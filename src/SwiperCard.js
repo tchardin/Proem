@@ -11,6 +11,7 @@ import {
   ActivityIndicator
 } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
+import Graph from './Graph'
 
 export default class SwiperCard extends Component {
   constructor(props) {
@@ -41,6 +42,7 @@ export default class SwiperCard extends Component {
           style={styles.container}>
           <ActivityIndicator
             color="white"
+            size="large"
             />
         </LinearGradient>
       )
@@ -51,6 +53,7 @@ export default class SwiperCard extends Component {
         style={styles.container}>
         <Text style={styles.text}>{this.state.id}</Text>
         <Text style={styles.text}>{this.roundPrice(this.state.price)}</Text>
+        <Graph />
       </LinearGradient>
     )
   }

@@ -8,7 +8,6 @@ import {
 import LinearGradient from 'react-native-linear-gradient'
 import Swiper from 'react-native-swiper'
 import SwiperCard from './SwiperCard'
-import SimpleCard from './SimpleCard'
 
 export default class Proem extends Component {
   constructor(props) {
