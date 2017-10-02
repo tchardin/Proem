@@ -7,6 +7,10 @@ App is iOS focused although could be made Android ready pretty fast when iOS dev
 Testing Swiper cards for different currencies, graph libraries and cool gradients.
 Using APIs from different exchanges to get the latest quotes. We will need to integrate as many exchanges as possibles to get a global ideas of prices in multiple currencies. Starting a table of supported exchanges we can update as we go.
 
+## Design
+
+See .xd file for reference.
+
 ## Supported exchange APIs
 
 |  | GDAX | Bitfinex | Bithump | bitFlyer | Bitrex | HitBTC | Bitstamp | Gemini | Poloniex | Kraken | Korbit | Binance | Coinone | OkCoin | BTCC | Huobi |
