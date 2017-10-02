@@ -5,9 +5,10 @@ import {
   View,
   ActivityIndicator
 } from 'react-native'
-import LinearGradient from 'react-native-linear-gradient'
-import Swiper from 'react-native-swiper'
-import SwiperCard from './SwiperCard'
+// import LinearGradient from 'react-native-linear-gradient'
+// import Swiper from 'react-native-swiper'
+// import SwiperCard from './SwiperCard'
+import PButton from './common/PButton'
 
 export default class Proem extends Component {
   constructor(props) {
@@ -17,19 +18,26 @@ export default class Proem extends Component {
     }
   }
   render() {
-    const {currencies} = this.state
-    let cards = currencies.map(id => (
-      <SwiperCard
-        key={id}
-        coin={id}
-      />
-    ))
+    // const {currencies} = this.state
+    // let cards = currencies.map(id => (
+    //   <SwiperCard
+    //     key={id}
+    //     coin={id}
+    //   />
+    // ))
     return (
-      <Swiper
-        style={styles.wrapper}
-        loop={false}>
-        {cards}
-     </Swiper>
+    //   <Swiper
+    //     style={styles.wrapper}
+    //     loop={false}>
+    //     {cards}
+    //  </Swiper>
+    <View
+      style={styles.container}>
+      <PButton
+        caption="Manage Asset"
+        onPress={() => {}}
+        />
+    </View>
     )
   }
 }

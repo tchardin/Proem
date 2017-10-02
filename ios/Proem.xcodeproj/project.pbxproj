@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -39,6 +38,9 @@
 		6FFD1673D7824A8A97CB3E3A /* libBVLinearGradient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C748958A49E5456DB6940605 /* libBVLinearGradient.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
+		2186B36C53D5448AA81C9029 /* Bungee-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D2DEC7CB6DEC470ABFEF97E1 /* Bungee-Regular.ttf */; };
+		BB318359F89040FA96F8C63F /* BungeeHairline-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AC4B2D484D604EEB9D819107 /* BungeeHairline-Regular.ttf */; };
+		78167C9DD4EE44EB8D391BD2 /* Hydrophilia_Iced.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FAB205D6066E4452805967C0 /* Hydrophilia_Iced.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -305,6 +307,9 @@
 		B0068094A7B145BB85456DA2 /* RNSVG.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNSVG.xcodeproj; path = "../node_modules/react-native-svg/ios/RNSVG.xcodeproj"; sourceTree = "<group>"; };
 		C748958A49E5456DB6940605 /* libBVLinearGradient.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libBVLinearGradient.a; sourceTree = "<group>"; };
 		E30E6CCBD69A485F97D58528 /* BVLinearGradient.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = BVLinearGradient.xcodeproj; path = "../node_modules/react-native-linear-gradient/BVLinearGradient.xcodeproj"; sourceTree = "<group>"; };
+		D2DEC7CB6DEC470ABFEF97E1 /* Bungee-Regular.ttf */ = {isa = PBXFileReference; name = "Bungee-Regular.ttf"; path = "../assets/fonts/Bungee-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		AC4B2D484D604EEB9D819107 /* BungeeHairline-Regular.ttf */ = {isa = PBXFileReference; name = "BungeeHairline-Regular.ttf"; path = "../assets/fonts/BungeeHairline-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		FAB205D6066E4452805967C0 /* Hydrophilia_Iced.ttf */ = {isa = PBXFileReference; name = "Hydrophilia_Iced.ttf"; path = "../assets/fonts/Hydrophilia_Iced.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -524,6 +529,7 @@
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* ProemTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
+				7E578ED0FB234166B064A7BB /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -567,6 +573,17 @@
 			);
 			name = Products;
 			sourceTree = "<group>";
+		};
+		7E578ED0FB234166B064A7BB /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				D2DEC7CB6DEC470ABFEF97E1 /* Bungee-Regular.ttf */,
+				AC4B2D484D604EEB9D819107 /* BungeeHairline-Regular.ttf */,
+				FAB205D6066E4452805967C0 /* Hydrophilia_Iced.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -983,6 +1000,9 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				2186B36C53D5448AA81C9029 /* Bungee-Regular.ttf in Resources */,
+				BB318359F89040FA96F8C63F /* BungeeHairline-Regular.ttf in Resources */,
+				78167C9DD4EE44EB8D391BD2 /* Hydrophilia_Iced.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
