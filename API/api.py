@@ -1,24 +1,42 @@
 
+#API related libraries
 from flask import Flask, request
 from flask_restful import Resource, Api
 from sqlalchemy import create_engine
 from json import dumps
-
-#Create a engine for connecting to SQLite3.
-#Assuming bitfinexBTCUSD.db is in your app root folder
-
-e = create_engine('sqlite:///bitfinex.db')
+from datetime import datetime
+from ast import literal_eval
+import requests
 
 app = Flask(__name__)
 api = Api(app)
 
+supported_currencies = ["BTC","ETH", "LTC"]
+
+e = create_engine('sqlite:///bitfinex.db')
+
+
+
 class All_Data(Resource):
     def get(self, coin):
-        #Connect to databse
+        #Connect to database
         conn = e.connect()
         #Perform query and return JSON data
         query = conn.execute("select * from %s"%coin)
         return {'data': [dict(zip(tuple (query.keys()) ,i)) for i in query.cursor]}
+
+class Current_Data(Resource):
+    def get(self, coin):
+        conn = e.connect()
+        bfx_coin = 't{0}USD'.format(coin)
+        data = [str(datetime.now())]
+        indices_used = [-2,-1,-4,0,2,-3]
+        #May seem wasteful but will keep the same names across applications
+        query = conn.execute("select * from %s"%coin)
+        r = literal_eval(requests.get("https://api.bitfinex.com/v2/ticker/%s"%bfx_coin).content)
+        data.extend([float(r[i]) for i in indices_used] + [coin])
+        data.insert(3,(data[1]+data[2])/2.0)
+        return {'data': [dict(zip(tuple (query.keys()) ,data))]}
 
 class Data_Intervals(Resource):
     def get(self, coin, date_from, date_to):
@@ -29,8 +47,15 @@ class Data_Intervals(Resource):
         return result
         #We can have PUT,DELETE,POST here. But in our API GET implementation is sufficient
 
-api.add_resource(Data_Intervals, '/<string:coin>/<string:date_from>/<string:date_to>')
+
+
+
 api.add_resource(All_Data, '/<string:coin>')
+api.add_resource(Current_Data, '/now/<string:coin>')
+api.add_resource(Data_Intervals, '/<string:coin>/<string:date_from>/<string:date_to>')
+
+
+
 
 
 if __name__ == '__main__':
