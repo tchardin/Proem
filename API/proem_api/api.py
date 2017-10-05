@@ -22,7 +22,7 @@ class All_Data(Resource):
         #Connect to database
         conn = e.connect()
         #Perform query and return JSON data
-        query = conn.execute("select * from %s"%coin)
+        query = conn.execute("select * from %s order by date asc"%coin)
         return {'data': [dict(zip(tuple (query.keys()) ,i)) for i in query.cursor]}
 
 class Current_Data(Resource):
@@ -39,7 +39,7 @@ class Current_Data(Resource):
 class Data_Intervals(Resource):
     def get(self, coin, date_from, date_to):
         conn = e.connect()
-        query = conn.execute("select * from %s where Date between '%s' and '%s'"%(coin, date_from, date_to))
+        query = conn.execute("select * from %s where Date between '%s' and '%s' order by date asc"%(coin, date_from, date_to))
         #Query the result and get cursor.Dumping that data to a JSON is looked by extension
         result = {'data': [dict(zip(tuple (query.keys()) ,i)) for i in query.cursor]}
         return result
