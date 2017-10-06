@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "autoprefixer": "^6.3.7",
+    "axios": "^0.16.2",
     "babel-polyfill": "^6.9.1",
     "browser-sync": "^2.13.0",
     "connect-history-api-fallback": "^1.2.0",
@@ -32,6 +33,7 @@
     "postcss-selector-not": "^2.0.0",
     "react": "^15.2.1",
     "react-dom": "^15.2.1",
+    "react-http-request": "^1.0.3",
     "react-redux": "^4.4.5",
     "redux": "^3.5.2",
     "victory": "^0.23.1",

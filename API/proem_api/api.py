@@ -1,6 +1,7 @@
 
+
 #API related libraries
-from flask import Flask, request
+from flask import Flask, request, Response
 from flask_restful import Resource, Api
 from sqlalchemy import create_engine
 from json import dumps
@@ -23,7 +24,9 @@ class All_Data(Resource):
         conn = e.connect()
         #Perform query and return JSON data
         query = conn.execute("select * from %s order by date asc"%coin)
-        return {'data': [dict(zip(tuple (query.keys()) ,i)) for i in query.cursor]}
+        resp = Response(dumps([dict(zip(tuple (query.keys()) ,i)) for i in query.cursor]))
+        resp.headers['Access-Control-Allow-Origin'] = '*'
+        return resp
 
 class Current_Data(Resource):
     def get(self, coin):

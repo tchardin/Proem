@@ -15,19 +15,22 @@ class HomePage extends Component {
           <div className={s.cardContainer}>
             <Card
               target="/bitcoin"
-              header="Bitcoin"
+              header="BTC"
+              height = "6000"
               />
           </div>
           <div className={s.cardContainer}>
             <Card
               target="/bitcoin"
-              header="Ethereum"
+              header="ETH"
+              height = "500"
               />
           </div>
           <div className={s.cardContainer}>
             <Card
               target="/bitcoin"
-              header="Litecoin"
+              header="LTC"
+              height = "100"
               />
           </div>
         </div>
