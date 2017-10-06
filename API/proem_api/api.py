@@ -36,6 +36,18 @@ class Current_Data(Resource):
         data.insert(3,(data[1]+data[2])/2.0)
         return {'data': [dict(zip(tuple (query.keys()) ,data))]}
 
+class Data_Candles(Resource):
+    def get(self, coin, interval):
+        data = []
+        bfx_coin = 't{0}USD'.format(coin)
+        #Query the result and get cursor.Dumping that data to a JSON is looked by extension
+        r = literal_eval(requests.get("https://api.bitfinex.com/v2/candles/trade:%s:%s/hist?limit=1000"%(interval,bfx_coin)).content)
+        for point in r:
+            data.append([[str(datetime.fromtimestamp(point[0]//1000.0))] + [float(point[i]) for i in range(1,len(point))] + [coin]])
+        result = {'data': [dict(zip(tuple (["Date", "Open", "Close", "High", "Low", "Volume"]) ,d)) for d in data]}
+        return result
+        #We can have PUT,DELETE,POST here. But in our API GET implementation is sufficient
+
 class Data_Intervals(Resource):
     def get(self, coin, date_from, date_to):
         conn = e.connect()
@@ -47,8 +59,10 @@ class Data_Intervals(Resource):
 
 
 api.add_resource(All_Data, '/<string:coin>')
-api.add_resource(Current_Data, '/now/<string:coin>')
 api.add_resource(Data_Intervals, '/<string:coin>/<string:date_from>/<string:date_to>')
+api.add_resource(Current_Data, '/now/<string:coin>')
+api.add_resource(Data_Candles, '/candles/<string:coin>/<string:interval>')
+
 
 
 
