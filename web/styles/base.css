@@ -1,0 +1,119 @@
+/* Custom Fonts */
+
+@font-face {
+  font-family: 'Bungee Regular';
+  src: local('../assets/fonts/Bungee-Regular') format('ttf');
+}
+
+/* CSS Reset */
+
+html:before {
+  display: none
+}
+
+*,
+*:before,
+*:after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+html,
+body,
+div,
+span,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+code,
+del,
+dfn,
+em,
+img,
+q,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+textarea,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-weight: inherit;
+  font-style: inherit;
+  font-size: 100%;
+  font-family: inherit;
+  vertical-align: baseline;
+  line-height: 1.5em
+}
+html,
+body {
+  height: 100%;
+  min-height: 100%;
+  width: 100%
+}
+a,
+span {
+  line-height: inherit
+}
+ul {
+  list-style: none
+}
+body {
+  background-color: #fff;
+  color: #000033;
+  font-family: 'Bungee Regular';
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+table {
+  border-collapse: separate;
+  border-spacing: 0
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: ""
+}
+blockquote,
+q {
+  quotes: """"
+}
+
+
+/*.selfclear:before,
+.selfclear:after {
+  content:" ";
+  display:table
+}
+.selfclear:after {
+  clear:both
+}*/
