@@ -32,16 +32,16 @@ function normalize(size: number): number {
 
 const styles = StyleSheet.create({
   text: {
-    fontFamily: 'BungeeHairline-regular',
+    fontFamily: 'bungeeHairline-regular',
   },
   h1: {
-    fontFamily: 'Bungee-Regular',
+    fontFamily: 'bungee-regular',
     fontSize: normalize(24),
     // lineHeight: normalize(27),
     color: activeText,
   },
   tick: {
-    fontFamily: 'Hydrophilia_Iced',
+    // fontFamily: 'hydrophilia-iced',
     fontSize: normalize(15),
     // lineHeight: normalize(23),
     color: invertedText,

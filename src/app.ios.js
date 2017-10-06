@@ -9,6 +9,7 @@ import {
 // import Swiper from 'react-native-swiper'
 // import SwiperCard from './SwiperCard'
 import PButton from './common/PButton'
+import Ticker from './Ticker'
 
 export default class Proem extends Component {
   constructor(props) {
@@ -33,22 +34,23 @@ export default class Proem extends Component {
     //  </Swiper>
     <View
       style={styles.container}>
+      <View></View>
       <PButton
         caption="Manage Asset"
         onPress={() => {}}
         />
+      <Ticker />
     </View>
     )
   }
 }
 
 const styles = StyleSheet.create({
-  wrapper: {
-  },
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
+    flexDirection: 'column'
     // backgroundColor: '#9DD6EB',
   },
   text: {
