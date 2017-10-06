@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -37,7 +38,11 @@
 		456BA962664148358C6A00FC /* libRNSVG.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5654204EA633407490F793C8 /* libRNSVG.a */; };
 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		6FFD1673D7824A8A97CB3E3A /* libBVLinearGradient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C748958A49E5456DB6940605 /* libBVLinearGradient.a */; };
+<<<<<<< HEAD
 		78167C9DD4EE44EB8D391BD2 /* Hydrophilia-Iced.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FAB205D6066E4452805967C0 /* Hydrophilia-Iced.ttf */; };
+=======
+		78167C9DD4EE44EB8D391BD2 /* Hydrophilia_Iced.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FAB205D6066E4452805967C0 /* Hydrophilia_Iced.ttf */; };
+>>>>>>> 7f66e3db31649c9a92383aabdafb7394564deecd
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 		BB318359F89040FA96F8C63F /* BungeeHairline-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AC4B2D484D604EEB9D819107 /* BungeeHairline-Regular.ttf */; };
@@ -85,6 +90,34 @@
 			proxyType = 1;
 			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
 			remoteInfo = Proem;
+		};
+		0EB4A3251F862C230051DDE9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 146833FF1AC3E56700842450 /* React.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 139D7ECE1E25DB7D00323FB7;
+			remoteInfo = "third-party";
+		};
+		0EB4A3271F862C230051DDE9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 146833FF1AC3E56700842450 /* React.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3D383D3C1EBD27B6005632C8;
+			remoteInfo = "third-party-tvOS";
+		};
+		0EB4A3291F862C230051DDE9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 146833FF1AC3E56700842450 /* React.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 139D7E881E25C6D100323FB7;
+			remoteInfo = "double-conversion";
+		};
+		0EB4A32B1F862C230051DDE9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 146833FF1AC3E56700842450 /* React.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3D383D621EBD27B9005632C8;
+			remoteInfo = "double-conversion-tvOS";
 		};
 		139105C01AF99BAD00B5F7CC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -337,7 +370,11 @@
 		C748958A49E5456DB6940605 /* libBVLinearGradient.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libBVLinearGradient.a; sourceTree = "<group>"; };
 		D2DEC7CB6DEC470ABFEF97E1 /* Bungee-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Bungee-Regular.ttf"; path = "../assets/fonts/Bungee-Regular.ttf"; sourceTree = "<group>"; };
 		E30E6CCBD69A485F97D58528 /* BVLinearGradient.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = BVLinearGradient.xcodeproj; path = "../node_modules/react-native-linear-gradient/BVLinearGradient.xcodeproj"; sourceTree = "<group>"; };
+<<<<<<< HEAD
 		FAB205D6066E4452805967C0 /* Hydrophilia-Iced.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = file; name = "Hydrophilia-Iced.ttf"; path = "../assets/fonts/Hydrophilia-Iced.ttf"; sourceTree = "<group>"; };
+=======
+		FAB205D6066E4452805967C0 /* Hydrophilia_Iced.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Hydrophilia_Iced.ttf; path = ../assets/fonts/Hydrophilia_Iced.ttf; sourceTree = "<group>"; };
+>>>>>>> 7f66e3db31649c9a92383aabdafb7394564deecd
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -455,6 +492,15 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		0EB4A3031F862C170051DDE9 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				C748958A49E5456DB6940605 /* libBVLinearGradient.a */,
+				5654204EA633407490F793C8 /* libRNSVG.a */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
 		139105B71AF99BAD00B5F7CC /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -498,10 +544,17 @@
 				3DAD3EAB1DF850E9000B6D8A /* libcxxreact.a */,
 				3DAD3EAD1DF850E9000B6D8A /* libjschelpers.a */,
 				3DAD3EAF1DF850E9000B6D8A /* libjschelpers.a */,
+<<<<<<< HEAD
 				AB1397F71F82E451006862B4 /* libthird-party.a */,
 				AB1397F91F82E451006862B4 /* libthird-party.a */,
 				AB1397FB1F82E451006862B4 /* libdouble-conversion.a */,
 				AB1397FD1F82E451006862B4 /* libdouble-conversion.a */,
+=======
+				0EB4A3261F862C230051DDE9 /* libthird-party.a */,
+				0EB4A3281F862C230051DDE9 /* libthird-party.a */,
+				0EB4A32A1F862C230051DDE9 /* libdouble-conversion.a */,
+				0EB4A32C1F862C230051DDE9 /* libdouble-conversion.a */,
+>>>>>>> 7f66e3db31649c9a92383aabdafb7394564deecd
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -529,7 +582,11 @@
 			children = (
 				D2DEC7CB6DEC470ABFEF97E1 /* Bungee-Regular.ttf */,
 				AC4B2D484D604EEB9D819107 /* BungeeHairline-Regular.ttf */,
+<<<<<<< HEAD
 				FAB205D6066E4452805967C0 /* Hydrophilia-Iced.ttf */,
+=======
+				FAB205D6066E4452805967C0 /* Hydrophilia_Iced.ttf */,
+>>>>>>> 7f66e3db31649c9a92383aabdafb7394564deecd
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -572,7 +629,11 @@
 				00E356EF1AD99517003FC87E /* ProemTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				7E578ED0FB234166B064A7BB /* Resources */,
+<<<<<<< HEAD
 				AB1397D41F82E450006862B4 /* Recovered References */,
+=======
+				0EB4A3031F862C170051DDE9 /* Recovered References */,
+>>>>>>> 7f66e3db31649c9a92383aabdafb7394564deecd
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -715,7 +776,8 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = 6QD5M8Z4DZ;
+						DevelopmentTeam = 7W8GGEC2BY;
+						ProvisioningStyle = Automatic;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -841,6 +903,34 @@
 			fileType = archive.ar;
 			path = libRCTVibration.a;
 			remoteRef = 00C302E31ABCB9EE00DB3ED1 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		0EB4A3261F862C230051DDE9 /* libthird-party.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libthird-party.a";
+			remoteRef = 0EB4A3251F862C230051DDE9 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		0EB4A3281F862C230051DDE9 /* libthird-party.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libthird-party.a";
+			remoteRef = 0EB4A3271F862C230051DDE9 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		0EB4A32A1F862C230051DDE9 /* libdouble-conversion.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libdouble-conversion.a";
+			remoteRef = 0EB4A3291F862C230051DDE9 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		0EB4A32C1F862C230051DDE9 /* libdouble-conversion.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libdouble-conversion.a";
+			remoteRef = 0EB4A32B1F862C230051DDE9 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		139105C11AF99BAD00B5F7CC /* libRCTSettings.a */ = {
@@ -1249,9 +1339,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = 6QD5M8Z4DZ;
+				DEVELOPMENT_TEAM = 7W8GGEC2BY;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
@@ -1264,7 +1356,9 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.squid.proem;
 				PRODUCT_NAME = Proem;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -1273,8 +1367,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 6QD5M8Z4DZ;
+				DEVELOPMENT_TEAM = 7W8GGEC2BY;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
@@ -1287,7 +1383,9 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.squid.proem;
 				PRODUCT_NAME = Proem;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
