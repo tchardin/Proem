@@ -1,9 +1,6 @@
 /* Custom Fonts */
 
-@font-face {
-  font-family: 'Bungee Regular';
-  src: local('../assets/fonts/Bungee-Regular') format('ttf');
-}
+
 
 /* CSS Reset */
 
@@ -71,13 +68,16 @@ td {
   font-size: 100%;
   font-family: inherit;
   vertical-align: baseline;
-  line-height: 1.5em
+  line-height: 1.5em;
 }
 html,
 body {
   height: 100%;
   min-height: 100%;
   width: 100%
+}
+a, a:link, a:visited, a:focus, a:hover, a:active {
+  text-decoration: none;
 }
 a,
 span {
@@ -89,7 +89,7 @@ ul {
 body {
   background-color: #fff;
   color: #000033;
-  font-family: 'Bungee Regular';
+  font-family: 'bungeeregular';
   -webkit-overflow-scrolling: touch;
   -ms-overflow-style: -ms-autohiding-scrollbar;
 }

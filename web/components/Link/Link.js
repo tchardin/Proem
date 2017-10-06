@@ -1,5 +1,6 @@
 import React, { Component} from 'react'
 import history from '../../core/history'
+import s from './styles.css'
 
 class Link extends Component {
   handleClick(event) {
@@ -34,6 +35,7 @@ class Link extends Component {
   render() {
     const { to, ...props } = this.props
     return <a
+      className={s.link}
       href={history.createHref(to)} {...props}
       onClick={(event) => { this.handleClick(event) }} />
   }
