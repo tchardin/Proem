@@ -38,11 +38,7 @@
 		456BA962664148358C6A00FC /* libRNSVG.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5654204EA633407490F793C8 /* libRNSVG.a */; };
 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		6FFD1673D7824A8A97CB3E3A /* libBVLinearGradient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C748958A49E5456DB6940605 /* libBVLinearGradient.a */; };
-<<<<<<< HEAD
 		78167C9DD4EE44EB8D391BD2 /* Hydrophilia-Iced.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FAB205D6066E4452805967C0 /* Hydrophilia-Iced.ttf */; };
-=======
-		78167C9DD4EE44EB8D391BD2 /* Hydrophilia_Iced.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FAB205D6066E4452805967C0 /* Hydrophilia_Iced.ttf */; };
->>>>>>> 7f66e3db31649c9a92383aabdafb7394564deecd
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 		BB318359F89040FA96F8C63F /* BungeeHairline-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AC4B2D484D604EEB9D819107 /* BungeeHairline-Regular.ttf */; };
