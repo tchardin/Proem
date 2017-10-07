@@ -24,16 +24,23 @@ class CardComponent extends Component {
   constructor(props) {
     super(props)
     this.state = {
-        data: []
+        data: [],
+        height: 1
     };
 }
 
   componentDidMount(){
     var self = this;
-    axios.get("http://127.0.0.1:5000/" + this.props.header).then((response) => {
+    axios.get("http://127.0.0.1:5000/" + this.props.ticker).then((response) => {
         self.setState({
           // parseFloat(a.Mid)
-          data: response.data.map((a, index) => {return ({time: index, price: parseFloat(a.Mid)})})
+          data: response.data.map((a, index) => {return ({time: index, price: parseFloat(a.Mid)})}),
+
+        })
+        self.setState({
+
+          height: Math.max.apply(Math,this.state.data.map(function(o){return o.price;}))
+
         })
       }).catch((error) => {
         console.log('error: ' + error)
@@ -41,7 +48,6 @@ class CardComponent extends Component {
     }
 
   render() {
-    console.log(this.state.data)
     return (
       <div className={s.card}>
         <Link to={this.props.target}>
@@ -50,7 +56,7 @@ class CardComponent extends Component {
         <VictoryLine
             interpolation={"natural"}
             data={this.state.data}
-            domain={{x: [0, this.state.data.length], y: [0, parseInt(this.props.height)]}}
+            domain={{x: [0, this.state.data.length], y: [-this.state.height/2, this.state.height]}}
             style={{data: {stroke: 'black'}}}
             padding={0}
             x="time"
