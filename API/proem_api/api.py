@@ -60,7 +60,7 @@ class Data_Intervals(Resource):
         query = conn.execute("select * from %s where Date between '%s' and '%s' order by date asc"%(coin, date_from, date_to))
         #Query the result and get cursor.Dumping that data to a JSON is looked by extension
         resp = Response(dumps([dict(zip(tuple (query.keys()) ,i)) for i in query.cursor]))
-        resp.headers['Access-Control-Allow-Origin'] = '*'        
+        resp.headers['Access-Control-Allow-Origin'] = '*'
         return resp
         #We can have PUT,DELETE,POST here. But in our API GET implementation is sufficient
 
@@ -76,4 +76,4 @@ api.add_resource(Data_Candles, '/candles/<string:coin>/<string:interval>')
 
 
 if __name__ == '__main__':
-     app.run()
+     app.run(host='0.0.0.0', port=8080)
