@@ -9,14 +9,13 @@ from datetime import datetime
 from ast import literal_eval
 import requests
 
-app = Flask(__name__)
-app.config["DEBUG"] = True
-api = Api(app)
+application = Flask(__name__)
+# application.config["DEBUG"] = True
+api = Api(application)
 
 supported_currencies = ["BTC","ETH", "LTC"]
 
 e = create_engine('sqlite:///bitfinex.db')
-
 
 
 class All_Data(Resource):
@@ -88,5 +87,7 @@ api.add_resource(Data_Candles, '/candles/<string:coin>/<string:interval>')
 
 
 
+
+
 if __name__ == '__main__':
-     app.run(host='0.0.0.0', port=8080)
+     application.run()
