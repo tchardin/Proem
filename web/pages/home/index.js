@@ -8,7 +8,9 @@
  * TODO (Dantino): Improve the <Graph /> component to fit domains and remain
  * full screen (Currently getting that annoying scroll)
  * + enable zoom/scroll and tooltips.
- * TODO (Thomas): Finish all cards and allow portfolio import
+ * TODO (Thomas): Finish all cards
+ * TODO (Thomas): Toggle between portfolio and discovery views
+ * TODO (Thomas): Map views to Browser history
  * TODO (Thomas): Blockstack login and storage
  * TODO (Thomas): Set up Redux store
  */
@@ -37,6 +39,7 @@ class HomePage extends Component {
       displayed: [],
       portfolio: [],
       selected: {},
+      mainView: 'discovery',
       cardView: 'import',
       amount: 0,
       date: '',
