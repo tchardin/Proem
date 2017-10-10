@@ -8,6 +8,9 @@ import s from './styles.css'
 class FlatListComponent extends Component {
   constructor(props) {
     super(props)
+    this.state = {
+      position: 0
+    }
     this.selectItem = this.selectItem.bind(this)
     this.scroll = this.scroll.bind(this)
   }
@@ -24,22 +27,26 @@ class FlatListComponent extends Component {
 		  else {
 			  startTime = new Date().getTime()
 		  }
-    const easeOutCubic = (x, t, b, c, d) => {
-      return c*((t=t/d-1)*t*t + 1) + b;
-    }
+    const easeOutExpo = (x, t, b, c, d) => {
+		   return (t==d) ? b+c : c * (-Math.pow(2, -10 * t/d) + 1) + b;
+	  }
     const tweenLoop = (time) => {
       let t = !time ? 0 : time - startTime
-      let factor = easeOutCubic(null, t, 0, 1, duration)
+      let factor = easeOutExpo(null, t, 0, 1, duration)
       scrollList.scrollLeft = start + delta * factor
       if (t < duration && scrollList.scrollLeft != end)
         requestAnimationFrame(tweenLoop)
     }
     tweenLoop()
+    this.setState({
+      position: end
+    })
   }
   selectItem(e) {
     this.props.onSelectItem(e)
   }
   render() {
+    const {position} = this.state
     let list = this.props.items.map(item => (
       <li
         className={s.item}
@@ -62,7 +69,7 @@ class FlatListComponent extends Component {
         </div>
         <div
           className={s.arrowBtn}
-          onClick={() => this.scroll(500, 0, 2000)}>
+          onClick={() => this.scroll(position, position-100, 2000)}>
           <Arrow
             direction="left"
             color="#fff"/>
@@ -74,7 +81,7 @@ class FlatListComponent extends Component {
         </ul>
         <div
           className={s.arrowBtn}
-          onClick={() => this.scroll(0, 500, 2000)}>
+          onClick={() => this.scroll(position, position+100, 2000)}>
           <Arrow
             direction="right"
             color="#fff" />
