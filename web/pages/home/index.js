@@ -7,9 +7,10 @@
  * the components.
  * TODO (Dantino): Improve the <Graph /> component to fit domains and remain
  * full screen (Currently getting that annoying scroll)
- * + enable zoom/scroll and tooltips.
+ * TODO (Dantino or Thomas): enable zoom/scroll and tooltips.
  * TODO (Thomas): Finish all cards
  * TODO (Thomas): Toggle between portfolio and discovery views
+ * TODO (Thomas): Dynamic portfolio metrics
  * TODO (Thomas): Map views to Browser history
  * TODO (Thomas): Blockstack login and storage
  * TODO (Thomas): Set up Redux store
@@ -136,11 +137,6 @@ class HomePage extends Component {
             <h1 className={s.brand}>
               PROEM
             </h1>
-            <Button
-              type="primary"
-              caption="Sign In"
-              target="/coins"
-              style={s.button}/>
           </div>
         </div>
         <div className={s.infoCard}>

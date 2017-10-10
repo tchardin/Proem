@@ -39,6 +39,9 @@ class FlatListComponent extends Component {
     ))
     return (
       <div className={s.container}>
+        <div className={s.leftInfo}>
+          23%
+        </div>
         <div
           className={s.arrowBtn}
           onClick={() => this.scrollTo('left')}>
@@ -57,6 +60,9 @@ class FlatListComponent extends Component {
           <Arrow
             direction="right"
             color="#fff" />
+        </div>
+        <div className={s.rightInfo}>
+          USD
         </div>
       </div>
     )
