@@ -10,6 +10,7 @@ from ast import literal_eval
 import requests
 
 app = Flask(__name__)
+app.config["DEBUG"] = True
 api = Api(app)
 
 supported_currencies = ["BTC","ETH", "LTC"]
@@ -23,8 +24,13 @@ class All_Data(Resource):
         #Connect to database
         conn = e.connect()
         #Perform query and return JSON data
-        query = conn.execute("select * from %s order by date asc"%coin)
+        try:
+            query = conn.execute("select * from %s order by date asc"%coin)
+        except ValueError as valerr:
+            print("Failed to extract all data: " + str(valerr))
+        #Query the result and get cursor.Dumping that data to a JSON is looked by extension
         resp = Response(dumps([dict(zip(tuple (query.keys()) ,i)) for i in query.cursor]))
+        #add access control to API.
         resp.headers['Access-Control-Allow-Origin'] = '*'
         return resp
 
@@ -33,8 +39,11 @@ class Current_Data(Resource):
         conn = e.connect()
         bfx_coin = 't{0}USD'.format(coin)
         #May seem wasteful but will keep the same names across applications
-        query = conn.execute("select * from %s"%coin)
-        r = literal_eval(requests.get("https://api.bitfinex.com/v2/ticker/%s"%bfx_coin).content)
+        try:
+            query = conn.execute("select * from %s"%coin)
+            r = literal_eval(requests.get("https://api.bitfinex.com/v2/ticker/%s"%bfx_coin).content)
+        except ValueError as valerr:
+            print("Failed to get current data from bitfinex: " + str(valerr))
         data = [str(datetime.now())] + [float(r[i]) for i in [-2,-1,-4,0,2,-3]] + [coin]
         data.insert(3,(data[1]+data[2])/2.0)
         resp = Response(dumps([dict(zip(tuple (query.keys()) ,data))]))
@@ -45,8 +54,10 @@ class Data_Candles(Resource):
     def get(self, coin, interval):
         data = []
         bfx_coin = 't{0}USD'.format(coin)
-        #Query the result and get cursor.Dumping that data to a JSON is looked by extension
-        r = literal_eval(requests.get("https://api.bitfinex.com/v2/candles/trade:%s:%s/hist?limit=1000"%(interval,bfx_coin)).content)
+        try:
+            r = literal_eval(requests.get("https://api.bitfinex.com/v2/candles/trade:%s:%s/hist?limit=1000"%(interval,bfx_coin)).content)
+        except ValueError as valerr:
+            print("Failed to get candles data from bitfinex: " + str(valerr))
         for point in r:
             data.append([[str(datetime.fromtimestamp(point[0]//1000.0))] + [float(point[i]) for i in range(1,len(point))] + [coin]])
         resp = Response(dumps([dict(zip(tuple (["Date", "Open", "Close", "High", "Low", "Volume"]) ,d)) for d in data]))
@@ -57,8 +68,10 @@ class Data_Candles(Resource):
 class Data_Intervals(Resource):
     def get(self, coin, date_from, date_to):
         conn = e.connect()
-        query = conn.execute("select * from %s where Date between '%s' and '%s' order by date asc"%(coin, date_from, date_to))
-        #Query the result and get cursor.Dumping that data to a JSON is looked by extension
+        try:
+            query = conn.execute("select * from %s where Date between '%s' and '%s' order by date asc"%(coin, date_from, date_to))
+        except ValueError as valerr:
+            print("Failed to extract historical data in intervals: " + str(valerr))
         resp = Response(dumps([dict(zip(tuple (query.keys()) ,i)) for i in query.cursor]))
         resp.headers['Access-Control-Allow-Origin'] = '*'
         return resp
