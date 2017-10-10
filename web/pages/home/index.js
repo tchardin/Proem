@@ -49,18 +49,17 @@ class HomePage extends Component {
     this.handleChange = this.handleChange.bind(this)
   }
 
-  handleChange({target}) {
-    this.setState({
-      [target.name]: target.value
-    })
-  }
-
+  // Import asset form actions
   fillImportForm() {
     this.setState({
       cardView: 'import'
     })
   }
-
+  handleChange({target}) {
+    this.setState({
+      [target.name]: target.value
+    })
+  }
   addAsset() {
     const {portfolio, amount, date, currency} = this.state
     let asset = {
