@@ -40,17 +40,17 @@ class HomePage extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      currencies: [],
-      displayed: [],
-      portfolio: [],
-      selected: {},
-      mainView: 'discovery',
-      cardView: 'import',
-      user: null,
-      amount: 0,
-      date: '',
-      currency: '',
-      fiat: 'USD'
+      currencies: [], // All currency data loaded from API
+      displayed: [], // Selected in menu to show in the chart
+      portfolio: [], // Added from the input form
+      selected: {}, // Selected by clicking on a chart area
+      mainView: 'discovery', // Toggle between Graphs
+      cardView: 'import', // Toggle between cards
+      user: null, // User profile populated by Blockstack API
+      amount: 0, // Amount input in import card
+      date: '', // Date input in import card
+      currency: '', // Currency input in import card
+      fiat: 'USD' // global fiat currency output
     }
     this.selectItem = this.selectItem.bind(this)
     this.displayItem = this.displayItem.bind(this)
