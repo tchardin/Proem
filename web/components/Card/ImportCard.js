@@ -5,33 +5,19 @@ import s from './styles.css'
 class CardComponent extends Component {
   constructor(props){
     super(props)
-    this.state = {
-      amount: 0,
-      date: '',
-      currency: null
-    }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
   }
-  handleChange({target}) {
-    this.setState({
-      [target.name]: target.value
-    })
+  handleChange(e) {
+    this.props.onChange(e)
   }
-  handleSubmit(e) {
-    e.preventDefault()
-    const {amount, date, currency} = this.state
-    this.props.handleSubmit(amount, date, currency)
-  }
-  componentDidMount() {
-    let c = this.props.currency
-    if (c) {
-      this.setState({
-        currency: c
-      })
-    }
+  handleSubmit() {
+    this.props.onSubmit()
   }
   render() {
+    const {amount, date, currency, select} = this.props
+    let options = select.map(
+      id => <option value={id} key={id}>{id}</option>)
     return (
       <div className={s.card}>
         <h1 className={s.cardHeader}>Add Curency to your portfolio</h1>
@@ -43,8 +29,9 @@ class CardComponent extends Component {
                 <input
                   className={s.input}
                   type="number"
+                  name="amount"
                   placeholder="Price in currency"
-                  value={this.state.amount}
+                  value={amount}
                   onChange={this.handleChange}/>
               </div>
             </div>
@@ -54,7 +41,8 @@ class CardComponent extends Component {
                 <input
                   className={s.input}
                   type="datetime-local"
-                  value={this.state.date}
+                  name="date"
+                  value={date}
                   onChange={this.handleChange}/>
               </div>
             </div>
@@ -62,10 +50,11 @@ class CardComponent extends Component {
               <label className={s.label}>Currency</label>
               <div className={s.control}>
                 <div className={s.select}>
-                  <select>
-                    <option>BTC</option>
-                    <option>ETH</option>
-                    <option>LTC</option>
+                  <select
+                    name="currency"
+                    value={currency}
+                    onChange={this.handleChange}>
+                    {options}
                   </select>
                 </div>
               </div>
