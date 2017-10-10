@@ -101,7 +101,6 @@ class HomePage extends Component {
               handleSubmit={this.addAsset}/>
     }
     return (
-<<<<<<< HEAD
       <div className={s.fullSize}>
         <div className={s.nav}>
           <div className={s.container}>
@@ -113,30 +112,6 @@ class HomePage extends Component {
               caption="Sign In"
               target="/coins"
               style={s.button}/>
-=======
-      <div className={gs.container}>
-        <div className={gs.line}>
-          <div className={s.cardContainer}>
-            <Card
-              target="/bitcoin"
-              header="Bitcoin"
-              ticker="BTC"
-              />
-          </div>
-          <div className={s.cardContainer}>
-            <Card
-              target="/bitcoin"
-              header="Ethereum"
-              ticker="ETH"
-              />
-          </div>
-          <div className={s.cardContainer}>
-            <Card
-              target="/bitcoin"
-              header="Litecoin"
-              ticker="LTC"
-              />
->>>>>>> 8a082a6f92893832527bc6d1a201aceee86bc521
           </div>
         </div>
         <div className={s.infoCard}>
