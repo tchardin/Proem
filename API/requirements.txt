@@ -5,3 +5,6 @@ jsonschema==2.6.0
 SQLAlchemy==1.1.14
 datetime
 celery
+flask
+flask_restful
+sqlalchemy
