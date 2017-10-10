@@ -36,29 +36,50 @@ class HomePage extends Component {
       currencies: [],
       displayed: [],
       portfolio: [],
-      selected: {}
+      selected: {},
+      cardView: 'import',
+      amount: 0,
+      date: '',
+      currency: ''
     }
     this.selectItem = this.selectItem.bind(this)
     this.displayItem = this.displayItem.bind(this)
     this.addAsset = this.addAsset.bind(this)
+    this.fillImportForm = this.fillImportForm.bind(this)
+    this.handleChange = this.handleChange.bind(this)
   }
 
-  addAsset(a, d, c) {
-    let asset = {
-      amount: a,
-      date: d,
-      currency: c
-    }
-    const {portfolio} = this.state
+  handleChange({target}) {
     this.setState({
-      portfolio: portfolio.concat(asset)
+      [target.name]: target.value
+    })
+  }
+
+  fillImportForm() {
+    this.setState({
+      cardView: 'import'
+    })
+  }
+
+  addAsset() {
+    const {portfolio, amount, date, currency} = this.state
+    let asset = {
+      amount: amount,
+      date: date,
+      currency: currency
+    }
+    this.setState({
+      portfolio: portfolio.concat(asset),
+      cardView: 'metrics'
     })
   }
 
   // Selected currency has info displayed on card
   selectItem(e) {
     this.setState({
-      selected: e
+      selected: e,
+      cardView: 'metrics',
+      currency: e.id
     })
   }
 
@@ -91,14 +112,20 @@ class HomePage extends Component {
   }
 
   render() {
+    let allIds = this.state.currencies.map(c => c.id)
     let card
-    if (this.state.selected.info) {
+    if (this.state.cardView === 'metrics') {
       card = <MetricsCard
-              item={this.state.selected} />
-    } else {
+              item={this.state.selected}
+              onSubmit={this.fillImportForm}/>
+    } else if (this.state.cardView === 'import') {
       card = <ImportCard
-              currency={this.state.selected}
-              handleSubmit={this.addAsset}/>
+              currency={this.state.currency}
+              date={this.state.date}
+              amount={this.state.amount}
+              select={allIds}
+              onSubmit={this.addAsset}
+              onChange={this.handleChange}/>
     }
     return (
       <div className={s.fullSize}>

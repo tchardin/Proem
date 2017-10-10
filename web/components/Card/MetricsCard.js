@@ -11,7 +11,7 @@ class CardComponent extends Component {
     this.handleSubmit = this.handleSubmit.bind(this)
   }
   handleSubmit() {
-
+    this.props.onSubmit()
   }
   render() {
     let list = this.props.item.info.map(i => (
@@ -28,7 +28,7 @@ class CardComponent extends Component {
           <div className={s.btnContainer}>
             <button
               className={s.btn}
-              onClick={() => this.handleSubmit()}>Add To portfolio</button>
+              onClick={() => this.handleSubmit()}>Import To portfolio</button>
           </div>
         </div>
       </div>
