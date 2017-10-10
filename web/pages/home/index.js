@@ -24,7 +24,11 @@ import s from './styles.css'
 // import global css as gs
 import gs from './../../styles/grid.css'
 
-import {ImportCard, MetricsCard} from '../../components/Card/'
+import {
+  ImportCard,
+  MetricsCard,
+  SignInCard
+} from '../../components/Card/'
 import Graph from '../../components/Graph/Graph'
 import Button from '../../components/Button/Button'
 import FlatList from '../../components/FlatList/FlatList'
@@ -42,6 +46,7 @@ class HomePage extends Component {
       selected: {},
       mainView: 'discovery',
       cardView: 'import',
+      user: null,
       amount: 0,
       date: '',
       currency: ''
@@ -51,12 +56,19 @@ class HomePage extends Component {
     this.addAsset = this.addAsset.bind(this)
     this.fillImportForm = this.fillImportForm.bind(this)
     this.handleChange = this.handleChange.bind(this)
+    this.signIn = this.signIn.bind(this)
+  }
+
+  // Sign in with Blockstack
+  signIn() {
+    window.alert('Blockstack not setup yet')
   }
 
   // Import asset form actions
   fillImportForm() {
+    const {user} = this.state
     this.setState({
-      cardView: 'import'
+      cardView: user ? 'import' : 'signin'
     })
   }
   handleChange({target}) {
@@ -104,13 +116,15 @@ class HomePage extends Component {
   }
 
   componentDidMount() {
+    const {user} = this.state
     // Display default with first item of array
     let d = this.state.displayed.concat(apiResponse.data[0])
     // Load all the api data in the currencies array.
     // Make Ajax call here.
     this.setState({
       currencies: apiResponse.data,
-      displayed: d
+      displayed: d,
+      cardView: user ? 'import' : 'signin'
     })
   }
 
@@ -129,6 +143,9 @@ class HomePage extends Component {
               select={allIds}
               onSubmit={this.addAsset}
               onChange={this.handleChange}/>
+    } else if (this.state.cardView === 'signin') {
+      card = <SignInCard
+              onSubmit={this.signIn}/>
     }
     return (
       <div className={s.fullSize}>
@@ -148,7 +165,9 @@ class HomePage extends Component {
         <FlatList
           items={this.state.currencies}
           onSelectItem={this.displayItem}
-          selectedItems={this.state.displayed}/>
+          selectedItems={this.state.displayed}
+          share={23}
+          fiat="USD"/>
       </div>
     )
   }

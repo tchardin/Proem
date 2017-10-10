@@ -24,7 +24,9 @@ class CardComponent extends Component {
       <div className={s.card}>
         <h1 className={s.cardHeader}>{this.props.item.name}</h1>
         <div className={s.cardBody}>
-          {list}
+          <div className={s.list}>
+            {list}
+          </div>
           <div className={s.btnContainer}>
             <button
               className={s.btn}

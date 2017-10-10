@@ -31,6 +31,10 @@
 	justify-content: space-between;
 }
 
+.list {
+	padding-bottom: 1em;
+}
+
 .textLeft,
 .textRight {
 	font-size: 0.8em;
