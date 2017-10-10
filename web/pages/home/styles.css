@@ -2,3 +2,53 @@
 	composes: unit from './../../styles/grid.css';
 	composes: size1of4 from './../../styles/grid.css';
 }
+
+.fullSize {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+}
+
+.nav {
+	position: absolute;
+	top: 20px;
+	right: 20px;
+}
+
+.container {
+	display: flex;
+	align-content: center;
+	justify-content: center;
+}
+
+.brand {
+	font-family: 'Gotham';
+	font-weight: bold;
+	font-size: 2em;
+	color: #000;
+	line-height: 1em;
+	padding: 0 1em 0 0;
+}
+
+.button {
+	margin: auto;
+}
+
+.infoCard {
+	position: absolute;
+	right: 20px;
+	top: 25%;
+	z-index: 100;
+}
+
+.selectCard {
+	display: flex;
+	flex: 1;
+	/*position: absolute;
+	bottom: 20px;
+	left: 0;
+	right: 0;
+	margin-left: auto;
+	margin-right: auto;*/
+}

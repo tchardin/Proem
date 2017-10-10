@@ -5,7 +5,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import FastClick from 'fastclick'
 import { Provider } from 'react-redux'
-
+import './styles/base.css'
 import store from './core/store'
 import router from './core/router'
 import history from './core/history'

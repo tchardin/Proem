@@ -1,0 +1,55 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #000;
+  padding-bottom: 1em;
+}
+
+.list {
+  max-width: 500px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  overflow: auto;
+  white-space: nowrap;
+  font-family: 'Gotham';
+  font-size: 0.75em;
+  line-height: 1.35em;
+}
+
+::-webkit-scrollbar {
+      display: none;
+   }
+
+.item {
+  color: #fff;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.label {
+  padding: 0.5em;
+  cursor: pointer;
+  user-select: none;
+}
+
+.item:not(:last-child) {
+  margin-right: 0.8em;
+}
+
+.radioBtn {
+  display: none;
+}
+
+.arrowBtn {
+  cursor: pointer;
+  padding: 0.5em;
+}
+
+.id {
+  font-weight: bold;
+}

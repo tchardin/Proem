@@ -5,7 +5,7 @@
     "chunk": "main"
   },
   {
-    "path": "/bitcoin",
+    "path": "/coins/:id",
     "page": "./pages/article",
     "chunk": "main"
   },
