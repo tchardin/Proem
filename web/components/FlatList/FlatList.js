@@ -13,6 +13,7 @@ class FlatListComponent extends Component {
     }
     this.selectItem = this.selectItem.bind(this)
     this.scroll = this.scroll.bind(this)
+    this.handleChange = this.handleChange.bind(this)
   }
   scroll(start, end, duration) {
     const {scrollList} = this
@@ -45,6 +46,9 @@ class FlatListComponent extends Component {
   selectItem(e) {
     this.props.onSelectItem(e)
   }
+  handleChange(e) {
+    this.props.onChange(e)
+  }
   render() {
     const {position} = this.state
     let list = this.props.items.map(item => (
@@ -62,6 +66,8 @@ class FlatListComponent extends Component {
           isActive={this.props.selectedItems.includes(item)} />
       </li>
     ))
+    const fiat = ['USD', 'EUR', 'JPY', 'GBP', 'CHF', 'CAD', 'AUD', 'NZD', 'ZAR', 'CNY']
+    let options = fiat.map(id => <option value={id} key={id}>{id}</option>)
     return (
       <div className={s.container}>
         <div className={s.leftInfo}>
@@ -87,7 +93,14 @@ class FlatListComponent extends Component {
             color="#fff" />
         </div>
         <div className={s.rightInfo}>
-          {this.props.fiat}
+          <div className={s.select}>
+            <select
+              name="fiat"
+              value={this.props.fiat}
+              onChange={this.handleChange}>
+              {options}
+            </select>
+          </div>
         </div>
       </div>
     )

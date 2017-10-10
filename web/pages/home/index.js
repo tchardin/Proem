@@ -49,7 +49,8 @@ class HomePage extends Component {
       user: null,
       amount: 0,
       date: '',
-      currency: ''
+      currency: '',
+      fiat: 'USD'
     }
     this.selectItem = this.selectItem.bind(this)
     this.displayItem = this.displayItem.bind(this)
@@ -167,7 +168,8 @@ class HomePage extends Component {
           onSelectItem={this.displayItem}
           selectedItems={this.state.displayed}
           share={23}
-          fiat="USD"/>
+          fiat={this.state.fiat}
+          onChange={this.handleChange}/>
       </div>
     )
   }
