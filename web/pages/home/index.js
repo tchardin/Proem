@@ -38,6 +38,7 @@ const apiResponse = require('../../utils/simple-object.json')
 
 // Blockstack js library
 const blockstack = require('blockstack')
+const STORAGE_FILE = 'portfolio.json'
 
 class HomePage extends Component {
   constructor(props) {
@@ -87,10 +88,12 @@ class HomePage extends Component {
       date: date,
       currency: currency
     }
+    let encrypt = true
     this.setState({
       portfolio: portfolio.concat(asset),
       cardView: 'metrics'
-    })
+    }, blockstack.putFile(STORAGE_FILE,
+      JSON.stringify(this.state.portfolio), encrypt))
   }
 
   // Selected currency has info displayed on card
@@ -120,11 +123,17 @@ class HomePage extends Component {
   }
 
   componentDidMount() {
-    // Check Blockstack state to retreive user profile
+    // Check Blockstack state to retreive user profile and data
     if (blockstack.isUserSignedIn()) {
       let newUser = blockstack.loadUserData().profile
-      this.setState({
-        user: newUser
+      const decrypt = true
+      blockstack.getFile(STORAGE_FILE, decrypt)
+      .then((data) => {
+        let savedPortfolio = JSON.parse(data || '[]')
+        this.setState({
+          user: newUser,
+          portfolio: savedPortfolio
+        })
       })
     } else if (blockstack.isSignInPending()) {
       blockstack.handlePendingSignIn()
