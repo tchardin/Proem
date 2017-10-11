@@ -36,6 +36,9 @@ import FlatList from '../../components/FlatList/FlatList'
 // Fake API response object for prototyping
 const apiResponse = require('../../utils/simple-object.json')
 
+// Blockstack js library
+const Blockstack = require('blockstack')
+
 class HomePage extends Component {
   constructor(props) {
     super(props)
@@ -62,7 +65,7 @@ class HomePage extends Component {
 
   // Sign in with Blockstack
   signIn() {
-    window.alert('Blockstack not setup yet')
+    blockstack.redirectToSignIn()
   }
 
   // Import asset form actions
@@ -117,6 +120,18 @@ class HomePage extends Component {
   }
 
   componentDidMount() {
+    // Check Blockstack state to retreive user profile
+    if (blockstack.isUserSignedIn()) {
+      let newUser = blockstack.loadUserData().profile
+      this.setState({
+        user: newUser
+      })
+    } else if (blockstack.isSignInPending()) {
+      blockstack.handlePendingSignIn()
+      .then((userData) => {
+        window.location = window.location.origin
+      })
+    }
     const {user} = this.state
     // Display default with first item of array
     let d = this.state.displayed.concat(apiResponse.data[0])
