@@ -64,6 +64,11 @@ API calls can now be made to `http://0.0.0.0:8080/`.
 ```
 ./automate_script.sh
 ```
+To update the RDS database using csv files, run:
+
+```
+python create_db.py
+```
 
 ## API Endpoints
 
@@ -76,4 +81,9 @@ There are currently four endpoints for the API.
 
 ## Querying AWS
 
-The API is hosted on a public EC2 instance with an entry-point of the format: 'ec2-IP-address.us-west-2.compute.amazonaws.com:8080/<endpoint>'. The IP address changes as instances are turned on and off (instances are not persistent). I'll post updates here for when this endpoint changes.
+The API is hosted on a public EC2 instance with an entry-point of the format: http://proem-io-api-dev.us-east-1.elasticbeanstalk.com/<query>
+New version of the API can be deployed using:
+
+```
+eb deploy
+```
