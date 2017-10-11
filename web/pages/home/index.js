@@ -37,7 +37,7 @@ import FlatList from '../../components/FlatList/FlatList'
 const apiResponse = require('../../utils/simple-object.json')
 
 // Blockstack js library
-const Blockstack = require('blockstack')
+const blockstack = require('blockstack')
 
 class HomePage extends Component {
   constructor(props) {

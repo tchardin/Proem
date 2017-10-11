@@ -178,7 +178,12 @@ const config = {
   },
 
   devServer: {
-    historyApiFallback: true
+    historyApiFallback: true,
+    headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE',
+        'Access-Control-Allow-Headers': 'Content-Type'
+    }
   }
 
 }
