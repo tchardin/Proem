@@ -66,8 +66,8 @@ def update():
                 "insert into %s values"%supported_currencies[idx]+"('%s',"%data[0]
                 + ",".join([str(d) for d in data[1:]]) + ")"
                 )
-            except:
-                print("Failed to update database")
+            except ValueError as valerr:
+                print("Failed to update database:" + str(valerr))
         else:
             pass
     conn.commit()
@@ -95,9 +95,9 @@ def update_regularly():
             "insert into %s_hourly values"%(supported_currencies[idx])
             + "('%s',"%data[0] + ",".join([str(d) for d in data[1:]]) + ")"
             )
-            cursor.execute("delete from %s_hourly where Date <= date('now','-14 day')"%supported_currencies[idx])
-        except:
-            print("Failed to update cache")
+            cursor.execute("delete from %s_hourly where Date <= to_char(NOW() - INTERVAL '14 days', 'MM-DD-YYYY HH24:MI:SS')"%supported_currencies[idx])
+        except ValueError as valerr:
+            print("Failed to update cache" + str(valerr))
     conn.commit()
     conn.close()
 
