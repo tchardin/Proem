@@ -1,8 +1,3 @@
-.cardContainer {
-	composes: unit from './../../styles/grid.css';
-	composes: size1of4 from './../../styles/grid.css';
-}
-
 .fullSize {
 	min-height: 100vh;
 	display: flex;
@@ -13,22 +8,24 @@
 .nav {
 	position: absolute;
 	top: 20px;
-	right: 20px;
+	left: 0;
+	right: 0;
 }
 
 .container {
 	display: flex;
+	flex-direction: row;
 	align-content: center;
-	justify-content: center;
+	justify-content: flex-start;
 }
 
 .brand {
 	font-family: 'Gotham';
 	font-weight: bold;
-	font-size: 2em;
+	font-size: 2.5em;
 	color: #000;
 	line-height: 1em;
-	padding: 0 1em 0 0;
+	margin-left: 1em;
 }
 
 .button {
@@ -38,7 +35,8 @@
 .infoCard {
 	position: absolute;
 	right: 20px;
-	top: 25%;
+	top: 50%;
+	transform: translateY(-50%);
 	z-index: 100;
 }
 
