@@ -7,11 +7,13 @@ from celery.bin import worker
 import celery.signals
 from celery.schedules import crontab
 
+
 ##Other libs
 from ast import literal_eval
 from datetime import datetime
 import requests
 import config
+import psycopg2
 
 supported_currencies = ["BTC","ETH", "LTC"]
 
