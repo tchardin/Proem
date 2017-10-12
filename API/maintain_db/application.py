@@ -73,33 +73,33 @@ def update():
     conn.commit()
     conn.close()
 
-@application.task(name='tasks.update_regularly')
-def update_regularly():
-    conn = connect_to_database(config)
-    cursor = conn.cursor()
-    bit_tickers = ['t{0}USD'.format(currency) for currency in supported_currencies]
-    r = literal_eval(requests.get("https://api.bitfinex.com/v2/tickers?symbols=" + ",".join(bit_tickers)).content)
-    for idx,coin_data in enumerate(r):
-        data = [str(datetime.now())] + [coin_data[i] for i in [-2,-1,-4,1,3,-3]]
-        data.insert(3,(data[1]+data[2])/2.0)
-        try:
-            cursor.execute("create table if not exists %s_hourly(Date text,"%(supported_currencies[idx])
-            +"High text,"
-            +"Low text,"
-            + "Mid text,"
-            + "Last text,"
-            + "Bid text,"
-            + "Ask text,"
-            + "Volume text)")
-            cursor.execute(
-            "insert into %s_hourly values"%(supported_currencies[idx])
-            + "('%s',"%data[0] + ",".join([str(d) for d in data[1:]]) + ")"
-            )
-            cursor.execute("delete from %s_hourly where Date <= to_char(NOW() - INTERVAL '14 days', 'MM-DD-YYYY HH24:MI:SS')"%supported_currencies[idx])
-        except ValueError as valerr:
-            print("Failed to update cache" + str(valerr))
-    conn.commit()
-    conn.close()
+# @application.task(name='tasks.update_regularly')
+# def update_regularly():
+#     conn = connect_to_database(config)
+#     cursor = conn.cursor()
+#     bit_tickers = ['t{0}USD'.format(currency) for currency in supported_currencies]
+#     r = literal_eval(requests.get("https://api.bitfinex.com/v2/tickers?symbols=" + ",".join(bit_tickers)).content)
+#     for idx,coin_data in enumerate(r):
+#         data = [str(datetime.now())] + [coin_data[i] for i in [-2,-1,-4,1,3,-3]]
+#         data.insert(3,(data[1]+data[2])/2.0)
+#         try:
+#             cursor.execute("create table if not exists %s_hourly(Date text,"%(supported_currencies[idx])
+#             +"High text,"
+#             +"Low text,"
+#             + "Mid text,"
+#             + "Last text,"
+#             + "Bid text,"
+#             + "Ask text,"
+#             + "Volume text)")
+#             cursor.execute(
+#             "insert into %s_hourly values"%(supported_currencies[idx])
+#             + "('%s',"%data[0] + ",".join([str(d) for d in data[1:]]) + ")"
+#             )
+#             cursor.execute("delete from %s_hourly where Date <= to_char(NOW() - INTERVAL '14 days', 'MM-DD-YYYY HH24:MI:SS')"%supported_currencies[idx])
+#         except ValueError as valerr:
+#             print("Failed to update cache" + str(valerr))
+#     conn.commit()
+#     conn.close()
 
 
 if __name__ == '__main__':
