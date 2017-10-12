@@ -93,12 +93,5 @@ api.add_resource(Data_Intervals, '/<string:coin>/<string:date_from>/<string:date
 api.add_resource(Current_Data, '/now/<string:coin>')
 api.add_resource(Data_Candles, '/candles/<string:coin>/<string:interval>')
 
-
-
-
-
-
-
-
 if __name__ == '__main__':
      application.run()
