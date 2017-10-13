@@ -97,3 +97,11 @@ New version of the API can be deployed using:
 ```
 eb deploy
 ```
+
+## Plot code
+
+Check out these links for example plots:
+
+- https://codepen.io/acamuto/pen/yzxeXQ for 2D animated area plot.
+- https://codepen.io/plotly/pen/WwXEoV for range selector time series plot.
+- https://codepen.io/plotly/pen/ae3a2b41e18e5ee8b54fe163fe270f36 for pie charts.
