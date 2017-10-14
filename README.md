@@ -1,9 +1,5 @@
 # Proem
 
-See TODOs and work in progress explained in ./web/pages/home/index.js
-
-Please think about cleaning some of the code as you go otherwise gonna be a nightmare as the codebase grows. (e.g. do we still need that bitfinex.db file or what is the package-lock etc...)
-
 App is iOS focused although could be made Android ready pretty fast when iOS development is ready.
 
 ## Status
