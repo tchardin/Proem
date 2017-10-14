@@ -22,8 +22,10 @@ supported_currencies_writted = ["bitcoin","ethereum", "litecoin","bitcoin-cash",
 global_keys = ["Date","High","Low","Mid","Last","Bid","Ask","Volume","Coin"]
 
 convert_symbols = dict()
+convert_symbols['DASH'] = "dash"
 for idx,currency in enumerate(supported_currencies):
     convert_symbols[currency] = supported_currencies_writted[idx]
+
 
 def connect_to_database(config) :
     try:
@@ -110,7 +112,7 @@ class Data_Metrics(Resource):
             r = literal_eval(requests.get("https://api.coinmarketcap.com/v1/ticker/%s"%(coin)).content)
         except ValueError as valerr:
             print("Failed to get metrics data from coinmarketcap: " + str(valerr))
-            return Response(dumps("currency not supported")
+            return Response(dumps("currency not supported"))
         resp = Response(dumps(r))
         resp.headers['Access-Control-Allow-Origin'] = '*'
         return resp
