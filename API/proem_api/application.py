@@ -37,7 +37,6 @@ def connect_to_database(config) :
 
 #### EXTRACTS DATA FROM PROEM MAINTAINED DATABASE ######################################
 class All_Data(Resource):
-    quandl.get("BITFINEX/ETCUSD", authtoken="25hmrVodDAz9wn53zGbv")
     def get(self, coin):
         #Connect to database
         conn = connect_to_database(config)
@@ -96,7 +95,6 @@ class Quandl_Intervals(Resource):
             df = df.loc[mask]
         except ValueError as valerr:
             print("Failed to extract data from quandl: " + str(valerr))
-
         resp = Response(dumps([dict(zip(list(df) ,i)) for i in df.values]))
         conn.close()
         resp.headers['Access-Control-Allow-Origin'] = '*'
@@ -156,8 +154,8 @@ class Data_Candles(Resource):
 
 
 ### global data
-api.add_resource(Quandl_Data, '/<string:coin>')
-api.add_resource(Quandl_Intervals, '/<string:coin>/<string:date_from>/<string:date_to>')
+api.add_resource(All_Data, '/<string:coin>')
+api.add_resource(Data_Intervals, '/<string:coin>/<string:date_from>/<string:date_to>')
 ### supported currencies
 api.add_resource(Supported_Currency, '/supported')
 api.add_resource(Data_Metrics, '/metrics/<string:coin>')
