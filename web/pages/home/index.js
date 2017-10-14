@@ -1,10 +1,5 @@
 /**
- * The state of the app is centralized in the HomePage component
- * TODO (Dantino): Plug in with the real API
- * Check out the ./utils/simple-object.json for the data structure
- * I tried to group by currency objects in array so if you can
- * parse the results like that you probably won't have trouble fitting
- * the components.
+ * The state of the app is now centralized in the Redux store
  * TODO (Dantino): Improve the <Graph /> component to fit domains and remain
  * full screen (Currently getting that annoying scroll)
  * TODO (Dantino or Thomas): enable zoom/scroll and tooltips.
@@ -13,7 +8,6 @@
  * TODO (Thomas): Dynamic portfolio metrics
  * TODO (Thomas): Map views to Browser history
  * TODO (Thomas): Blockstack login and storage
- * TODO (Thomas): Set up Redux store
  */
 
 

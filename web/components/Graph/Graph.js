@@ -28,7 +28,7 @@ class GraphComponent extends Component {
         date: new Date(child.date),
         price: Number(child.last)}
       })
-    const chart = bigChart.slice(0, 100)
+    const chart = bigChart.slice(0, bigChart.length-1)
     return (
       <div className={s.container}>
         <VictoryChart
