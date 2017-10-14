@@ -67,11 +67,29 @@ ssh -i "proem-key-pair.pem" ec2-user@ec2-54-191-34-79.us-west-2.compute.amazonaw
 cd Proem/API/maintain_db
 nohup python application.py &
 ```
+
+OR :
+
+```
+cd maintain_db
+ssh -i "proem-key-pair.pem" ec2-user@ec2-54-191-34-79.us-west-2.compute.amazonaws.com
+contrab -e
+01 00 * * * /home/ec2-user/Proem/API/create_database.sh
+:wq
+```
+
 To kill, with PID the process ID:
 ```
 ps -ef | grep python
 kill -9 PID
 ```
+
+or if using crontab:
+```
+cd
+crontab -r
+``
+
 To update the RDS database using csv files, run:
 
 ```
