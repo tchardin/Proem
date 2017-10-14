@@ -62,7 +62,15 @@ API calls can now be made to `http://0.0.0.0:8080/`.
 ## Database Maintenance
  To automate the maintenance of the database of daily historical data and a local cache of minute precision values run:
 ```
-./automate_script.sh
+cd maintain_db
+ssh -i "proem-key-pair.pem" ec2-user@ec2-54-191-34-79.us-west-2.compute.amazonaws.com
+cd Proem/API/maintain_db
+nohup python application.py &
+```
+To kill, with PID the process ID:
+```
+ps -ef | grep python
+kill -9 PID
 ```
 To update the RDS database using csv files, run:
 
@@ -77,7 +85,9 @@ There are currently four endpoints for the API.
 1. '/<string:coin>' which collects historical data for a coin. The coin argument is passed as the ticker symbol capitalised: eg: 'BTC'.
 2. '/<string:coin>/<string:date_from>/<string:date_to>' searches the locally hosted database between two date strings passed in the format 'YYYY-MM-DD'.
 3. '/now/<string:coin>' queries the bitfinex API for the most recent data point.
-4. '/candles/<string:coin>/<string:interval>' queries the bitfinex API for candle milestones for plotting, the query automatically demands for the highest resolution possible. Possible resolutions are: '1m', '5m', '15m', '30m', '1h', '3h', '6h', '12h', '1D', '7D', '14D', '1M'. These give an order of magnitude for the dates returned '1M' for example actually returns a couple months worth of data.
+4. '/candles/<string:coin>/<string:interval>' queries the bitfinex API for candle milestones for plotting, the query automatically demands for the highest resolution possible. Possible resolutions are: '1m', '5m', '15m', '30m', '1h', '3h', '6h', '12h', '1D', '7D', '14D', '1M'. These give an order of magnitude for the dates returned '1M' for example actually returns a couple months worth of data. The coin argument is passed as the ticker symbol capitalised: eg: 'BTC'.
+5. '/supported' to return the supported currencies.
+6. '/metrics/<string:coin>' to return the current metrics for a coin from coinmarketcap. The coin argument is passed as the ticker symbol capitalised: eg: 'BTC'.
 
 ## Querying AWS
 
@@ -87,3 +97,11 @@ New version of the API can be deployed using:
 ```
 eb deploy
 ```
+
+## Plot code
+
+Check out these links for example plots:
+
+- https://codepen.io/acamuto/pen/yzxeXQ for 2D animated area plot.
+- https://codepen.io/plotly/pen/WwXEoV for range selector time series plot.
+- https://codepen.io/plotly/pen/ae3a2b41e18e5ee8b54fe163fe270f36 for pie charts.

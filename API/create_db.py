@@ -20,8 +20,7 @@ for currency in supported_currencies:
         +"""Last text,"""
         +"""Bid text,"""
         +"""Ask text,"""
-        +"""Volume text,"""
-        +"""Coin text)"""
+        +"""Volume text)"""
         )
         f = open(r'data_csv/BITFINEX-' + currency + 'USD.csv', 'r')
         cursor.copy_from(f,currency,sep=',')
