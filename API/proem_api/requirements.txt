@@ -7,4 +7,5 @@ requests
 datetime
 celery
 psycopg2
+pandas
 quandl
