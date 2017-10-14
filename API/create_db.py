@@ -1,5 +1,5 @@
 import psycopg2
-supported_currencies = ["BTC","ETH", "LTC"]
+supported_currencies = ["BTC","ETH", "LTC", "BCH", "ETC","ZEC","XMR"]
 import config
 
 try:

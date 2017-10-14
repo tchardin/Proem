@@ -10,13 +10,21 @@ from ast import literal_eval
 import requests
 import psycopg2
 import config
+import quandl
 
 application = Flask(__name__)
 # application.config["DEBUG"] = True
 api = Api(application)
 
-supported_currencies = ["BTC","ETH", "LTC"]
+supported_currencies = ["BTC","ETH", "LTC", "BCH", "ETC","ZEC","XMR"]
+supported_currencies_writted = ["bitcoin","ethereum", "litecoin","bitcoin-cash", "ethereum-classic","zcash","dash","monero"]
+
 global_keys = ["Date","High","Low","Mid","Last","Bid","Ask","Volume","Coin"]
+
+convert_symbols = dict()
+for idx,currency in enumerate(supported_currencies):
+    convert_symbols[currency] = supported_currencies_writted[idx]
+
 def connect_to_database(config) :
     try:
         conn=psycopg2.connect(dbname= 'proemdbdev', host= config.database_host,
@@ -25,17 +33,9 @@ def connect_to_database(config) :
         print("Unable to connect to database: " + valerr)
     return conn
 
-def convert_from_symbol(symbol) :
-    if(symbol=='BTC'):
-        return 'bitcoin'
-    elif(symbol=='ETH'):
-        return 'ethereum'
-    elif(symbol=='LTC'):
-        return 'litecoin'
-    else:
-        return 'not supported'
-
+#### EXTRACTS DATA FROM PROEM MAINTAINED DATABASE ######################################
 class All_Data(Resource):
+    quandl.get("BITFINEX/ETCUSD", authtoken="25hmrVodDAz9wn53zGbv")
     def get(self, coin):
         #Connect to database
         conn = connect_to_database(config)
@@ -53,14 +53,64 @@ class All_Data(Resource):
         resp.headers['Access-Control-Allow-Origin'] = '*'
         return resp
 
+
+class Data_Intervals(Resource):
+    def get(self, coin, date_from, date_to):
+        conn = connect_to_database(config)
+        try:
+            cursor = conn.cursor()
+            query = cursor.execute("select * from %s where Date between '%s' and '%s' order by date asc"%(coin, date_from, date_to))
+        except ValueError as valerr:
+            print("Failed to extract historical data in intervals: " + str(valerr))
+        keys = [desc[0] for desc in cursor.description]
+        resp = Response(dumps([dict(zip(tuple(keys) ,i)) for i in cursor]))
+        conn.close()
+        resp.headers['Access-Control-Allow-Origin'] = '*'
+        return resp
+        #We can have PUT,DELETE,POST here. But in our API GET implementation is sufficient
+
+
+#### EXTRACTS DATA FROM QUANDL MAINTAINED DATABASE ######################################
+
+class Quandl_Data(Resource):
+    def get(self, coin):
+        #Connect to database
+        try:
+            df = quandl.get("BITFINEX/%sUSD"%coin, authtoken="25hmrVodDAz9wn53zGbv")
+        except ValueError as valerr:
+            print("Failed to extract data from quandl: " + str(valerr))
+
+        resp = Response(dumps([dict(zip(list(df),i)) for i in df.values]))
+        #add access control to API.
+        resp.headers['Access-Control-Allow-Origin'] = '*'
+        return resp
+
+class Quandl_Intervals(Resource):
+    def get(self, coin, date_from, date_to):
+
+        try:
+            df = quandl.get("BITFINEX/%sUSD"%coin, authtoken="25hmrVodDAz9wn53zGbv")
+            mask = (df['Date'] > date_from) & (df['Date'] <= date_to)
+            df = df.loc[mask]
+        except ValueError as valerr:
+            print("Failed to extract data from quandl: " + str(valerr))
+
+        resp = Response(dumps([dict(zip(list(df) ,i)) for i in df.values]))
+        conn.close()
+        resp.headers['Access-Control-Allow-Origin'] = '*'
+        return resp
+
+#### GETS CURRENT DATA AND METRICS  ######################################
+
 class Data_Metrics(Resource):
     def get(self, coin):
         data = []
-        coin = convert_from_symbol(coin)
+        coin = convert_symbols[coin]
         try:
             r = literal_eval(requests.get("https://api.coinmarketcap.com/v1/ticker/%s"%(coin)).content)
         except ValueError as valerr:
             print("Failed to get metrics data from coinmarketcap: " + str(valerr))
+            return Response(dumps("currency not supported")
         resp = Response(dumps(r))
         resp.headers['Access-Control-Allow-Origin'] = '*'
         return resp
@@ -101,26 +151,14 @@ class Data_Candles(Resource):
 
         #We can have PUT,DELETE,POST here. But in our API GET implementation is sufficient
 
-class Data_Intervals(Resource):
-    def get(self, coin, date_from, date_to):
-        conn = connect_to_database(config)
-        try:
-            cursor = conn.cursor()
-            query = cursor.execute("select * from %s where Date between '%s' and '%s' order by date asc"%(coin, date_from, date_to))
-        except ValueError as valerr:
-            print("Failed to extract historical data in intervals: " + str(valerr))
-        keys = [desc[0] for desc in cursor.description]
-        resp = Response(dumps([dict(zip(tuple(keys) ,i)) for i in cursor]))
-        conn.close()
-        resp.headers['Access-Control-Allow-Origin'] = '*'
-        return resp
-        #We can have PUT,DELETE,POST here. But in our API GET implementation is sufficient
 
 
-api.add_resource(All_Data, '/<string:coin>')
+### global data
+api.add_resource(Quandl_Data, '/<string:coin>')
+api.add_resource(Quandl_Intervals, '/<string:coin>/<string:date_from>/<string:date_to>')
+### supported currencies
 api.add_resource(Supported_Currency, '/supported')
 api.add_resource(Data_Metrics, '/metrics/<string:coin>')
-api.add_resource(Data_Intervals, '/<string:coin>/<string:date_from>/<string:date_to>')
 api.add_resource(Current_Data, '/now/<string:coin>')
 api.add_resource(Data_Candles, '/candles/<string:coin>/<string:interval>')
 
