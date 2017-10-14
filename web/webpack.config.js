@@ -9,7 +9,7 @@ const isDebug = global.DEBUG === false ? false : !process.argv.includes('--relea
 const isVerbose = process.argv.includes('--verbose') || process.argv.includes('-v')
 const useHMR = !!global.HMR // Hot Module Replacement (HMR)
 const babelConfig = Object.assign({}, pkg.babel, {
-  babelrc: false,
+  babelrc: true,
   cacheDirectory: useHMR,
 })
 
@@ -73,7 +73,8 @@ const config = {
       {
         test: /\.jsx?$/,
         include: [
-          path.resolve(__dirname, './actions'),
+          path.resolve(__dirname, './store'),
+          path.resolve(__dirname, './market'),
           path.resolve(__dirname, './components'),
           path.resolve(__dirname, './core'),
           path.resolve(__dirname, './pages'),

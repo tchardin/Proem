@@ -2,8 +2,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #000;
+  /*background: linear-gradient(
+    to top,
+    black 75%,
+    rgba(255, 0, 0, 0)
+    );*/
+  background-color: black;
   padding-bottom: 1em;
+  padding-top: 1em;
+
 }
 
 .list {
@@ -23,12 +30,21 @@
       display: none;
    }
 
+.activeItem {
+  color: #fff;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .item {
   color: #fff;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  opacity: 0.5;
 }
 
 .label {
@@ -52,6 +68,14 @@
 
 .id {
   font-weight: bold;
+}
+
+.pChange {
+  color: #1BB900;
+}
+
+.nChange {
+  color: #B90000;
 }
 
 .leftInfo,

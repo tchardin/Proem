@@ -9,7 +9,8 @@ class FlatListComponent extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      position: 0
+      position: 0,
+      selectedFiat: 'USD'
     }
     this.selectItem = this.selectItem.bind(this)
     this.scroll = this.scroll.bind(this)
@@ -46,24 +47,28 @@ class FlatListComponent extends Component {
   selectItem(e) {
     this.props.onSelectItem(e)
   }
-  handleChange(e) {
-    this.props.onChange(e)
+  handleChange({target}) {
+    this.setState({
+      [target.name]: target.value
+    })
   }
   render() {
-    const {position} = this.state
-    let list = this.props.items.map(item => (
+    const {position, selectedFiat} = this.state
+    const {items, ids, selectedItem} = this.props
+    let list = ids.map(id => (
       <li
-        className={s.item}
-        key={item.id}
-        onClick={() => this.selectItem(item)}>
+        className={id === selectedItem ? s.activeItem : s.item}
+        key={id}
+        onClick={() => this.selectItem(id)}>
         <label
           className={s.label}>
-          <div className={s.id}>{item.id}</div>
-          <div className={s.price}>{item.info[0].value}</div>
-          <div className={s.change}>{item.info[1].value}</div>
+          <div className={s.id}>{id}</div>
+          <div className={s.price}>{items[id].metrics.items.price_usd}</div>
+          <div
+            className={items[id].metrics.items.percent_change_24h > 0 ? s.pChange : s.nChange}>
+            {items[id].metrics.items.percent_change_24h}%
+          </div>
         </label>
-        <Radio
-          isActive={this.props.selectedItems.includes(item)} />
       </li>
     ))
     const fiat = ['USD', 'EUR', 'JPY', 'GBP', 'CHF', 'CAD', 'AUD', 'NZD', 'ZAR', 'CNY']
@@ -95,8 +100,8 @@ class FlatListComponent extends Component {
         <div className={s.rightInfo}>
           <div className={s.select}>
             <select
-              name="fiat"
-              value={this.props.fiat}
+              name="selectedFiat"
+              value={this.state.selectedFiat}
               onChange={this.handleChange}>
               {options}
             </select>
