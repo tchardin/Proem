@@ -25,6 +25,7 @@ for currency in supported_currencies:
         f = open(r'data_csv/BITFINEX-' + currency + 'USD.csv', 'r')
         cursor.copy_from(f,currency,sep=',')
         f.close()
+        cursor.execute("DELETE FROM " + currency + " WHERE volume = 'Volume'")
         # cursor.execute("""COPY """ + currency + """ FROM 'data_csv/BITFINEX-""" + currency + """USD.csv' WITH (FORMAT csv);""")
     except ValueError as valerr:
         print("Unable to populate table: " + currency)
