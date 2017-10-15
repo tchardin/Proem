@@ -6,3 +6,16 @@ curl https://www.quandl.com/api/v3/datasets/BITFINEX/ETCUSD.csv?api_key=25hmrVod
 curl https://www.quandl.com/api/v3/datasets/BITFINEX/LTCUSD.csv?api_key=25hmrVodDAz9wn53zGbv > BITFINEX-LTCUSD.csv
 curl https://www.quandl.com/api/v3/datasets/BITFINEX/XMRUSD.csv?api_key=25hmrVodDAz9wn53zGbv > BITFINEX-XMRUSD.csv
 curl https://www.quandl.com/api/v3/datasets/BITFINEX/ZECUSD.csv?api_key=25hmrVodDAz9wn53zGbv > BITFINEX-ZECUSD.csv
+
+
+sudo rm USDEUR.csv USDGBP.csv USDJPY.csv USDCHF.csv USDCAD.csv USDAUD.csv USDNZD.csv USDZAR.csv USDCNY.csv
+#
+# curl https://www.quandl.com/api/v3/datasets/CUR/EUR.csv?api_key=25hmrVodDAz9wn53zGbv > USDEUR.csv
+# curl https://www.quandl.com/api/v3/datasets/CUR/GBP.csv?api_key=25hmrVodDAz9wn53zGbv > USDGBP.csv
+# curl https://www.quandl.com/api/v3/datasets/CUR/JPY.csv?api_key=25hmrVodDAz9wn53zGbv > USDJPY.csv
+# curl https://www.quandl.com/api/v3/datasets/CUR/CHF.csv?api_key=25hmrVodDAz9wn53zGbv > USDCHF.csv
+# curl https://www.quandl.com/api/v3/datasets/CUR/CAD.csv?api_key=25hmrVodDAz9wn53zGbv > USDCAD.csv
+# curl https://www.quandl.com/api/v3/datasets/CUR/AUD.csv?api_key=25hmrVodDAz9wn53zGbv > USDAUD.csv
+# curl https://www.quandl.com/api/v3/datasets/CUR/NZD.csv?api_key=25hmrVodDAz9wn53zGbv > USDNZD.csv
+# curl https://www.quandl.com/api/v3/datasets/CUR/ZAR.csv?api_key=25hmrVodDAz9wn53zGbv > USDZAR.csv
+# curl https://www.quandl.com/api/v3/datasets/CUR/CNY.csv?api_key=25hmrVodDAz9wn53zGbv > USDCNY.csv

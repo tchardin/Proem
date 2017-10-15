@@ -1,11 +1,14 @@
 import psycopg2
 supported_currencies = ["BTC","ETH", "LTC", "BCH", "ETC","ZEC","XMR"]
+supported_fiat = ['USD', 'EUR', 'JPY', 'GBP', 'CHF', 'CAD', 'AUD',  'CNY', 'NZD', 'ZAR']
+from ast import literal_eval
+import numpy as np
 import config
 import pandas
+import requests
 
-def r(df):
-    for idx, row in df.iterrows():
-        yield ','.join(map(str, row))
+
+
 
 try:
     conn=psycopg2.connect(dbname= 'proemdbdev', host= config.database_host,
@@ -14,15 +17,18 @@ except ValueError as valerr:
     print("Unable to connect to database: " + valerr)
 
 cursor = conn.cursor()
-
+rates = literal_eval(requests.get("http://api.fixer.io/latest?base=USD").content)
 for currency in supported_currencies:
-    try :
-
-        pd = pandas.read_csv('data_csv/BITFINEX-' + currency + 'USD.csv')
-        sql = "INSERT INTO " + currency + " VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
-        cursor.execute(sql,[f for f in pd.values[0]])
-    except ValueError as valerr:
-        print("Unable to populate table: " + currency)
+    for fiat in supported_fiat:
+        try :
+            pd = pandas.read_csv('data_csv/BITFINEX-' + currency + 'USD.csv')
+            row = pd.values[0]
+            if (fiat != 'USD'):
+                row = np.asfarray(row)*rates['rates'][fiat]
+            sql = "INSERT INTO " + currency + " VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+            cursor.execute(sql,[f for f in row])
+        except ValueError as valerr:
+            print("Unable to populate table: " + currency)
 
 conn.commit()
 print("DB updated.")
