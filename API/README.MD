@@ -73,7 +73,7 @@ OR :
 ```
 cd maintain_db
 ssh -i "proem-key-pair.pem" ec2-user@ec2-54-191-34-79.us-west-2.compute.amazonaws.com
-contrab -e
+crontab -e
 01 00 * * * /home/ec2-user/Proem/API/create_database.sh
 :wq
 ```
