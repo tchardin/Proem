@@ -18,8 +18,10 @@ api = Api(application)
 
 supported_currencies = ["BTC","ETH", "LTC", "BCH", "ETC","ZEC","XMR"]
 supported_currencies_writted = ["bitcoin","ethereum", "litecoin","bitcoin-cash", "ethereum-classic","zcash","dash","monero"]
+supported_fiat = ['USD', 'EUR', 'JPY', 'GBP', 'CHF', 'CAD', 'AUD',  'CNY', 'NZD', 'ZAR']
 
-global_keys = ["Date","High","Low","Mid","Last","Bid","Ask","Volume","Coin"]
+
+global_keys = ["Date","High","Low","Mid","Last","Bid","Ask","Volume"]
 
 convert_symbols = dict()
 convert_symbols['DASH'] = "dash"
@@ -37,13 +39,13 @@ def connect_to_database(config) :
 
 #### EXTRACTS DATA FROM PROEM MAINTAINED DATABASE ######################################
 class All_Data(Resource):
-    def get(self, coin):
+    def get(self, coin, fiat):
         #Connect to database
         conn = connect_to_database(config)
         #Perform query and return JSON data
         try:
             cursor = conn.cursor()
-            query = cursor.execute("select * from %s order by date asc"%coin)
+            query = cursor.execute("select * from %s%s order by date asc"%(coin,fiat))
         except ValueError as valerr:
             print("Failed to extract all data: " + str(valerr))
         #Query the result and get cursor.Dumping that data to a JSON is looked by extension
@@ -56,11 +58,11 @@ class All_Data(Resource):
 
 
 class Data_Intervals(Resource):
-    def get(self, coin, date_from, date_to):
+    def get(self, coin, fiat, date_from, date_to):
         conn = connect_to_database(config)
         try:
             cursor = conn.cursor()
-            query = cursor.execute("select * from %s where Date between '%s' and '%s' order by date asc"%(coin, date_from, date_to))
+            query = cursor.execute("select * from %s%s where Date between '%s' and '%s' order by date asc"%(coin,fiat, date_from, date_to))
         except ValueError as valerr:
             print("Failed to extract historical data in intervals: " + str(valerr))
         keys = [desc[0] for desc in cursor.description]
@@ -117,34 +119,42 @@ class Data_Metrics(Resource):
 
 class Supported_Currency(Resource):
     def get(self):
-        resp = Response(dumps(supported_currencies))
+        resp = Response(dumps({'crypto': supported_currencies, 'fiat': supported_fiat}))
         resp.headers['Access-Control-Allow-Origin'] = '*'
         return resp
 
 class Current_Data(Resource):
-    def get(self, coin):
+    def get(self, coin, fiat):
         bfx_coin = 't{0}USD'.format(coin)
         #May seem wasteful but will keep the same names across applications
         try:
+            rates = literal_eval(requests.get("http://api.fixer.io/latest?base=USD").content)
             r = literal_eval(requests.get("https://api.bitfinex.com/v2/ticker/%s"%bfx_coin).content)
         except ValueError as valerr:
             print("Failed to get current data from bitfinex: " + str(valerr))
-        data = [str(datetime.now())] + [float(r[i]) for i in [-2,-1,-4,0,2,-3]] + [coin]
+        if (fiat != 'USD'):
+            data = [str(datetime.now())] + [float(r[i])*rates['rates'][fiat] for i in [-2,-1,-4,0,2,-3]]
+        else:
+            data = [str(datetime.now())] + [float(r[i]) for i in [-2,-1,-4,0,2,-3]]
         data.insert(3,(data[1]+data[2])/2.0)
         resp = Response(dumps([dict(zip(tuple(global_keys) ,data))]))
         resp.headers['Access-Control-Allow-Origin'] = '*'
         return resp
 
 class Data_Candles(Resource):
-    def get(self, coin, interval):
+    def get(self, coin, fiat,  interval):
         data = []
         bfx_coin = 't{0}USD'.format(coin)
         try:
+            rates = literal_eval(requests.get("http://api.fixer.io/latest?base=USD").content)
             r = literal_eval(requests.get("https://api.bitfinex.com/v2/candles/trade:%s:%s/hist?limit=1000"%(interval,bfx_coin)).content)
         except ValueError as valerr:
             print("Failed to get candles data from bitfinex: " + str(valerr))
         for point in r:
-            data.append([[str(datetime.fromtimestamp(point[0]//1000.0))] + [float(point[i]) for i in range(1,len(point))] + [coin]])
+            if (fiat != 'USD'):
+                data.append([[str(datetime.fromtimestamp(point[0]//1000.0))] + [float(point[i])*rates['rates'][fiat] for i in range(1,len(point))]])
+            else:
+                data.append([[str(datetime.fromtimestamp(point[0]//1000.0))] + [float(point[i]) for i in range(1,len(point))]])
         resp = Response(dumps([dict(zip(tuple (["Date", "Open", "Close", "High", "Low", "Volume"]) ,d)) for d in data]))
         resp.headers['Access-Control-Allow-Origin'] = '*'
         return resp
@@ -154,13 +164,13 @@ class Data_Candles(Resource):
 
 
 ### global data
-api.add_resource(All_Data, '/<string:coin>')
-api.add_resource(Data_Intervals, '/<string:coin>/<string:date_from>/<string:date_to>')
+api.add_resource(All_Data, '/<string:coin>/<string:fiat>')
+api.add_resource(Data_Intervals, '/<string:coin>/<string:date_from>/<string:date_to>/<string:fiat>')
 ### supported currencies
 api.add_resource(Supported_Currency, '/supported')
 api.add_resource(Data_Metrics, '/metrics/<string:coin>')
-api.add_resource(Current_Data, '/now/<string:coin>')
-api.add_resource(Data_Candles, '/candles/<string:coin>/<string:interval>')
+api.add_resource(Current_Data, '/now/<string:coin>/<string:fiat>')
+api.add_resource(Data_Candles, '/candles/<string:coin>/<string:interval>/<string:fiat>')
 
 if __name__ == '__main__':
      application.run()

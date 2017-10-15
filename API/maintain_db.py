@@ -24,7 +24,7 @@ for currency in supported_currencies:
             pd = pandas.read_csv('data_csv/BITFINEX-' + currency + 'USD.csv')
             row = pd.values[0]
             if (fiat != 'USD'):
-                row = np.asfarray(row)*rates['rates'][fiat]
+                row[1:-1] = np.asfarray(row[1:-1])*rates['rates'][fiat]
             sql = "INSERT INTO " + currency + " VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
             cursor.execute(sql,[str(f) for f in row])
         except ValueError as valerr:
