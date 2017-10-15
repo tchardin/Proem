@@ -105,11 +105,11 @@ class Quandl_Intervals(Resource):
 #### GETS CURRENT DATA AND METRICS  ######################################
 
 class Data_Metrics(Resource):
-    def get(self, coin):
+    def get(self, fiat, coin):
         data = []
         coin = convert_symbols[coin]
         try:
-            r = literal_eval(requests.get("https://api.coinmarketcap.com/v1/ticker/%s"%(coin)).content)
+            r = literal_eval(requests.get("https://api.coinmarketcap.com/v1/ticker/%s/?convert=%s"%(coin,fiat)).content)
         except ValueError as valerr:
             print("Failed to get metrics data from coinmarketcap: " + str(valerr))
             return Response(dumps("currency not supported"))
@@ -168,7 +168,7 @@ api.add_resource(All_Data, '/<string:coin>/<string:fiat>')
 api.add_resource(Data_Intervals, '/<string:coin>/<string:date_from>/<string:date_to>/<string:fiat>')
 ### supported currencies
 api.add_resource(Supported_Currency, '/supported')
-api.add_resource(Data_Metrics, '/metrics/<string:coin>')
+api.add_resource(Data_Metrics, '/metrics/<string:coin>/<string:fiat>')
 api.add_resource(Current_Data, '/now/<string:coin>/<string:fiat>')
 api.add_resource(Data_Candles, '/candles/<string:coin>/<string:interval>/<string:fiat>')
 
