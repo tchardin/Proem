@@ -37,17 +37,32 @@ def connect_to_database(config) :
         print("Unable to connect to database: " + valerr)
     return conn
 
+def make_request(url, cursor):
+    try:
+        cursor.execute(url)
+    except ValueError as valerr:
+        print("Failed to extract data: " + str(valerr))
+
+
 #### EXTRACTS DATA FROM PROEM MAINTAINED DATABASE ######################################
 class All_Data(Resource):
-    def get(self, coin, fiat):
+    def get(self, coin):
         #Connect to database
+        date_to = request.args.get('date_to')
+        print(date_to)
+        date_from = request.args.get('date_from')
+        fiat = request.args.get('fiat')
+        if fiat is None:
+            fiat = 'USD'
         conn = connect_to_database(config)
+        cursor = conn.cursor()
         #Perform query and return JSON data
-        try:
-            cursor = conn.cursor()
-            query = cursor.execute("select * from %s%s order by date asc"%(coin,fiat))
-        except ValueError as valerr:
-            print("Failed to extract all data: " + str(valerr))
+        if (date_to is None and date_from is not None):
+            make_request("select * from %s%s where Date >= '%s' order by date asc"%(coin,fiat, date_from), cursor)
+        elif(date_to is None and date_from is None):
+            make_request("select * from %s%s order by date asc"%(coin,fiat), cursor)
+        else:
+            make_request("select * from %s%s where Date between '%s' and '%s' order by date asc"%(coin,fiat, date_from, date_to), cursor)
         #Query the result and get cursor.Dumping that data to a JSON is looked by extension
         keys = [desc[0] for desc in cursor.description]
         resp = Response(dumps([dict(zip(tuple(keys),i)) for i in cursor]))
@@ -55,22 +70,6 @@ class All_Data(Resource):
         #add access control to API.
         resp.headers['Access-Control-Allow-Origin'] = '*'
         return resp
-
-
-class Data_Intervals(Resource):
-    def get(self, coin, fiat, date_from, date_to):
-        conn = connect_to_database(config)
-        try:
-            cursor = conn.cursor()
-            query = cursor.execute("select * from %s%s where Date between '%s' and '%s' order by date asc"%(coin,fiat, date_from, date_to))
-        except ValueError as valerr:
-            print("Failed to extract historical data in intervals: " + str(valerr))
-        keys = [desc[0] for desc in cursor.description]
-        resp = Response(dumps([dict(zip(tuple(keys) ,i)) for i in cursor]))
-        conn.close()
-        resp.headers['Access-Control-Allow-Origin'] = '*'
-        return resp
-        #We can have PUT,DELETE,POST here. But in our API GET implementation is sufficient
 
 
 #### EXTRACTS DATA FROM QUANDL MAINTAINED DATABASE ######################################
@@ -105,7 +104,10 @@ class Quandl_Intervals(Resource):
 #### GETS CURRENT DATA AND METRICS  ######################################
 
 class Data_Metrics(Resource):
-    def get(self, fiat, coin):
+    def get(self, coin):
+        fiat = request.args.get('fiat')
+        if fiat is None:
+            fiat = 'USD'
         data = []
         coin = convert_symbols[coin]
         try:
@@ -124,7 +126,10 @@ class Supported_Currency(Resource):
         return resp
 
 class Current_Data(Resource):
-    def get(self, coin, fiat):
+    def get(self, coin):
+        fiat = request.args.get('fiat')
+        if fiat is None:
+            fiat = 'USD'
         bfx_coin = 't{0}USD'.format(coin)
         #May seem wasteful but will keep the same names across applications
         try:
@@ -142,7 +147,13 @@ class Current_Data(Resource):
         return resp
 
 class Data_Candles(Resource):
-    def get(self, coin, fiat,  interval):
+    def get(self, coin):
+        fiat = request.args.get('fiat')
+        interval = request.args.get('interval')
+        if fiat is None:
+            fiat = 'USD'
+        if interval is None:
+            interval = '1M'
         data = []
         bfx_coin = 't{0}USD'.format(coin)
         try:
@@ -164,13 +175,13 @@ class Data_Candles(Resource):
 
 
 ### global data
-api.add_resource(All_Data, '/<string:coin>/<string:fiat>')
-api.add_resource(Data_Intervals, '/<string:coin>/<string:date_from>/<string:date_to>/<string:fiat>')
+api.add_resource(All_Data, '/<string:coin>')
+# api.add_resource(Data_Intervals, '/<string:coin>')
 ### supported currencies
 api.add_resource(Supported_Currency, '/supported')
-api.add_resource(Data_Metrics, '/metrics/<string:coin>/<string:fiat>')
-api.add_resource(Current_Data, '/now/<string:coin>/<string:fiat>')
-api.add_resource(Data_Candles, '/candles/<string:coin>/<string:interval>/<string:fiat>')
+api.add_resource(Data_Metrics, '/metrics/<string:coin>')
+api.add_resource(Current_Data, '/now/<string:coin>')
+api.add_resource(Data_Candles, '/candles/<string:coin>')
 
 if __name__ == '__main__':
      application.run()

@@ -100,12 +100,12 @@ python create_db.py
 
 There are currently four endpoints for the API.
 
-1. '/<string:coin>/<string:fiat>'' which collects historical data for a coin. The coin argument is passed as the ticker symbol capitalised: eg: 'BTC'. Fiat currencies are passed in symbolic form eg: 'USD'.
-2. '/<string:coin>/<string:date_from>/<string:date_to>/<string:fiat>' searches the locally hosted database between two date strings passed in the format 'YYYY-MM-DD'.
-3. '/now/<string:coin>/<string:fiat>'' queries the bitfinex API for the most recent data point.
-4. '/candles/<string:coin>/<string:interval>/<string:fiat>'' queries the bitfinex API for candle milestones for plotting, the query automatically demands for the highest resolution possible. Possible resolutions are: '1m', '5m', '15m', '30m', '1h', '3h', '6h', '12h', '1D', '7D', '14D', '1M'. These give an order of magnitude for the dates returned '1M' for example actually returns a couple months worth of data. The coin argument is passed as the ticker symbol capitalised: eg: 'BTC'.
+1. '/<string:coin>?fiat=<string:fiat>'' which collects historical data for a coin. The coin argument is passed as the ticker symbol capitalised: eg: 'BTC'. Fiat currencies are passed in symbolic form eg: 'USD' and default to USD if not passed.
+2. '/<string:coin>?date_from=<string:date_from>&date_to=<string:date_to>&fiat=<string:fiat>' searches the locally hosted database between two date strings passed in the format 'YYYY-MM-DD'. date_to and date_from default to None, returning all historical data.
+3. '/now/<string:coin>?fiat = <string:fiat>'' queries the bitfinex API for the most recent data point.
+4. '/candles/<string:coin>?interval=<string:interval>&fiat=<string:fiat>'' queries the bitfinex API for candle milestones for plotting, the query automatically demands for the highest resolution possible. Possible resolutions are: '1m', '5m', '15m', '30m', '1h', '3h', '6h', '12h', '1D', '7D', '14D', '1M'. These give an order of magnitude for the dates returned '1M' for example actually returns a couple months worth of data. Interval defaults to '1M'. The coin argument is passed as the ticker symbol capitalised: eg: 'BTC' and defaults to USD?
 5. '/supported' to return the supported currencies.
-6. '/metrics/<string:coin>/<string:fiat>' to return the current metrics for a coin from coinmarketcap. The coin argument is passed as the ticker symbol capitalised: eg: 'BTC'.
+6. '/metrics/<string:coin>?fiat=<string:fiat>' to return the current metrics for a coin from coinmarketcap. The coin argument is passed as the ticker symbol capitalised: eg: 'BTC'.
 
 ## Querying AWS
 
