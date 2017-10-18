@@ -1,36 +1,48 @@
 // Card displaying information about specific currencies
 
 import React, { Component } from 'react'
+import {connect} from 'react-redux'
+import Button from '../Button/Button'
 // local styles
 import s from './styles.css'
 
-
-class CardComponent extends Component {
-  constructor(props) {
-    super(props)
-    this.handleSubmit = this.handleSubmit.bind(this)
-  }
+class ImportCard extends Component {
   handleSubmit() {
-    this.props.onSubmit()
+  }
+  handleCancel() {
+
   }
   render() {
-    let list = this.props.item.info.map(i => (
-      <div className={s.row} key={i.field}>
-        <div className={s.label}>{i.field}</div>
-        <div className={s.value}>{i.value}</div>
-      </div>
-    ))
+    const {metrics, selectedFiat, selectedCrypto} = this.props
+    if (typeof metrics[selectedCrypto] === 'undefined'
+    || typeof metrics[selectedCrypto][selectedFiat] === 'undefined'
+    || metrics[selectedCrypto][selectedFiat].isFetching) {
+      return null
+    }
+    const {items} = metrics[selectedCrypto][selectedFiat]
     return (
       <div className={s.card}>
-        <h1 className={s.cardHeader}>{this.props.item.name}</h1>
+        <div className={s.cardHeader}>
+          <h1 className={s.cardTitle}>METRICS</h1>
+        </div>
         <div className={s.cardBody}>
           <div className={s.list}>
-            {list}
-          </div>
-          <div className={s.btnContainer}>
-            <button
-              className={s.btn}
-              onClick={() => this.handleSubmit()}>Import To portfolio</button>
+            <div className={s.row}>
+              <div className={s.label}>Price</div>
+              <div className={s.value}>{items.price}</div>
+            </div>
+            <div className={s.row}>
+              <div className={s.label}>Change (24h)</div>
+              <div className={s.value}>{items.percent_change_24h}%</div>
+            </div>
+            <div className={s.row}>
+              <div className={s.label}>Volume (24h)</div>
+              <div className={s.value}>{items['24h_volume']}</div>
+            </div>
+            <div className={s.row}>
+              <div className={s.label}>Available Supply</div>
+              <div className={s.value}>{items.available_supply}</div>
+            </div>
           </div>
         </div>
       </div>
@@ -38,4 +50,14 @@ class CardComponent extends Component {
   }
 }
 
-export default CardComponent
+const mapStateToProps = state => {
+  const {metrics, ids} = state
+  const {selectedFiat, selectedCrypto} = ids
+  return {
+    metrics,
+    selectedFiat,
+    selectedCrypto
+  }
+}
+
+export default connect(mapStateToProps)(ImportCard)

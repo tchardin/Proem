@@ -3,24 +3,35 @@ import s from './styles.css'
 import Link from './../Link/Link'
 
 class PButton extends Component {
+  handleClick(event) {
+    this.props.onClick(event)
+  }
   render() {
-    const caption = this.props.caption
-    const style = this.props.style
+    const {caption, type, target} = this.props
     let content
     if (this.props.type === 'primary') {
       content = (
         <div
           className={s.primaryButton}>
           <span className={s.primaryCaption}>
-            {caption}
+            {caption.toUpperCase()}
+          </span>
+        </div>
+      )
+    } else {
+      content = (
+        <div
+          className={s.primaryButton}>
+          <span className={s.secondCaption}>
+            {caption.toUpperCase()}
           </span>
         </div>
       )
     }
     return (
-      <Link to={this.props.target}>
+      <a onClick={event => this.handleClick(event)}>
         {content}
-      </Link>
+      </a>
     )
   }
 }

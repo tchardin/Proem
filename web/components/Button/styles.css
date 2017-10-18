@@ -4,14 +4,21 @@
   display: -webkit-box;
   align-items: center;
   justify-content: center;
-  background-color: #fff;
-  box-shadow: 0px 2px 6px 0px rgba(0,0,0,0.25);
+  cursor: pointer;
+  /*box-shadow: 0px 2px 6px 0px rgba(0,0,0,0.25);*/
+}
+
+.primaryCaption, .secondCaption {
+  font-size: 1em;
+  font-family: 'Gotham';
+  font-weight: bold;
+  padding: 0.8em;
 }
 
 .primaryCaption {
-  font-size: 0.8em;
-  color: #000;
-  font-family: 'Gotham';
-  font-weight: 400;
-  padding: 2em;
+  color: #00CEFF;
+}
+
+.secondCaption {
+  color: #F6F6F6;
 }

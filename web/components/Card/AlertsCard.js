@@ -1,14 +1,18 @@
+/**
+ * Alerts stored on user Blockstack storage
+ *
+ */
+
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-// local shared styles with all cards to maintain consistency
-import s from './styles.css'
-import Arrow from '../svg/Arrow' // Svg icons
 import Button from '../Button/Button'
 import Cross from '../svg/Cross'
 import {update, reset} from '../../market/import'
-import {updatePortfolio} from '../../market/portfolio'
+import {addAlert} from '../../market/alerts'
 
-class ImportCard extends Component {
+import s from './styles.css'
+
+class AlertsCard extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -28,16 +32,22 @@ class ImportCard extends Component {
     this.props.update(name, value)
   }
   handleSubmit() {
-    const {amount, date, currency} = this.props
-    this.props.updatePortfolio(currency, amount, date)
+    const {amount, currency} = this.props
+    this.props.addAlert(currency, amount)
     this.props.reset()
     this.toggleInput()
   }
   render() {
     const {input} = this.state
-    const {amount, date, currency, ids} = this.props
-    let options = ids.crypto.map(
+    const {amount, currency, crypto, allIds, alertsByID} = this.props
+    let options = crypto.map(
       id => <option value={id} key={id}>{id}</option>)
+    let alerts = allIds.length ? allIds.map(id => (
+      <div className={s.row} key={id}>
+        <div className={s.label}>{alertsByID[id].crypto}</div>
+        <div className={s.value}>{alertsByID[id].price}</div>
+      </div>
+    )) : null
     let cardBody
     if (input) {
       cardBody = (
@@ -50,16 +60,6 @@ class ImportCard extends Component {
                 name="amount"
                 placeholder="Amount"
                 value={amount}
-                onChange={this.handleChange}/>
-            </div>
-          </div>
-          <div className={s.field}>
-            <div className={s.control}>
-              <input
-                className={s.input}
-                type="datetime-local"
-                name="date"
-                value={date}
                 onChange={this.handleChange}/>
             </div>
           </div>
@@ -80,7 +80,7 @@ class ImportCard extends Component {
               caption="cancel"
               type="second" />
             <Button
-              caption="import"
+              caption="set"
               type="primary"
               onClick={this.handleSubmit} />
           </div>
@@ -88,17 +88,18 @@ class ImportCard extends Component {
       )
     } else {
       cardBody = (
-        <div className={s.portfolio}>
-          <div className={s.label}>
-            Click on the + to add assets
-          </div>
+        <div className={s.list}>
+          {alerts === null ? (
+            <div className={s.label}>
+              Click on the + to add alerts
+            </div>) : alerts}
         </div>
       )
     }
     return (
       <div className={s.card}>
         <div className={s.cardHeader}>
-          <h1 className={s.cardTitle}>PORTFOLIO</h1>
+          <h1 className={s.cardTitle}>ALERTS</h1>
           <div className={s.headerBtn}
             onClick={() => this.toggleInput()}>
             <Cross
@@ -115,21 +116,11 @@ class ImportCard extends Component {
 }
 
 const mapStateToProps = state => {
-  const {form, ids} = state
-  const {
-    amount,
-    date,
-    currency
-  } = form
-  return {
-    amount,
-    date,
-    currency,
-    ids
-  }
+  const {form, ids, alerts} = state
+  const {amount, currency} = form
+  const {crypto} = ids
+  const {allIds, alertsByID} = alerts
+  return {amount, currency, crypto, allIds, alertsByID}
 }
 
-export default connect(mapStateToProps, {
-  update,
-  updatePortfolio, reset
-})(ImportCard)
+export default connect(mapStateToProps, {update, reset, addAlert})(AlertsCard)
