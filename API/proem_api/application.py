@@ -115,7 +115,23 @@ class Data_Metrics(Resource):
         except ValueError as valerr:
             print("Failed to get metrics data from coinmarketcap: " + str(valerr))
             return Response(dumps("currency not supported"))
-        resp = Response(dumps(r))
+        print(r)
+        r_formatted = [{
+        'market_cap': r[0]['market_cap_'+fiat.lower()],
+        'price': r[0]['price_'+fiat.lower()],
+        'last_updated': r[0]['last_updated'],
+        'name': r[0]['name'],
+        '24h_volume': r[0]['24h_volume_'+fiat.lower()],
+        'percent_change_7d': r[0]['percent_change_7d'],
+        'symbol': r[0]['symbol'],
+        'rank': r[0]['rank'],
+        'percent_change_1h': r[0]['percent_change_1h'],
+        'total_supply': r[0]['total_supply'],
+        'available_supply': r[0]['available_supply'],
+        'percent_change_24h': r[0]['percent_change_24h'],
+        'id': r[0]['id'],
+        }]
+        resp = Response(dumps(r_formatted))
         resp.headers['Access-Control-Allow-Origin'] = '*'
         return resp
 
@@ -163,9 +179,10 @@ class Data_Candles(Resource):
             print("Failed to get candles data from bitfinex: " + str(valerr))
         for point in r:
             if (fiat != 'USD'):
-                data.append([[str(datetime.fromtimestamp(point[0]//1000.0))] + [float(point[i])*rates['rates'][fiat] for i in range(1,len(point))]])
+                data.append([str(datetime.fromtimestamp(point[0]//1000.0))] + [float(point[i])*rates['rates'][fiat] for i in range(1,len(point))])
             else:
-                data.append([[str(datetime.fromtimestamp(point[0]//1000.0))] + [float(point[i]) for i in range(1,len(point))]])
+                data.append([str(datetime.fromtimestamp(point[0]//1000.0))] + [float(point[i]) for i in range(1,len(point))])
+        print data[0]
         resp = Response(dumps([dict(zip(tuple (["Date", "Open", "Close", "High", "Low", "Volume"]) ,d)) for d in data]))
         resp.headers['Access-Control-Allow-Origin'] = '*'
         return resp
