@@ -5,6 +5,8 @@
 
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
+import anime from 'animejs'
+
 import Button from '../Button/Button'
 import Cross from '../svg/Cross'
 import {update, reset} from '../../market/import'
@@ -23,9 +25,17 @@ class AlertsCard extends Component {
     this.handleSubmit = this.handleSubmit.bind(this)
   }
   toggleInput() {
+    const {input} = this.state
+    const newMargin = input ? '-160px' : '10px'
     this.setState(prevState => ({
       input: !prevState.input
     }))
+    anime({
+      targets: this.alertsCard,
+      marginLeft: newMargin,
+      duration: 1000,
+      easing: 'easeOutElastic'
+    })
   }
   handleChange({target}) {
     const {name, value} = target
@@ -97,7 +107,7 @@ class AlertsCard extends Component {
       )
     }
     return (
-      <div className={s.card}>
+      <div className={s.alertsCard} ref={div => this.alertsCard = div}>
         <div className={s.cardHeader}>
           <h1 className={s.cardTitle}>ALERTS</h1>
           <div className={s.headerBtn}

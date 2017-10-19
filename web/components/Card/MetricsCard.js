@@ -21,7 +21,7 @@ class ImportCard extends Component {
     }
     const {items} = metrics[selectedCrypto][selectedFiat]
     return (
-      <div className={s.card}>
+      <div className={s.metricsCard}>
         <div className={s.cardHeader}>
           <h1 className={s.cardTitle}>METRICS</h1>
         </div>

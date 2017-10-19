@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
+import anime from 'animejs'
 // local shared styles with all cards to maintain consistency
 import s from './styles.css'
 import Arrow from '../svg/Arrow' // Svg icons
@@ -19,9 +20,17 @@ class ImportCard extends Component {
     this.handleSubmit = this.handleSubmit.bind(this)
   }
   toggleInput() {
+    const {input} = this.state
+    const newMargin = input ? '-160px' : '10px'
     this.setState(prevState => ({
       input: !prevState.input
     }))
+    anime({
+      targets: this.portfolioCard,
+      marginLeft: newMargin,
+      duration: 1000,
+      easing: 'easeOutElastic'
+    })
   }
   handleChange({target}) {
     const {name, value} = target
@@ -96,7 +105,7 @@ class ImportCard extends Component {
       )
     }
     return (
-      <div className={s.card}>
+      <div className={s.portfolioCard} ref={div => this.portfolioCard = div}>
         <div className={s.cardHeader}>
           <h1 className={s.cardTitle}>PORTFOLIO</h1>
           <div className={s.headerBtn}

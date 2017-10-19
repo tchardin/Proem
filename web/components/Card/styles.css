@@ -11,9 +11,7 @@
 	flex-direction: row;
 }
 
-.card {
-	margin: 0 auto;
-	margin-bottom: 20px;
+.alertsCard, .portfolioCard, .metricsCard {
 	background: -moz-linear-gradient(top, #1a1c50 21%, #050610 100%); /* FF3.6-15 */
 	background: -webkit-linear-gradient(top, #1a1c50 21%,#050610 100%); /* Chrome10-25,Safari5.1-6 */
 	background: linear-gradient(to bottom, #1a1c50 21%,#050610 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
@@ -28,7 +26,20 @@
 	width: 200px;
 	display: flex;
 	flex-direction: column;
-	margin: 0.4em;
+}
+
+.metricsCard {
+	z-index: 999;
+}
+
+.portfolioCard {
+	z-index: 998;
+	margin-left: -160px;
+}
+
+.alertsCard {
+	z-index: 997;
+	margin-left: -160px;
 }
 
 .cardHeader,

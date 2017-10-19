@@ -11,7 +11,7 @@ import { format } from 'd3-format'
 import { timeFormat } from 'd3-time-format'
 
 import {ChartCanvas, Chart} from 'react-stockcharts'
-import {AreaSeries, LineSeries} from 'react-stockcharts/lib/series'
+import {AreaSeries, LineSeries, CandlestickSeries} from 'react-stockcharts/lib/series'
 import {XAxis, YAxis} from 'react-stockcharts/lib/axes'
 import {
 	CrossHairCursor,
@@ -23,64 +23,27 @@ import { discontinuousTimeScaleProvider } from 'react-stockcharts/lib/scale'
 import maxBy from 'lodash.maxby'
 import minBy from 'lodash.minby'
 import last from 'lodash.last'
-import {
-  getHistory,
-  getSelectedHistory,
-  getSelectedFiat,
-  getSelectedCrypto,
-  fetchHistory
-} from '../../market/history'
+
+const candlesAppearance = {
+  wickStroke: d => d.close > d.open ? "#0AFE00" : "#FF0000",
+  fill: function fill(d) {
+    return d.close > d.open ? "#0AFE00" : "#FF0000";
+  },
+  stroke: "#000000",
+  candleStrokeWidth: 0,
+  widthRatio: 0.8,
+  opacity: 1,
+}
 
 class ChartComponent extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      width: 450,
-      height: 300
-    }
-    this.windowDimensions = this.windowDimensions.bind(this)
-  }
-  windowDimensions() {
-    this.setState({
-      width: window.innerWidth,
-      height: window.innerHeight - 100
-    })
-  }
-  componentDidMount() {
-    this.windowDimensions()
-    window.addEventListener('resize', this.windowDimensions)
-    const {crypto, fiat} = this.props
-    this.props.dispatch(fetchHistory(crypto, fiat))
-  }
-  componentDidUpdate() {
-    const {history, crypto, fiat} = this.props
-    console.log('Component updated')
-    if (typeof history[crypto] === 'undefined' || typeof history[crypto][fiat] === 'undefined') {
-      this.props.dispatch(fetchHistory(crypto, fiat))
-    }
-  }
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.windowDimensions)
-  }
-
   render() {
-    const {history, crypto, fiat } = this.props
-    const {width, height} = this.state
-    if (typeof history[crypto] === 'undefined' || typeof history[crypto][fiat] === 'undefined' || history[crypto][fiat].isFetching) {
-      return null
-    }
-    const data = history[crypto][fiat].items.map(child => {
-      return {
-        volume: Number(child.volume),
-        last: Number(child.last),
-        date: new Date(child.date),
-        }
-      })
+    const {height, width, data, view} = this.props
     const margin = { left: 0, right: 50, top: 0, bottom: 30 }
     const gridHeight = height - margin.top - margin.bottom
     const xGrid = {innerTickSize: -1 * gridHeight, tickStrokeOpacity: 0.1}
-    const xDomain = [new Date(2016, 10, 1), new Date()]
-    const yDomain = [minBy(data, d => d.last).price, maxBy(data, d => d.last).last+(maxBy(data, d => d.last).last/4)]
+    const xDomain = [new Date(2017, 8, 1), new Date()]
+    // const yDomain = [minBy(data, d => d.last).price, maxBy(data, d => d.last).last+(maxBy(data, d => d.last).last/4)]
+    const yExtents = view === 'HISTORY' ? (d => d.close) : (d => [d.high, d.low])
     return (
       <ChartCanvas ratio={1} width={width} height={height}
 					margin={margin}
@@ -89,7 +52,7 @@ class ChartComponent extends Component {
 					xAccessor={d => d.date}
 					xScale={scaleTime()}
 					xExtents={xDomain}>
-				<Chart id={0} yExtents={d => d.last}>
+				<Chart id={0} yExtents={yExtents}>
 					<XAxis
             axisAt="bottom"
             orient="bottom"
@@ -110,14 +73,23 @@ class ChartComponent extends Component {
           <MouseCoordinateX
   					at="bottom"
   					orient="bottom"
-  					displayFormat={timeFormat("%Y-%m-%d")} />
+  					displayFormat={timeFormat("%Y-%m-%d")}
+            fill="#00CEFF"
+            fontFamily="Gotham"
+            fontSize={11}/>
           <MouseCoordinateY
 						at="right"
 						orient="right"
-						displayFormat={format(".2f")} />
-					<LineSeries yAccessor={d => d.last}
+						displayFormat={format(".2f")}
+            fill="#00CEFF"
+            fontFamily="Gotham"
+            fontSize={11}/>
+					{view === 'HISTORY' &&
+          <LineSeries yAccessor={d => d.close}
             stroke="#FFF500"
-            strokeWidth={2}/>
+            strokeWidth={2}/>}
+          {view === 'CANDLES' &&
+          <CandlestickSeries {...candlesAppearance}/>}
 				</Chart>
         <CrossHairCursor stroke="#FFFFFF"/>
 			</ChartCanvas>
@@ -125,12 +97,4 @@ class ChartComponent extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    history: getHistory(state),
-    crypto: getSelectedCrypto(state),
-    fiat: getSelectedFiat(state)
-  }
-}
-
-export default connect(mapStateToProps)(ChartComponent)
+export default ChartComponent
