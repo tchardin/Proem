@@ -17,43 +17,25 @@ import {connect} from 'react-redux'
 import s from './styles.css'
 // import global css as gs
 import gs from './../../styles/grid.css'
-
-import {
-  ImportCard,
-  MetricsCard,
-  SignInCard
-} from '../../components/Card/'
 import Graph from '../../components/Graph/Graph'
-import Button from '../../components/Button/Button'
+import Chart from '../../components/Graph/Chart'
 import FlatList from '../../components/FlatList/FlatList'
+import Cards from '../../components/Card/Card'
 
-import {loadCurrencies, selectCurrency} from '../../market/actions'
-
-const loadData = ({loadCurrencies}) => {
-  loadCurrencies()
-}
-
-// Fake API response object for prototyping
-const apiResponse = require('../../utils/simple-object.json')
-
-// Blockstack js library
-const blockstack = require('blockstack')
-const STORAGE_FILE = 'portfolio.json'
+import {loadIds} from '../../market/ids'
+import {loadUser, signUserOut} from '../../market/auth'
 
 class HomePage extends Component {
 
-  displayItem = nextCurrency => {
-    this.props.selectCurrency(nextCurrency)
-  }
-
   componentDidMount() {
     // Loading currencies
-    loadData(this.props)
+    this.props.loadIds()
+    this.props.loadUser()
   }
 
   render() {
-    const {allIds, currenciesById, selectedCurrency, history} = this.props
-    if (currenciesById.isFetching) {
+    const {ids, user, signUserOut} = this.props
+    if (ids.isFetching) {
       return (
         <div className={s.fullSize}>
           <div className={s.center}>
@@ -70,38 +52,37 @@ class HomePage extends Component {
             <h1 className={s.brand}>
               PROEM
             </h1>
+            {user.info &&
+              <h2 className={s.hello}>
+                Hello, {user.info.username.slice(0, -3)}
+              </h2>
+            }
+            {user.info &&
+              <a className={s.signOut}
+                onClick={() => signUserOut()}>
+                Sign Out
+              </a>
+            }
           </div>
         </div>
-        <Graph
-          data={history.items}
-          maxPoints={100}/>
-        <FlatList
-          ids={allIds}
-          items={currenciesById}
-          share={23}
-          onSelectItem={this.displayItem}
-          selectedItem={selectedCurrency}/>
+        <Cards />
+        <Chart />
+        <FlatList />
       </div>
     )
   }
 }
 
 const mapStateToProps = state => {
-  const {allIds, currenciesById, selectedCurrency} = state
-  const {
-    history,
-    metrics
-  } = currenciesById[selectedCurrency] || {
-    history: {},
-    metrics: {}
-  }
+  const {ids, user} = state
   return {
-    allIds,
-    currenciesById,
-    selectedCurrency,
-    history,
-    metrics
+    ids,
+    user
   }
 }
 
-export default connect(mapStateToProps, {loadCurrencies, selectCurrency})(HomePage)
+export default connect(mapStateToProps, {
+  loadIds,
+  loadUser,
+  signUserOut
+})(HomePage)

@@ -1,11 +1,34 @@
 
+.infoCard {
+	z-index: 888;
+	position: absolute;
+	left: 30px;
+	top: 30px;
+}
+
+.cardContainer {
+	display: flex;
+	flex-direction: row;
+}
+
 .card {
 	margin: 0 auto;
 	margin-bottom: 20px;
-	background-color: #fff;
-	box-shadow: 0px 2px 6px 0px rgba(0,0,0,0.25);
+	background: -moz-linear-gradient(top, #1a1c50 21%, #050610 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(top, #1a1c50 21%,#050610 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom, #1a1c50 21%,#050610 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	/*background-color: white;*/
+	/*backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);*/
+	box-shadow: 1px 2px 6px 0px rgba(0,0,0,0.45);
 	border-radius: 8px;
 	font-family: 'Gotham';
+	color: #fff;
+	height: 340px;
+	width: 200px;
+	display: flex;
+	flex-direction: column;
+	margin: 0.4em;
 }
 
 .cardHeader,
@@ -14,11 +37,30 @@
 }
 
 .cardHeader {
+	display: flex;
+	flex: 1;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.headerBtn {
+	cursor: pointer;
+}
+
+.cardTitle {
 	max-width: 180px;
-	font-size: 16px;
+	font-size: 1.2em;
 	font-weight: bold;
 	/* padding-bottom: 20px; */
 	font-family: 'Gotham';
+}
+
+.cardBody {
+	display: flex;
+	flex: 4;
+	flex-direction: column;
+	justify-content: flex-end;
 }
 
 .row {
@@ -33,6 +75,16 @@
 
 .list {
 	padding-bottom: 1em;
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+}
+/* For now */
+.portfolio {
+	padding-bottom: 1em;
+	display: flex;
+	flex-direction: column;
+	flex: 1;
 }
 
 .textLeft,
@@ -52,6 +104,10 @@
 
 .form {
 	font-family: 'Gotham';
+	display: flex;
+	flex: 3;
+	flex-direction: column;
+	justify-content: space-between;
 }
 
 .field:not(:last-child) {
@@ -59,7 +115,7 @@
 }
 
 .label {
-	font-size: 0.8em;
+	font-size: 0.7em;
 	font-weight: 500;
 }
 
@@ -73,15 +129,45 @@
 .input {
 	display: inline-flex;
 	align-items: center;
-	border: 1px solid transparent;
-	border-radius: 4px;
+	background-color: transparent;
+	border: none;
+	border-bottom: 1px solid #00CEFF;
+	color: #fff;
+	font-weight: bold;
+	/*border-radius: 4px;*/
 	/*border-color: #dbdbdb;*/
 	height: 2.3em;
-	padding: 0.375em 0.625em 0.375em 0.625em;
+	padding: 0.375em 0.625em 0.375em 0;
 	width: 100%;
 	justify-content: flex-start;
 	line-height: 1.5;
-	box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.25);
+	/*box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.25);*/
+}
+
+.input:focus {
+	outline: none;
+	border-radius: 4px;
+	border: 2px solid #00CEFF;
+}
+textarea {
+	color: #fff;
+}
+
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: #fff;
+}
+::-moz-placeholder { /* Firefox 19+ */
+  color: #fff;
+}
+:-ms-input-placeholder { /* IE 10+ */
+  color: #fff;
+}
+:-moz-placeholder { /* Firefox 18- */
+  color: #fff;
+}
+
+input[type="datetime-local"] {
+	font-family: 'Gotham'
 }
 
 .select {
@@ -93,7 +179,7 @@
 }
 
 .select::after {
-		border: 1px solid #000;
+		border: 1px solid #00CEFF;
     border-right: 0;
     border-top: 0;
     content: " ";
@@ -135,9 +221,9 @@
     padding-top: calc(0.375em - 1px);
     position: relative;
     vertical-align: top;
-    background-color: white;
+    background-color: transparent;
     /*border-color: black;*/
-    color: #363636;
+    color: #fff;
     cursor: pointer;
     display: block;
     font-size: 1em;
@@ -145,47 +231,9 @@
     outline: none;
 }
 
-.btn {
-	-moz-appearance: none;
-    -webkit-appearance: none;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    border: 1px solid transparent;
-    border-radius: 3px;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-    display: -webkit-inline-box;
-    display: -ms-inline-flexbox;
-    display: inline-flex;
-    font-size: 1em;
-    height: 2.25em;
-    -webkit-box-pack: start;
-    -ms-flex-pack: start;
-    justify-content: flex-start;
-    line-height: 1.5;
-    padding-bottom: calc(0.375em - 1px);
-    padding-top: calc(0.375em - 1px);
-    position: relative;
-    vertical-align: top;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    background-color: white;
-    color: black;
-    cursor: pointer;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-    padding-left: 0.75em;
-    padding-right: 0.75em;
-    text-align: center;
-    white-space: nowrap;
-		margin: auto;
-}
-
 .btnContainer {
-	text-align: center;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
 }

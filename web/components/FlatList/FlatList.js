@@ -1,20 +1,23 @@
 // Horizontal List of currency items with select check box
 
 import React, {Component} from 'react'
+import {connect} from 'react-redux'
 import Arrow from '../svg/Arrow' // Svg icons
 import Radio from '../svg/Radio'
+import ListItem from './ListItem'
 import s from './styles.css'
+
+import {updateSelected} from '../../market/ids'
 
 class FlatListComponent extends Component {
   constructor(props) {
     super(props)
     this.state = {
       position: 0,
-      selectedFiat: 'USD'
     }
-    this.selectItem = this.selectItem.bind(this)
     this.scroll = this.scroll.bind(this)
-    this.handleChange = this.handleChange.bind(this)
+    this.selectCrypto = this.selectCrypto.bind(this)
+    this.selectFiat = this.selectFiat.bind(this)
   }
   scroll(start, end, duration) {
     const {scrollList} = this
@@ -44,39 +47,28 @@ class FlatListComponent extends Component {
       position: end
     })
   }
-  selectItem(e) {
-    this.props.onSelectItem(e)
+  selectCrypto(id) {
+    this.props.dispatch(updateSelected('selectedCrypto', id))
   }
-  handleChange({target}) {
-    this.setState({
-      [target.name]: target.value
-    })
+  selectFiat({target}) {
+    const {value} = target
+    this.props.dispatch(updateSelected('selectedFiat', value))
   }
   render() {
-    const {position, selectedFiat} = this.state
-    const {items, ids, selectedItem} = this.props
-    let list = ids.map(id => (
-      <li
-        className={id === selectedItem ? s.activeItem : s.item}
+    const {position} = this.state
+    const {ids} = this.props
+    let list = ids.crypto.map(id => (
+      <ListItem
+        onSelect={this.selectCrypto}
+        id={id}
         key={id}
-        onClick={() => this.selectItem(id)}>
-        <label
-          className={s.label}>
-          <div className={s.id}>{id}</div>
-          <div className={s.price}>{items[id].metrics.items.price_usd}</div>
-          <div
-            className={items[id].metrics.items.percent_change_24h > 0 ? s.pChange : s.nChange}>
-            {items[id].metrics.items.percent_change_24h}%
-          </div>
-        </label>
-      </li>
+        />
     ))
-    const fiat = ['USD', 'EUR', 'JPY', 'GBP', 'CHF', 'CAD', 'AUD', 'NZD', 'ZAR', 'CNY']
-    let options = fiat.map(id => <option value={id} key={id}>{id}</option>)
+    let options = ids.fiat.map(id => <option value={id} key={id}>{id}</option>)
     return (
       <div className={s.container}>
         <div className={s.leftInfo}>
-          {this.props.share}%
+          23%
         </div>
         <div
           className={s.arrowBtn}
@@ -101,8 +93,8 @@ class FlatListComponent extends Component {
           <div className={s.select}>
             <select
               name="selectedFiat"
-              value={this.state.selectedFiat}
-              onChange={this.handleChange}>
+              value={ids.selectedFiat}
+              onChange={this.selectFiat}>
               {options}
             </select>
           </div>
@@ -112,4 +104,11 @@ class FlatListComponent extends Component {
   }
 }
 
-export default FlatListComponent
+const mapStateToProps = state => {
+  const {ids} = state
+  return {
+    ids
+  }
+}
+
+export default connect(mapStateToProps)(FlatListComponent)

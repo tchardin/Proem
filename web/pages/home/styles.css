@@ -2,11 +2,15 @@
 	min-height: 100vh;
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
+	justify-content: flex-end;
+	background-color: #191B4E;
 }
 
 .center {
-
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 }
 
 .ball {
@@ -61,34 +65,44 @@
 	top: 20px;
 	left: 0;
 	right: 0;
+	z-index: 777;
 }
 
 .container {
 	display: flex;
-	flex-direction: row;
-	align-content: center;
-	justify-content: flex-start;
+	flex-direction: column;
+	align-content: flex-end;
+	justify-content: center;
+	margin: 0.5em 4em 0.5em 0;
 }
 
 .brand {
 	font-family: 'Gotham';
 	font-weight: bold;
 	font-size: 2.5em;
-	color: #000;
+	color: #fff;
 	line-height: 1em;
-	margin-left: 1em;
+	text-align: right;
+}
+
+.hello {
+	font-family: 'Gotham';
+	font-size: 0.8em;
+	color: #fff;
+	text-align: right;
+}
+
+.signOut {
+	font-family: 'Gotham';
+	font-size: 0.6em;
+	color: #95989A;
+	cursor: pointer;
+	line-height: 2em;
+	text-align: right;
 }
 
 .button {
 	margin: auto;
-}
-
-.infoCard {
-	position: absolute;
-	right: 20px;
-	top: 50%;
-	transform: translateY(-50%);
-	z-index: 100;
 }
 
 .selectCard {

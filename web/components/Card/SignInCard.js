@@ -1,28 +1,27 @@
 // 0State card prompting the user to sign in before importing portfolio
 
 import React, {Component} from 'react'
-
+import {connect} from 'react-redux'
 import s from './styles.css'
+import Button from '../Button/Button'
+import {signUserIn} from '../../market/auth'
 
-class CardComponent extends Component {
-  constructor(props) {
-    super(props)
-    this.handleSubmit = this.handleSubmit.bind(this)
-  }
+class SignInCard extends Component {
   handleSubmit() {
-    this.props.onSubmit()
+    this.props.dispatch(signUserIn())
   }
   render() {
     return (
       <div className={s.card}>
-        <h1 className={s.cardHeader}>
-          Sign in with Blockstack to import your portfolio
-        </h1>
+        <div className={s.cardHeader}>
+          <h1 className={s.cardTitle}>WELCOME</h1>
+        </div>
         <div className={s.cardBody}>
           <div className={s.btnContainer}>
-            <button
-              className={s.btn}
-              onClick={() => this.handleSubmit()}>Sign In</button>
+            <Button
+              caption="Sign In"
+              type="primary"
+              onClick={() => this.handleSubmit()} />
           </div>
         </div>
       </div>
@@ -30,4 +29,4 @@ class CardComponent extends Component {
   }
 }
 
-export default CardComponent
+export default connect()(SignInCard)
