@@ -18,6 +18,7 @@ import s from './styles.css'
 // import global css as gs
 import gs from './../../styles/grid.css'
 import Graph from '../../components/Graph/Graph'
+import Chart from '../../components/Graph/Chart'
 import FlatList from '../../components/FlatList/FlatList'
 import Cards from '../../components/Card/Card'
 
@@ -65,7 +66,7 @@ class HomePage extends Component {
           </div>
         </div>
         <Cards />
-        <Graph />
+        <Chart />
         <FlatList />
       </div>
     )

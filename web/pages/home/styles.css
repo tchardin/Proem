@@ -73,7 +73,7 @@
 	flex-direction: column;
 	align-content: flex-end;
 	justify-content: center;
-	margin: 1em;
+	margin: 0.5em 4em 0.5em 0;
 }
 
 .brand {
