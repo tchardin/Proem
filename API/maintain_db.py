@@ -25,7 +25,7 @@ for currency in supported_currencies:
             row = pd.values[0]
             if (fiat != 'USD'):
                 row[1:-1] = np.asfarray(row[1:-1])*rates['rates'][fiat]
-            sql = "INSERT INTO " + currency + " VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+            sql = "INSERT INTO " + currency + fiat + " VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
             cursor.execute(sql,[str(f) for f in row])
         except ValueError as valerr:
             print("Unable to populate table: " + currency)
