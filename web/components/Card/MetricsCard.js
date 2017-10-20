@@ -45,7 +45,7 @@ class MetricsCard extends Component {
             </div>
             <div className={s.row}>
               <div className={s.label}>Change (24h)</div>
-              <div className={s.value}>{items.percent_change_24h}%</div>
+              <div className={items.percent_change_24h > 0 ? s.upValue : s.downValue}>{items.percent_change_24h}%</div>
             </div>
           </div>
         </div>

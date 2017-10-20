@@ -19,12 +19,20 @@ export default (state = initialState, action) => {
           ...state.assets,
           [action.currency]: {
             ...state.assets[action.currency],
-            [action.date]: action.amount
+            [action.date]: transaction(action)
           }
         }
       }
     default:
       return state
+  }
+}
+
+const transaction = action => {
+  const {date, amount} = action
+  return {
+    date,
+    amount
   }
 }
 

@@ -6,6 +6,7 @@ import s from './styles.css'
 import Arrow from '../svg/Arrow' // Svg icons
 import Button from '../Button/Button'
 import Cross from '../svg/Cross'
+import Portfolio from './PortfolioContainer'
 import {update, reset} from '../../market/import'
 import {updatePortfolio} from '../../market/portfolio'
 
@@ -52,12 +53,10 @@ class ImportCard extends Component {
   }
   render() {
     const {input, display} = this.state
-    const {amount, date, currency, ids} = this.props
+    const {amount, date, currency, ids, allIds} = this.props
     let options = ids.crypto.map(
       id => <option value={id} key={id}>{id}</option>)
-    let cardBody
-    if (input) {
-      cardBody = (
+    let inputFields = (
         <div className={s.form}>
           <div className={s.field}>
             <div className={s.control}>
@@ -103,15 +102,15 @@ class ImportCard extends Component {
           </div>
         </div>
       )
-    } else {
-      cardBody = (
-        <div className={s.portfolio}>
-          <div className={s.label}>
-            Click on the + to add assets
-          </div>
-        </div>
-      )
-    }
+    // } else {
+    //   cardBody = (
+    //     <div className={s.portfolio}>
+    //       <div className={s.label}>
+    //         Click on the + to add assets
+    //       </div>
+    //     </div>
+    //   )
+    // }
     return (
       <div className={s.portfolioCard} ref={div => this.portfolioCard = div}>
         <div className={s.cardHeader}>
@@ -126,7 +125,8 @@ class ImportCard extends Component {
           </div>}
         </div>
         <div className={s.cardBody}>
-          {display && cardBody}
+          {input ? inputFields :
+          <Portfolio />}
         </div>
       </div>
     )
@@ -134,17 +134,19 @@ class ImportCard extends Component {
 }
 
 const mapStateToProps = state => {
-  const {form, ids} = state
+  const {form, ids, portfolio} = state
   const {
     amount,
     date,
     currency
   } = form
+  const {allIds} = portfolio
   return {
     amount,
     date,
     currency,
-    ids
+    ids,
+    allIds
   }
 }
 

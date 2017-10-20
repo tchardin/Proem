@@ -4,10 +4,11 @@
   align-items: center;
   /*background: linear-gradient(
     to top,
-    black 75%,
-    rgba(255, 0, 0, 0)
+    black 60%,
+    #191B4E
     );*/
-  background-color: #191B4E;
+  /*background-color: #191B4E;*/
+  background-color: transparent;
   padding-bottom: 1em;
   padding-top: 1em;
 
@@ -134,7 +135,7 @@
     padding-top: calc(0.375em - 1px);*/
     position: relative;
     vertical-align: top;
-    background-color: #191B4E;
+    background-color: transparent;
     /*border-color: black;*/
     color: white;
     cursor: pointer;

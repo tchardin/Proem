@@ -26,9 +26,7 @@ import last from 'lodash.last'
 
 const candlesAppearance = {
   wickStroke: d => d.close > d.open ? "#0AFE00" : "#FF0000",
-  fill: function fill(d) {
-    return d.close > d.open ? "#0AFE00" : "#FF0000";
-  },
+  fill: d => d.close > d.open ? "#0AFE00" : "#FF0000",
   stroke: "#000000",
   candleStrokeWidth: 0,
   widthRatio: 0.8,
@@ -58,6 +56,7 @@ class ChartComponent extends Component {
             orient="bottom"
             ticks={6}
             opacity={0}
+            fontFamily="Gotham"
             tickStroke="#FFFFFF"
             tickStrokeOpacity={0.4}/>
 					<YAxis
@@ -65,6 +64,7 @@ class ChartComponent extends Component {
             orient="right"
             opacity={0}
             ticks={8}
+            fontFamily="Gotham"
             tickStroke="#FFFFFF"
             tickStrokeOpacity={0.4}
             innerTickSize={5}
