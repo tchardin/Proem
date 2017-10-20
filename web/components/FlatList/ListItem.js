@@ -39,7 +39,7 @@ class ListItem extends Component {
         <label
           className={s.label}>
           <div className={s.id}>{id}</div>
-          <div className={s.price}>{items.price}</div>
+          <div className={s.price}>{new Intl.NumberFormat('en-US', { style: 'currency', currency: selectedFiat }).format(items.price)}</div>
           <div className={items.percent_change_24h > 0 ? s.pChange : s.nChange}>
             {items.percent_change_24h}%
           </div>
