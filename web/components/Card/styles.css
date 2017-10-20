@@ -11,13 +11,11 @@
 	flex-direction: row;
 }
 
-.card {
-	margin: 0 auto;
-	margin-bottom: 20px;
-	background: -moz-linear-gradient(top, #1a1c50 21%, #050610 100%); /* FF3.6-15 */
-	background: -webkit-linear-gradient(top, #1a1c50 21%,#050610 100%); /* Chrome10-25,Safari5.1-6 */
-	background: linear-gradient(to bottom, #1a1c50 21%,#050610 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-	/*background-color: white;*/
+.alertsCard, .portfolioCard, .metricsCard {
+	 background: -moz-linear-gradient(top, #1a1c50 21%, #050610 100%);
+	 background: -webkit-linear-gradient(top, #1a1c50 21%,#050610 100%);
+	 background: linear-gradient(to bottom, #1a1c50 21%,#050610 100%);
+	/*background-color: "#1A1C50";*/
 	/*backdrop-filter: blur(10px);
 	-webkit-backdrop-filter: blur(10px);*/
 	box-shadow: 1px 2px 6px 0px rgba(0,0,0,0.45);
@@ -25,35 +23,64 @@
 	font-family: 'Gotham';
 	color: #fff;
 	height: 340px;
-	width: 200px;
+	width: 170px;
 	display: flex;
 	flex-direction: column;
-	margin: 0.4em;
 }
 
-.cardHeader,
+.metricsCard {
+	z-index: 999;
+}
+
+.portfolioCard {
+	z-index: 998;
+	margin-left: -140px;
+}
+
+.alertsCard {
+	z-index: 997;
+	margin-left: -140px;
+}
+
+
 .cardBody {
 	padding: 1em;
 }
 
 .cardHeader {
 	display: flex;
-	flex: 1;
-	flex-direction: row;
-	justify-content: space-between;
-	align-items: center;
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-end;
+	padding: 0.7em 0.7em 1em 1em;
 }
 
 .headerBtn {
 	cursor: pointer;
+	margin-top: -18px;
 }
 
 .cardTitle {
+	cursor: pointer;
 	max-width: 180px;
-	font-size: 1.2em;
+	font-size: 1em;
 	font-weight: bold;
 	/* padding-bottom: 20px; */
 	font-family: 'Gotham';
+	/*transform-origin: right top 0;
+	transform:rotate(90deg);
+	transform: translateY();*/
+	writing-mode: vertical-lr;
+}
+
+.cardTitleOpen {
+	cursor: pointer;
+	max-width: 180px;
+	font-size: 1em;
+	font-weight: bold;
+	/* padding-bottom: 20px; */
+	font-family: 'Gotham';
+	align-self: flex-start;
 }
 
 .cardBody {
@@ -81,7 +108,7 @@
 }
 /* For now */
 .portfolio {
-	padding-bottom: 1em;
+	padding-right: 1em;
 	display: flex;
 	flex-direction: column;
 	flex: 1;
@@ -98,7 +125,7 @@
 }
 
 .value {
-	font-size: 0.8em;
+	font-size: 0.6em;
 	padding-left: 1em;
 }
 
@@ -115,7 +142,7 @@
 }
 
 .label {
-	font-size: 0.7em;
+	font-size: 0.6em;
 	font-weight: 500;
 }
 
@@ -236,4 +263,22 @@ input[type="datetime-local"] {
 	flex-direction: row;
 	justify-content: center;
 	align-items: center;
+}
+
+.alertContainer {
+	padding: 0.5em 0 0.5em 0;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: flex-end;
+}
+
+.alertLabel {
+	font-weight: 500;
+	font-size: 0.8em;
+}
+
+.alertPrice {
+	color: #14FF00;
+	font-size: 0.8em;
 }

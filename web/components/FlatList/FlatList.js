@@ -4,10 +4,13 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import Arrow from '../svg/Arrow' // Svg icons
 import Radio from '../svg/Radio'
+import Candle from '../svg/Candle'
+import Curve from '../svg/Curve'
 import ListItem from './ListItem'
 import s from './styles.css'
 
 import {updateSelected} from '../../market/ids'
+import {changeView} from '../../market/ui'
 
 class FlatListComponent extends Component {
   constructor(props) {
@@ -18,6 +21,7 @@ class FlatListComponent extends Component {
     this.scroll = this.scroll.bind(this)
     this.selectCrypto = this.selectCrypto.bind(this)
     this.selectFiat = this.selectFiat.bind(this)
+    this.handleChange = this.handleChange.bind(this)
   }
   scroll(start, end, duration) {
     const {scrollList} = this
@@ -54,9 +58,12 @@ class FlatListComponent extends Component {
     const {value} = target
     this.props.dispatch(updateSelected('selectedFiat', value))
   }
+  handleChange(view) {
+    this.props.dispatch(changeView(view))
+  }
   render() {
     const {position} = this.state
-    const {ids} = this.props
+    const {ids, ui} = this.props
     let list = ids.crypto.map(id => (
       <ListItem
         onSelect={this.selectCrypto}
@@ -68,7 +75,14 @@ class FlatListComponent extends Component {
     return (
       <div className={s.container}>
         <div className={s.leftInfo}>
-          23%
+          <div className={s.curve}
+            onClick={() => this.handleChange('HISTORY')}>
+            <Curve color={ui === 'HISTORY' ? "#00CEFF" : "#FFFFFF"} />
+          </div>
+          <div className={s.candle} 
+            onClick={() => this.handleChange('CANDLES')}>
+            <Candle color={ui === 'CANDLES' ? "#00CEFF" : "#FFFFFF"} />
+          </div>
         </div>
         <div
           className={s.arrowBtn}
@@ -105,9 +119,10 @@ class FlatListComponent extends Component {
 }
 
 const mapStateToProps = state => {
-  const {ids} = state
+  const {ids, ui} = state
   return {
-    ids
+    ids,
+    ui
   }
 }
 

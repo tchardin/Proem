@@ -2,7 +2,6 @@
  * Operations on the history entity
  *
  */
- import {createSelector} from 'reselect'
  const API_ROOT = 'http://proem-io-api-dev.us-east-1.elasticbeanstalk.com'
 
  export const REQUEST_HISTORY = 'REQUEST_HISTORY'
@@ -12,12 +11,6 @@
  export const getSelectedFiat = state => state.ids.selectedFiat
  export const getSelectedCrypto = state => state.ids.selectedCrypto
 
- export const getSelectedHistory = createSelector(
-   [getHistory, getSelectedFiat, getSelectedCrypto],
-   (history, selectedFiat, selectedCrypto) => {
-     return history[selectedCrypto][selectedFiat]
-   }
- )
 
  export default (state = {}, action) => {
    const {crypto, fiat, results, receivedAt} = action

@@ -8,10 +8,12 @@ import user from '../market/auth'
 import form from '../market/import'
 import alerts from '../market/alerts'
 import portfolio from '../market/portfolio'
+import candles from '../market/candles'
+import ui from '../market/ui'
 
 
 const rootReducer = combineReducers({
-  ids, history, metrics, user, form, alerts, portfolio
+  ids, history, metrics, user, form, alerts, portfolio, candles, ui
 })
 
 const configureStore = preloadedState => createStore(

@@ -3,34 +3,18 @@
  *
  */
 
-const SHOW_CARD = 'SHOW_CARD'
-const HIDE_CARD = 'HIDE_CARD'
+const CHANGE_VIEW = 'CHANGE_VIEW'
 
-const initialState = {
-  cardType: 'METRICS',
-  cardProps: {}
-}
-
-export default (state = initialState, action) => {
+export default (state = 'HISTORY', action) => {
   switch (action.type) {
-    case 'SHOW_CARD':
-      return {
-        cardType: action.cardType,
-        cardProps: action.cardProps
-      }
-    case 'HIDE_CARD':
-      return initialState
+    case 'CHANGE_VIEW':
+      return action.view
     default:
       return state
   }
 }
 
-export const showCard = (cardType, cardProps) => ({
-  type: SHOW_CARD,
-  cardType,
-  cardProps
-})
-
-export const hideCard = () => ({
-  type: HIDE_CARD
+export const changeView = view => ({
+  type: CHANGE_VIEW,
+  view
 })

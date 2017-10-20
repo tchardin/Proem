@@ -7,6 +7,7 @@
     "npm": ">=3.8"
   },
   "dependencies": {
+    "animejs": "^2.2.0",
     "autoprefixer": "^6.3.7",
     "axios": "^0.16.2",
     "babel-polyfill": "^6.9.1",

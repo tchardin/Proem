@@ -71,11 +71,11 @@
 }
 
 .pChange {
-  color: #1BB900;
+  color: #0AFE00;
 }
 
 .nChange {
-  color: #B90000;
+  color: #FF0000;
 }
 
 .leftInfo,
@@ -85,6 +85,21 @@
   font-size: 2.5em;
   color: white;
   padding: 0 1em 0 1em;
+}
+
+.leftInfo {
+  display: flex;
+  flex-direction: row;
+}
+
+.curve {
+  cursor: pointer;
+  padding: 0.25em;
+}
+
+.candle {
+  cursor: pointer;
+  padding: 0.25em;
 }
 
 .select {
