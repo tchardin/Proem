@@ -9,6 +9,7 @@ import anime from 'animejs'
 
 import Button from '../Button/Button'
 import Cross from '../svg/Cross'
+import AlertItem from './AlertItem'
 import {update, reset} from '../../market/import'
 import {addAlert} from '../../market/alerts'
 
@@ -18,24 +19,32 @@ class AlertsCard extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      input: false
+      input: false,
+      display: false
     }
+    this.toggleDisplay = this.toggleDisplay.bind(this)
     this.toggleInput = this.toggleInput.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
   }
   toggleInput() {
-    const {input} = this.state
-    const newMargin = input ? '-160px' : '10px'
     this.setState(prevState => ({
       input: !prevState.input
     }))
+    this.props.reset()
+  }
+  toggleDisplay() {
+    const {display} = this.state
+    const newMargin = display ? '-140px' : '10px'
     anime({
       targets: this.alertsCard,
       marginLeft: newMargin,
       duration: 1000,
       easing: 'easeOutElastic'
     })
+    this.setState(prevState => ({
+      display: !prevState.display
+    }))
   }
   handleChange({target}) {
     const {name, value} = target
@@ -48,15 +57,12 @@ class AlertsCard extends Component {
     this.toggleInput()
   }
   render() {
-    const {input} = this.state
+    const {input, display} = this.state
     const {amount, currency, crypto, allIds, alertsByID} = this.props
     let options = crypto.map(
       id => <option value={id} key={id}>{id}</option>)
     let alerts = allIds.length ? allIds.map(id => (
-      <div className={s.row} key={id}>
-        <div className={s.label}>{alertsByID[id].crypto}</div>
-        <div className={s.value}>{alertsByID[id].price}</div>
-      </div>
+      <AlertItem id={id} key={id}/>
     )) : null
     let cardBody
     if (input) {
@@ -88,7 +94,8 @@ class AlertsCard extends Component {
           <div className={s.btnContainer}>
             <Button
               caption="cancel"
-              type="second" />
+              type="second"
+              onClick={this.toggleInput}/>
             <Button
               caption="set"
               type="primary"
@@ -109,16 +116,18 @@ class AlertsCard extends Component {
     return (
       <div className={s.alertsCard} ref={div => this.alertsCard = div}>
         <div className={s.cardHeader}>
-          <h1 className={s.cardTitle}>ALERTS</h1>
-          <div className={s.headerBtn}
-            onClick={() => this.toggleInput()}>
-            <Cross
-              color="#fff"
-              direction={input ? 'cancel' : 'plus'} />
-          </div>
+          <h1 className={display ? s.cardTitleOpen : s.cardTitle}
+            onClick={() => this.toggleDisplay()}>ALERTS</h1>
+          { display &&
+            <div className={s.headerBtn}
+              onClick={() => this.toggleInput()}>
+              <Cross
+                color="#fff"
+                direction={input ? 'cancel' : 'plus'} />
+            </div>}
         </div>
         <div className={s.cardBody}>
-          {cardBody}
+          {display && cardBody}
         </div>
       </div>
     )

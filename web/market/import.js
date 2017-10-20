@@ -9,7 +9,7 @@ const FORM_RESET = 'FORM_RESET'
 const initialState = {
   amount: '',
   date: '',
-  currency: ''
+  currency: 'BTC'
 }
 
 export default (state = initialState, action) => {

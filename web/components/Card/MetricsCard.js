@@ -6,7 +6,7 @@ import Button from '../Button/Button'
 // local styles
 import s from './styles.css'
 
-class ImportCard extends Component {
+class MetricsCard extends Component {
   handleSubmit() {
   }
   handleCancel() {
@@ -23,25 +23,29 @@ class ImportCard extends Component {
     return (
       <div className={s.metricsCard}>
         <div className={s.cardHeader}>
-          <h1 className={s.cardTitle}>METRICS</h1>
+          <h1 className={s.cardTitleOpen}>METRICS</h1>
         </div>
         <div className={s.cardBody}>
           <div className={s.list}>
             <div className={s.row}>
-              <div className={s.label}>Price</div>
-              <div className={s.value}>{items.price}</div>
+              <div className={s.label}>Market Cap</div>
+              <div className={s.value}>
+                {new Intl.NumberFormat('en-US', { style: 'currency', currency: selectedFiat }).format(items.market_cap)}
+              </div>
+            </div>
+            <div className={s.row}>
+              <div className={s.label}>Volume (24h)</div>
+              <div className={s.value}>
+                {new Intl.NumberFormat('en-US', { style: 'currency', currency: selectedFiat }).format(items['24h_volume'])}
+              </div>
+            </div>
+            <div className={s.row}>
+              <div className={s.label}>Available Supply</div>
+              <div className={s.value}>{items.available_supply.toLocaleString()} {selectedCrypto}</div>
             </div>
             <div className={s.row}>
               <div className={s.label}>Change (24h)</div>
               <div className={s.value}>{items.percent_change_24h}%</div>
-            </div>
-            <div className={s.row}>
-              <div className={s.label}>Volume (24h)</div>
-              <div className={s.value}>{items['24h_volume']}</div>
-            </div>
-            <div className={s.row}>
-              <div className={s.label}>Available Supply</div>
-              <div className={s.value}>{items.available_supply}</div>
             </div>
           </div>
         </div>
@@ -60,4 +64,4 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps)(ImportCard)
+export default connect(mapStateToProps)(MetricsCard)

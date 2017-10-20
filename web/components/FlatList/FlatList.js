@@ -5,6 +5,7 @@ import {connect} from 'react-redux'
 import Arrow from '../svg/Arrow' // Svg icons
 import Radio from '../svg/Radio'
 import Candle from '../svg/Candle'
+import Curve from '../svg/Curve'
 import ListItem from './ListItem'
 import s from './styles.css'
 
@@ -57,8 +58,8 @@ class FlatListComponent extends Component {
     const {value} = target
     this.props.dispatch(updateSelected('selectedFiat', value))
   }
-  handleChange() {
-    this.props.dispatch(changeView('CANDLES'))
+  handleChange(view) {
+    this.props.dispatch(changeView(view))
   }
   render() {
     const {position} = this.state
@@ -73,8 +74,15 @@ class FlatListComponent extends Component {
     let options = ids.fiat.map(id => <option value={id} key={id}>{id}</option>)
     return (
       <div className={s.container}>
-        <div className={s.leftInfo} onClick={() => this.handleChange()}>
-          <Candle color={ui === 'CANDLES' ? "#00CEFF" : "#FFFFFF"} />
+        <div className={s.leftInfo}>
+          <div className={s.curve}
+            onClick={() => this.handleChange('HISTORY')}>
+            <Curve color={ui === 'HISTORY' ? "#00CEFF" : "#FFFFFF"} />
+          </div>
+          <div className={s.candle} 
+            onClick={() => this.handleChange('CANDLES')}>
+            <Candle color={ui === 'CANDLES' ? "#00CEFF" : "#FFFFFF"} />
+          </div>
         </div>
         <div
           className={s.arrowBtn}
