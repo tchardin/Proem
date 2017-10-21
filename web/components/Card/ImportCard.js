@@ -8,7 +8,7 @@ import Button from '../Button/Button'
 import Cross from '../svg/Cross'
 import Portfolio from './PortfolioContainer'
 import {update, reset} from '../../market/import'
-import {updatePortfolio} from '../../market/portfolio'
+import {newTransaction} from '../../market/portfolio'
 
 class ImportCard extends Component {
   constructor(props) {
@@ -47,7 +47,7 @@ class ImportCard extends Component {
   }
   handleSubmit() {
     const {amount, date, currency} = this.props
-    this.props.updatePortfolio(currency, amount, date)
+    this.props.newTransaction(currency, amount, date)
     this.props.reset()
     this.toggleInput()
   }
@@ -152,5 +152,5 @@ const mapStateToProps = state => {
 
 export default connect(mapStateToProps, {
   update,
-  updatePortfolio, reset
+  newTransaction, reset
 })(ImportCard)

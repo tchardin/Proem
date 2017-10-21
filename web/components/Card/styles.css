@@ -146,6 +146,18 @@
 	font-size: 0.8em;
 }
 
+.total {
+	font-weight: bold;
+}
+
+.pTotalChange {
+	color: #0AFE00;
+}
+
+.nTotalChange {
+	color: #FF0000;
+}
+
 .textLeft,
 .textRight {
 	font-size: 0.8em;
