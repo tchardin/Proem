@@ -21,10 +21,17 @@ supported_currencies = ["BTC","ETH", "LTC", "BCH", "ETC","ZEC","XMR"]
 supported_fiat = ['USD', 'EUR', 'JPY', 'GBP', 'CHF', 'CAD', 'AUD',  'CNY', 'NZD', 'ZAR']
 supported_currencies_writted = ["bitcoin","ethereum", "litecoin","bitcoin-cash", "ethereum-classic","zcash","dash","monero"]
 
+exchanges = ['BITFINEX','GDAX', 'KRAKEN']
+
 convert_symbols = dict()
 convert_symbols['DASH'] = "dash"
 for idx,currency in enumerate(supported_currencies):
     convert_symbols[currency] = supported_currencies_writted[idx]
+
+supported_currencies_exchange = dict()
+supported_currencies_exchange['BITFINEX'] = supported_currencies
+supported_currencies_exchange['GDAX'] = supported_currencies[0:3]
+supported_currencies_exchange['KRAKEN'] = supported_currencies[1:]
 
 
 def connect_to_database(config) :
@@ -144,24 +151,29 @@ def ticker_url(market, coin):
         r = literal_eval(requests.get('https://api.gdax.com/products/%s/ticker'%gdx_coin).content)
     elif market == 'KRAKEN':
         krk_coin = '{0}USD'.format(coin)
-        r = literal_eval(requests.get('https://api.kraken.com/0/public/OHLC?pair=%s'%krk_coin).content)
+        r = literal_eval(requests.get('https://api.kraken.com/0/public/Ticker?pair=%s'%krk_coin).content)
     return r
 
-def ticker_data(market, coin, rates, fiat, r):
+def ticker_data(coin, rates, fiat, responses):
     ticker_keys = ["Date","High","Low","Mid","Last","Bid","Ask","Volume"]
-    if market == 'BITFINEX':
-        data = [str(datetime.now())] + [float(r[i])*rates['rates'][fiat] for i in [-2,-1,-4,0,2,-3]]
-        data.insert(3,(data[1]+data[2])/2.0)
-    elif market == 'GDAX':
-        gdx_coin = '{0}-USD'.format(coin)
-        r2 = literal_eval(requests.get('https://api.gdax.com/products/%s/stats'%gdx_coin).content)
-        data = [str(datetime.now())] + [float(r2[i]) for i in ['high','low']] + [float(r[i]) for i in ['price','bid','ask','volume']]
-        data.insert(3,(data[1]+data[2])/2.0)
-    elif market == 'KRAKEN':
+    resp_dict = dict()
+    for resp in responses:
+        market = resp[0]
+        r = resp[1]
         print r
-        data = [str(datetime.now())] + [float(r['result'][coin+fiat][i][0])*rates['rates'][fiat] for i in ['h','l','c','b','a','v']]
-        data.insert(3,(data[1]+data[2])/2.0)
-    resp = Response(dumps([dict(zip(tuple(ticker_keys) ,data))]))
+        if market == 'BITFINEX':
+            data = [str(datetime.now())] + [float(r[i])*rates['rates'][fiat] for i in [-2,-1,-4,0,2,-3]]
+            data.insert(3,(data[1]+data[2])/2.0)
+        elif market == 'GDAX':
+            gdx_coin = '{0}-USD'.format(coin)
+            r2 = literal_eval(requests.get('https://api.gdax.com/products/%s/stats'%gdx_coin).content)
+            data = [str(datetime.now())] + [float(r2[i]) for i in ['high','low']] + [float(r[i]) for i in ['price','bid','ask','volume']]
+            data.insert(3,(data[1]+data[2])/2.0)
+        elif market == 'KRAKEN':
+            data = [str(datetime.now())] + [float(r['result']['X'+coin+'ZUSD'][i][0])*rates['rates'][fiat] for i in ['h','l','c','b','a','v']]
+            data.insert(3,(data[1]+data[2])/2.0)
+        resp_dict[market] = [dict(zip(tuple(ticker_keys), data))]
+    resp = Response(dumps(resp_dict))
     return resp
 
 def candles_url(market,coin, interval):
@@ -191,17 +203,7 @@ def candles_data(market, coin, rates, fiat, r):
     elif market == 'KRAKEN':
         for point in r['result'][coin+fiat]:
             data.append([str(datetime.now())] + [float(point[i])*rates['rates'][fiat] for i in [1,4,2,3,6]])
-    resp = Response(dumps([dict(zip(tuple(candles_keys) ,d)) for d in data]))
-    return resp
-
-def get_supported_currencies(market):
-    exchanges = ['BITFINEX','GDAX', 'KRAKEN']
-    if market == 'BITFINEX':
-        resp = Response(dumps({'crypto': supported_currencies, 'fiat': supported_fiat, 'exchanges': exchanges}))
-    elif market == 'GDAX':
-        resp = Response(dumps({'crypto': supported_currencies[0:3], 'fiat': supported_fiat, 'exchanges': exchanges}))
-    elif market == 'KRAKEN':
-        resp = Response(dumps({'crypto': supported_currencies[1:], 'fiat': supported_fiat, 'exchanges': exchanges}))
+    resp = Response(dumps([dict(zip(tuple(candles_keys),d)) for d in data]))
     return resp
 
 def format_metrics(r,fiat):
@@ -276,24 +278,24 @@ class Supported_Currency(Resource):
         market = request.args.get('market')
         if market is None:
             market = 'BITFINEX'
-        resp = get_supported_currencies(market)
+        resp = Response(dumps({'crypto': supported_currencies_exchange[market], 'fiat': supported_fiat, 'exchanges': exchanges}))
         resp.headers['Access-Control-Allow-Origin'] = '*'
         return resp
 
 class Current_Data(Resource):
     def get(self, coin):
         fiat = request.args.get('fiat')
-        market = request.args.get('market')
         if fiat is None:
             fiat = 'USD'
-        if market is None:
-            market = 'BITFINEX'
         try:
+            r = []
             rates = get_exchange_rates(fiat)
-            r = ticker_url(market, coin)
+            for exchange in exchanges:
+                if coin in supported_currencies_exchange[exchange]:
+                    r.append((exchange, ticker_url(exchange, coin)))
         except ValueError as valerr:
             print("Failed to get current data %s: "%market + str(valerr))
-        resp = ticker_data(market, coin, rates, fiat, r)
+        resp = ticker_data(coin, rates, fiat, r)
         resp.headers['Access-Control-Allow-Origin'] = '*'
         return resp
 
