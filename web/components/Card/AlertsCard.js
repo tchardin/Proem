@@ -11,7 +11,7 @@ import Button from '../Button/Button'
 import Cross from '../svg/Cross'
 import AlertItem from './AlertItem'
 import {update, reset} from '../../market/import'
-import {addAlert} from '../../market/alerts'
+import {addAlert, removeAlert} from '../../market/alerts'
 
 import s from './styles.css'
 
@@ -26,6 +26,7 @@ class AlertsCard extends Component {
     this.toggleInput = this.toggleInput.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleDelete = this.handleDelete.bind(this)
   }
   toggleInput() {
     this.setState(prevState => ({
@@ -56,13 +57,20 @@ class AlertsCard extends Component {
     this.props.reset()
     this.toggleInput()
   }
+  handleDelete(id) {
+    this.props.removeAlert(id)
+  }
   render() {
     const {input, display} = this.state
     const {amount, currency, crypto, allIds, alertsByID} = this.props
     let options = crypto.map(
       id => <option value={id} key={id}>{id}</option>)
     let alerts = allIds.length ? allIds.map(id => (
-      <AlertItem id={id} key={id}/>
+      <AlertItem
+        alerts={alertsByID}
+        id={id}
+        key={id}
+        onDelete={() => this.handleDelete(id)}/>
     )) : null
     let cardBody
     if (input) {
@@ -122,6 +130,7 @@ class AlertsCard extends Component {
             <div className={s.headerBtn}
               onClick={() => this.toggleInput()}>
               <Cross
+                size="14px"
                 color="#fff"
                 direction={input ? 'cancel' : 'plus'} />
             </div>}
@@ -142,4 +151,4 @@ const mapStateToProps = state => {
   return {amount, currency, crypto, allIds, alertsByID}
 }
 
-export default connect(mapStateToProps, {update, reset, addAlert})(AlertsCard)
+export default connect(mapStateToProps, {update, reset, addAlert, removeAlert})(AlertsCard)

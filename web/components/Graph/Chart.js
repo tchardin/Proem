@@ -41,7 +41,7 @@ class ChartComponent extends Component {
     const xGrid = {innerTickSize: -1 * gridHeight, tickStrokeOpacity: 0.1}
     const xDomain = [new Date(2017, 8, 1), new Date()]
     // const yDomain = [minBy(data, d => d.last).price, maxBy(data, d => d.last).last+(maxBy(data, d => d.last).last/4)]
-    const yExtents = view === 'HISTORY' ? (d => d.close) : (d => [d.high, d.low])
+    const yExtents = view.chart === 'LINE' ? (d => d.close) : (d => [d.high, d.low])
     return (
       <ChartCanvas ratio={1} width={width} height={height}
 					margin={margin}
@@ -84,11 +84,11 @@ class ChartComponent extends Component {
             fill="#00CEFF"
             fontFamily="Gotham"
             fontSize={11}/>
-					{view === 'HISTORY' &&
+					{view.chart === 'LINE' &&
           <LineSeries yAccessor={d => d.close}
             stroke="#FFF500"
             strokeWidth={2}/>}
-          {view === 'CANDLES' &&
+          {view.chart === 'CANDLES' &&
           <CandlestickSeries {...candlesAppearance}/>}
 				</Chart>
         <CrossHairCursor stroke="#FFFFFF"/>

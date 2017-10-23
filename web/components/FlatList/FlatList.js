@@ -77,11 +77,11 @@ class FlatListComponent extends Component {
         <div className={s.leftInfo}>
           <div className={s.curve}
             onClick={() => this.handleChange('HISTORY')}>
-            <Curve color={ui === 'HISTORY' ? "#00CEFF" : "#FFFFFF"} />
+            <Curve color={ui.chart === 'LINE' ? "#00CEFF" : "#FFFFFF"} />
           </div>
-          <div className={s.candle} 
+          <div className={s.candle}
             onClick={() => this.handleChange('CANDLES')}>
-            <Candle color={ui === 'CANDLES' ? "#00CEFF" : "#FFFFFF"} />
+            <Candle color={ui.chart === 'CANDLES' ? "#00CEFF" : "#FFFFFF"} />
           </div>
         </div>
         <div

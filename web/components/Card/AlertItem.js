@@ -1,41 +1,29 @@
 import React, {Component} from 'react'
-import {connect} from 'react-redux'
 import s from './styles.css'
 // import delete alert
+import Cross from '../svg/Cross'
 
-class AlertItem extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      hover: false
-    }
-    this.handleHover = this.handleHover.bind(this)
-  }
-  handleHover() {
-    this.setState({
-      hover: true
-    })
-  }
-  render() {
-    const {alerts, id, fiat, metrics} = this.props
-    return (
-      <div className={s.alertContainer}>
-        <div className={s.alertLabel}>{alerts[id].crypto} {metrics[alerts[id].crypto][fiat].items.name}</div>
-        <div className={s.alertPrice}>{alerts[id].price}</div>
+const AlertItem = ({alerts, id, onDelete}) => {
+  return (
+    <div className={s.alertContainer}>
+      <div
+        className={s.alertCross}
+        onClick={onDelete}>
+        <Cross
+          color="#00CEFF"
+          size="14px"
+          direction="cancel" />
       </div>
-    )
-  }
+      <div className={s.alertInfo}>
+        <div className={s.alertLabel}>
+          {alerts[id].asset}
+        </div>
+        <div className={s.alertPrice}>
+          {alerts[id].price}
+        </div>
+      </div>
+    </div>
+  )
 }
 
-const mapStateToProps = state => {
-  const {alerts, metrics, ids} = state
-  const {alertsByID} = alerts
-  const {selectedFiat} = ids
-  return {
-    alerts: alertsByID,
-    fiat: selectedFiat,
-    metrics
-  }
-}
-
-export default connect(mapStateToProps)(AlertItem)
+export default AlertItem

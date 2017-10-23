@@ -3,16 +3,15 @@
  *
  */
 
+import {omit} from 'lodash'
+
 const ADD_ALERT = 'ADD_ALERT'
 const REMOVE_ALERT = 'REMOVE_ALERT'
 
-const createAlert = (state, action) => {
-  const {payload} = action
-  const {alertId, crypto, price} = payload
-  return {
-    ...state,
-    [alertId]: payload
-  }
+const removeItem = (array, index) => {
+  let newArray = array.slice()
+  newArray.splice(index, 1)
+  return newArray
 }
 
 export default (state = {
@@ -21,9 +20,21 @@ export default (state = {
 }, action) => {
   switch(action.type) {
     case ADD_ALERT:
+      const {id, crypto, price} = action
       return {
-        allIds: [...state.allIds, action.payload.alertId],
-        alertsByID: createAlert(state.alertsByID, action)
+        allIds: !state.allIds.includes(action.id) ? [...state.allIds, action.id] : [...state.allIds],
+        alertsByID: {
+          ...state.alertsByID,
+          [id]: {
+            asset: action.crypto,
+            price: action.price
+          }
+        }
+      }
+    case REMOVE_ALERT:
+      return {
+        allIds: removeItem(state.allIds, state.allIds.indexOf(action.id)),
+        alertsByID: omit(state.alertsByID, [`${action.id}`])
       }
     default:
       return state
@@ -31,17 +42,16 @@ export default (state = {
 }
 
 export const addAlert = (crypto, price) => {
-  const alertId = generateId()
   return {
     type: ADD_ALERT,
-    payload: {
-      alertId,
-      crypto,
-      price
-    }
+    id: `${crypto}${price}`,
+    crypto, price
   }
 }
 
-const generateId = () => {
-  return Math.floor(Math.random()*1000)
+export const removeAlert = id => {
+  return {
+    type: REMOVE_ALERT,
+    id
+  }
 }

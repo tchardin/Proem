@@ -29,11 +29,11 @@ class ChartContainer extends Component {
   }
   getViewData() {
     const {ui, history, candles, crypto, fiat} = this.props
-    if (ui === 'HISTORY') {
+    if (ui.chart === 'LINE') {
       if (typeof history[crypto] === 'undefined' || typeof history[crypto][fiat] === 'undefined') {
         this.props.dispatch(fetchHistory(crypto, fiat))
       }
-    } else if (ui === 'CANDLES') {
+    } else if (ui.chart === 'CANDLES') {
       if (typeof candles[crypto] === 'undefined' || typeof candles[crypto][fiat] === 'undefined') {
         this.props.dispatch(fetchCandles(crypto, fiat))
       }
@@ -54,7 +54,7 @@ class ChartContainer extends Component {
     const {history, crypto, fiat, ui, candles } = this.props
     const {width, height} = this.state
     let data
-    if (ui === 'HISTORY') {
+    if (ui.chart === 'LINE') {
       if (typeof history[crypto] === 'undefined' || typeof history[crypto][fiat] === 'undefined' || history[crypto][fiat].isFetching) {
         return null
       }
@@ -64,7 +64,7 @@ class ChartContainer extends Component {
           close: Number(child.last)
           }
         })
-    } else if (ui === 'CANDLES') {
+    } else if (ui.chart === 'CANDLES') {
       if (typeof candles[crypto] === 'undefined' || typeof candles[crypto][fiat] === 'undefined' || candles[crypto][fiat].isFetching) {
         return null
       }

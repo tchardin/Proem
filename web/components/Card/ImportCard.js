@@ -120,6 +120,7 @@ class ImportCard extends Component {
           <div className={s.headerBtn}
             onClick={() => this.toggleInput()}>
             <Cross
+              size="14px"
               color="#fff"
               direction={input ? 'cancel' : 'plus'} />
           </div>}
