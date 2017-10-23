@@ -4,7 +4,6 @@
  */
 
 import React, {Component} from 'react'
-import {connect} from 'react-redux'
 
 import {scaleTime} from 'd3-scale'
 import { format } from 'd3-format'
@@ -14,6 +13,7 @@ import {ChartCanvas, Chart} from 'react-stockcharts'
 import {AreaSeries, LineSeries, CandlestickSeries} from 'react-stockcharts/lib/series'
 import {XAxis, YAxis} from 'react-stockcharts/lib/axes'
 import {
+  PriceCoordinate,
 	CrossHairCursor,
 	MouseCoordinateX,
 	MouseCoordinateY,
@@ -35,7 +35,15 @@ const candlesAppearance = {
 
 class ChartComponent extends Component {
   render() {
-    const {height, width, data, view} = this.props
+    const {height, width, data, view, alerts} = this.props
+    const {allIds, alertsByID} = alerts
+    let alertLines = allIds.length ? allIds.map(id => {
+      <PriceCoordinate
+        at="right"
+        orient="left"
+        price={alertsByID[id].price}
+        displayFormat={format('.2f')} />
+    }) : null
     const margin = { left: 0, right: 50, top: 0, bottom: 30 }
     const gridHeight = height - margin.top - margin.bottom
     const xGrid = {innerTickSize: -1 * gridHeight, tickStrokeOpacity: 0.1}
@@ -90,6 +98,7 @@ class ChartComponent extends Component {
             strokeWidth={2}/>}
           {view.chart === 'CANDLES' &&
           <CandlestickSeries {...candlesAppearance}/>}
+          {view.alerts && alertLines}
 				</Chart>
         <CrossHairCursor stroke="#FFFFFF"/>
 			</ChartCanvas>

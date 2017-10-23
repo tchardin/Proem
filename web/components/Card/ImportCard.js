@@ -9,13 +9,13 @@ import Cross from '../svg/Cross'
 import Portfolio from './PortfolioContainer'
 import {update, reset} from '../../market/import'
 import {newTransaction} from '../../market/portfolio'
+import {changeView} from '../../market/ui'
 
 class ImportCard extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      input: false,
-      display: false
+      input: false
     }
     this.toggleInput = this.toggleInput.bind(this)
     this.toggleDisplay = this.toggleDisplay.bind(this)
@@ -29,7 +29,7 @@ class ImportCard extends Component {
     this.props.reset()
   }
   toggleDisplay() {
-    const {display} = this.state
+    const {display} = this.props
     const newMargin = display ? '-140px' : '10px'
     anime({
       targets: this.portfolioCard,
@@ -37,9 +37,7 @@ class ImportCard extends Component {
       duration: 1000,
       easing: 'easeOutElastic'
     })
-    this.setState(prevState => ({
-      display: !prevState.display
-    }))
+    this.props.changeView('portfolio')
   }
   handleChange({target}) {
     const {name, value} = target
@@ -52,8 +50,8 @@ class ImportCard extends Component {
     this.toggleInput()
   }
   render() {
-    const {input, display} = this.state
-    const {amount, date, currency, ids, allIds} = this.props
+    const {input} = this.state
+    const {amount, date, currency, ids, allIds, display} = this.props
     let options = ids.crypto.map(
       id => <option value={id} key={id}>{id}</option>)
     let inputFields = (
@@ -135,7 +133,7 @@ class ImportCard extends Component {
 }
 
 const mapStateToProps = state => {
-  const {form, ids, portfolio} = state
+  const {form, ids, portfolio, ui} = state
   const {
     amount,
     date,
@@ -143,6 +141,7 @@ const mapStateToProps = state => {
   } = form
   const {allIds} = portfolio
   return {
+    display: ui.portfolio,
     amount,
     date,
     currency,
@@ -153,5 +152,7 @@ const mapStateToProps = state => {
 
 export default connect(mapStateToProps, {
   update,
-  newTransaction, reset
+  newTransaction,
+  reset,
+  changeView
 })(ImportCard)

@@ -51,7 +51,7 @@ class ChartContainer extends Component {
     window.removeEventListener('resize', this.windowDimensions)
   }
   render() {
-    const {history, crypto, fiat, ui, candles } = this.props
+    const {history, crypto, fiat, ui, candles, alerts} = this.props
     const {width, height} = this.state
     let data
     if (ui.chart === 'LINE') {
@@ -86,6 +86,7 @@ class ChartContainer extends Component {
           width={width}
           data={data}
           view={ui}
+          alerts={alerts}
           />
       </div>
     )
@@ -93,9 +94,10 @@ class ChartContainer extends Component {
 }
 
 const mapStateToProps = state => {
-  const {candles, history, ids, ui} = state
+  const {candles, history, ids, ui, alerts} = state
   const {selectedCrypto, selectedFiat} = ids
   return {
+    alerts,
     ui,
     candles,
     history,

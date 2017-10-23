@@ -12,6 +12,7 @@ import Cross from '../svg/Cross'
 import AlertItem from './AlertItem'
 import {update, reset} from '../../market/import'
 import {addAlert, removeAlert} from '../../market/alerts'
+import {changeView} from '../../market/ui'
 
 import s from './styles.css'
 
@@ -35,7 +36,7 @@ class AlertsCard extends Component {
     this.props.reset()
   }
   toggleDisplay() {
-    const {display} = this.state
+    const {display} = this.props
     const newMargin = display ? '-140px' : '10px'
     anime({
       targets: this.alertsCard,
@@ -43,9 +44,7 @@ class AlertsCard extends Component {
       duration: 1000,
       easing: 'easeOutElastic'
     })
-    this.setState(prevState => ({
-      display: !prevState.display
-    }))
+    this.props.changeView('alerts')
   }
   handleChange({target}) {
     const {name, value} = target
@@ -61,8 +60,8 @@ class AlertsCard extends Component {
     this.props.removeAlert(id)
   }
   render() {
-    const {input, display} = this.state
-    const {amount, currency, crypto, allIds, alertsByID} = this.props
+    const {input} = this.state
+    const {amount, currency, crypto, allIds, alertsByID, display} = this.props
     let options = crypto.map(
       id => <option value={id} key={id}>{id}</option>)
     let alerts = allIds.length ? allIds.map(id => (
@@ -144,11 +143,20 @@ class AlertsCard extends Component {
 }
 
 const mapStateToProps = state => {
-  const {form, ids, alerts} = state
+  const {form, ids, alerts, ui} = state
   const {amount, currency} = form
   const {crypto} = ids
   const {allIds, alertsByID} = alerts
-  return {amount, currency, crypto, allIds, alertsByID}
+  return {
+    display: ui.alerts,
+    amount,
+    currency,
+    crypto,
+    allIds,
+    alertsByID
+  }
 }
 
-export default connect(mapStateToProps, {update, reset, addAlert, removeAlert})(AlertsCard)
+export default connect(mapStateToProps, {
+  update, reset, addAlert, removeAlert, changeView
+})(AlertsCard)

@@ -10,7 +10,7 @@ import ListItem from './ListItem'
 import s from './styles.css'
 
 import {updateSelected} from '../../market/ids'
-import {changeView} from '../../market/ui'
+import {toggleChart} from '../../market/ui'
 
 class FlatListComponent extends Component {
   constructor(props) {
@@ -59,7 +59,7 @@ class FlatListComponent extends Component {
     this.props.dispatch(updateSelected('selectedFiat', value))
   }
   handleChange(view) {
-    this.props.dispatch(changeView(view))
+    this.props.dispatch(toggleChart(view))
   }
   render() {
     const {position} = this.state
@@ -76,7 +76,7 @@ class FlatListComponent extends Component {
       <div className={s.container}>
         <div className={s.leftInfo}>
           <div className={s.curve}
-            onClick={() => this.handleChange('HISTORY')}>
+            onClick={() => this.handleChange('LINE')}>
             <Curve color={ui.chart === 'LINE' ? "#00CEFF" : "#FFFFFF"} />
           </div>
           <div className={s.candle}
