@@ -25,7 +25,7 @@ SECRET_KEY = '!$g7ot(vblf*@9@0d0^plbpj5vhikwm(=#k=%lv__#20ju6x+g'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['proemgsql-dev.us-east-1.elasticbeanstalk.com']
 
 
 # Application definition
@@ -125,6 +125,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = 'static'
 
 
 GRAPHENE = {

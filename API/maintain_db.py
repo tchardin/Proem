@@ -28,7 +28,7 @@ for currency in supported_currencies:
             sql = "INSERT INTO " + currency + fiat + " VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
             cursor.execute(sql,[str(f) for f in row])
             sql_all = "INSERT INTO ALLDATA VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-            cursor.execute(sql_all,[str(f) for f in row] + [coin] + [fiat])
+            cursor.execute(sql_all,[str(f) for f in row] + [currency] + [fiat])
         except ValueError as valerr:
             print("Unable to populate table: " + currency)
 
