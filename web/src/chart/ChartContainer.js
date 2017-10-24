@@ -23,7 +23,7 @@ class ChartContainer extends Component {
   windowDimensions() {
     this.setState({
       width: window.innerWidth,
-      height: window.innerHeight - 100
+      height: window.innerHeight - 120
     })
   }
   getViewData() {
@@ -63,13 +63,15 @@ class ChartContainer extends Component {
           close: Number(child.last)
           }
         })
+      console.log(data)
     } else if (ui.chart === 'CANDLES') {
       if (typeof candles[crypto] === 'undefined' || typeof candles[crypto][fiat] === 'undefined' || candles[crypto][fiat].isFetching) {
         return null
       }
       data = candles[crypto][fiat].items.map(child => {
+        let trim = child.Date.split(' ')
         return {
-          date: new Date(child.Date),
+          date: new Date(trim[0]),
           close: Number(child.Close),
           open: Number(child.Open),
           high: Number(child.High),
@@ -77,6 +79,7 @@ class ChartContainer extends Component {
           }
         })
       data = data.reverse()
+      console.log(data)
     }
     return (
       <div>

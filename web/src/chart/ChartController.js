@@ -96,7 +96,7 @@ class FlatListComponent extends Component {
           {list}
         </ul>
         <div
-          className="arrowBtn"
+          className="arrowRightBtn"
           onClick={() => this.scroll(position, position+100, 2000)}>
           <Arrow
             direction="right"
