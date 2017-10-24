@@ -1,0 +1,6 @@
+{
+  "name": "Proem",
+  "start_url": "./index.html",
+  "description": "App for visualizing and growing cryptocurrency portfolios",
+  "display": "standalone"
+}
