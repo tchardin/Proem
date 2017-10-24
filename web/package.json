@@ -21,7 +21,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "flow": "flow"
+    "flow": "flow",
+    "deploy": "aws s3 sync build/ s3://proem"
   },
   "devDependencies": {
     "redux-logger": "^3.0.6"
