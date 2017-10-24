@@ -27,6 +27,8 @@ for currency in supported_currencies:
                 row[1:-1] = np.asfarray(row[1:-1])*rates['rates'][fiat]
             sql = "INSERT INTO " + currency + fiat + " VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
             cursor.execute(sql,[str(f) for f in row])
+            sql_all = "INSERT INTO ALLDATA VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            cursor.execute(sql_all,[str(f) for f in row] + [currency] + [fiat])
         except ValueError as valerr:
             print("Unable to populate table: " + currency)
 

@@ -1,0 +1,10 @@
+
+jsonschema==2.6.0
+requests
+datetime
+psycopg2
+pandas
+quandl
+graphene
+graphene_django
+Django
