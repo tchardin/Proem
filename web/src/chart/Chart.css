@@ -1,0 +1,149 @@
+.controlContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /*background: linear-gradient(
+    to top,
+    black 60%,
+    #191B4E
+    );*/
+  /*background-color: #191B4E;*/
+  background-color: transparent;
+  padding-bottom: 1em;
+  padding-top: 1em;
+
+}
+
+.controlList {
+  max-width: 500px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  overflow: auto;
+  white-space: nowrap;
+  font-family: 'Gotham';
+  font-size: 1em;
+  line-height: 1.35em;
+}
+
+::-webkit-scrollbar {
+      display: none;
+   }
+
+.activeControlItem {
+  color: #fff;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.controlItem {
+  color: #fff;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  opacity: 0.5;
+}
+
+.controlItemlabel {
+  padding: 0.5em;
+  cursor: pointer;
+  user-select: none;
+}
+
+.controlItemlabel:not(:last-child) {
+  margin-right: 0.8em;
+}
+
+.arrowBtn {
+  cursor: pointer;
+  padding: 0.5em;
+}
+
+.arrowRightBtn {
+  transform: rotate(180deg) translateY(4px);
+  cursor: pointer;
+  padding: 0.5em;
+}
+
+.controlId {
+  font-weight: bold;
+}
+
+.pChange {
+  color: #0AFE00;
+}
+
+.nChange {
+  color: #FF0000;
+}
+
+.leftInfo,
+.rightInfo {
+  font-family: 'Gotham';
+  font-weight: bold;
+  font-size: 3em;
+  color: white;
+  padding: 0 1em 0 1em;
+}
+
+.leftInfo {
+  display: flex;
+  flex-direction: row;
+}
+
+.curve {
+  cursor: pointer;
+  padding: 0.25em;
+}
+
+.candle {
+  cursor: pointer;
+  padding: 0.25em;
+}
+
+.fiatSelect {
+	display: inline-block;
+	/*height: 3em;*/
+	max-width: 100%;
+	position: relative;
+	vertical-align: top;
+}
+
+.fiatSelect select {
+		moz-appearance: none;
+    -webkit-appearance: none;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    border: 1px solid transparent;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    /*font-size: 1rem;*/
+    /*height: 2.25em;*/
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    /*line-height: 1.5;*/
+    /*padding-bottom: calc(0.375em - 1px);
+    padding-left: calc(0.625em - 1px);
+    padding-right: 2.5em;
+    padding-top: calc(0.375em - 1px);*/
+    position: relative;
+    vertical-align: top;
+    background-color: transparent;
+    /*border-color: black;*/
+    color: white;
+    cursor: pointer;
+    display: block;
+    font-size: 1em;
+    font-weight: bold;
+    max-width: 100%;
+    outline: none;
+}
