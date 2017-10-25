@@ -3,9 +3,11 @@ import requests
 from graphene_django import DjangoObjectType
 from historicaldata.models import History
 from django.db.models import Q
+from django.db import transaction
 from ast import literal_eval
 from json import dumps
 from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
 
 
 
@@ -269,6 +271,7 @@ class Query(graphene.AbstractType):
 
     # @graphene.resolve_only_args
     def resolve_history(self, args, context, info):
+        History.objects.update()
         coin = args.get('coin')
         fiat = args.get('fiat')
         if coin and fiat:
@@ -276,7 +279,7 @@ class Query(graphene.AbstractType):
                 Q(coin__icontains=coin) &
                 Q(fiat__icontains=fiat)
             )
-            return History.objects.filter(filter)
+            return History.objects.filter(filter).order_by('date')
 
         return History.objects.all()
 
@@ -333,6 +336,7 @@ class Query(graphene.AbstractType):
                     low = re['low'],
                     volume = re['volume']))
                 cand.append(CandlesType(name=exchange,values=cand_data))
+        cand[0] = sorted(cand[0].values, key=lambda k: k.date)
         return cand
 
     def resolve_metrics(self, args, context, info):
