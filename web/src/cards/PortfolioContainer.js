@@ -4,9 +4,8 @@ import './Cards.css'
 
 import {VictoryPie} from 'victory'
 
-class PortfolioContainer extends Component {
-  render() {
-    const {allIds, assets, metrics, selectedFiat} = this.props
+const PortfolioContent = ({allIds, assets, metrics, selectedFiat}) => {
+
     if (!allIds.length) {
       return (
         <div className="portfolioContainer">
@@ -19,8 +18,10 @@ class PortfolioContainer extends Component {
     // Calculate totals for each asset
     let allBalances = allIds.map(id =>
       assets[id].balance * metrics[id][selectedFiat].items.price)
+
     // Calculate the total value of the portfolio
     let total = allBalances.reduce((a, b) => a + b, 0)
+
     // Calculate the percent share of total portfolio for each asset
     let allPercentShares = allBalances.map(balance => balance/total)
     let sharesById = allIds.map(id => {
@@ -28,14 +29,17 @@ class PortfolioContainer extends Component {
         x: id, y: assets[id].balance*metrics[id][selectedFiat].items.price/total
       }
     })
+
     // Calculate how much percent change for each asset
     let allPercentChanges = allIds.map(id =>
       Number(metrics[id][selectedFiat].items.percent_change_24h))
+
     // Calculate weighted average for total 24h change of portfolio
     let totalPercentChange = 0
     for (let i = 0; i < allIds.length; i++) {
       totalPercentChange += allPercentShares[i]*allPercentChanges[i]
     }
+
     let items = allIds.map(id => {
       let percentShare = assets[id].balance*metrics[id][selectedFiat].items.price/total
       return (
@@ -70,19 +74,6 @@ class PortfolioContainer extends Component {
         </div>
       </div>
     )
-  }
 }
 
-const mapStateToProps = state => {
-  const {portfolio, metrics, ids} = state
-  const {allIds, assets} = portfolio
-  const {selectedFiat} = ids
-  return {
-    allIds,
-    assets,
-    metrics,
-    selectedFiat
-  }
-}
-
-export default connect(mapStateToProps)(PortfolioContainer)
+export default PortfolioContent

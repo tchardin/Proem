@@ -10,69 +10,49 @@ import anime from 'animejs'
 import Button from '../components/Button/Button'
 import Cross from '../components/svg/Cross'
 import AlertItem from './AlertItem'
-import {update, reset} from '../store/form'
-import {addAlert, removeAlert} from '../store/alerts'
-import {changeView} from '../store/ui'
 
 import './Cards.css'
 
-class AlertsCard extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      input: false,
-      display: false
-    }
-    this.toggleDisplay = this.toggleDisplay.bind(this)
-    this.toggleInput = this.toggleInput.bind(this)
-    this.handleChange = this.handleChange.bind(this)
-    this.handleSubmit = this.handleSubmit.bind(this)
-    this.handleDelete = this.handleDelete.bind(this)
-  }
-  toggleInput() {
-    this.setState(prevState => ({
-      input: !prevState.input
-    }))
-    this.props.reset()
-  }
-  toggleDisplay() {
-    const {display} = this.props
-    const newMargin = display ? '-180px' : '10px'
-    anime({
-      targets: this.alertsCard,
-      marginLeft: newMargin,
-      duration: 1000,
-      easing: 'easeOutElastic'
-    })
-    this.props.changeView('alerts')
-  }
-  handleChange({target}) {
+const AlertsCard = ({
+  amount,
+  currency,
+  crypto,
+  allIds,
+  alertsByID,
+  display,
+  showCard,
+  resetForm,
+  displayForm,
+  updateForm,
+  addAlert,
+  removeAlert,
+  toggleCard
+}) => {
+  let alertsCard
+
+  const handleChange = ({target}) => {
     const {name, value} = target
-    this.props.update(name, value)
+    updateForm('alerts', name, value)
   }
-  handleSubmit() {
-    const {amount, currency} = this.props
-    this.props.addAlert(currency, amount)
-    this.props.reset()
-    this.toggleInput()
+
+  const handleSubmit = () => {
+    addAlert(currency, amount)
+    resetForm('alerts')
   }
-  handleDelete(id) {
-    this.props.removeAlert(id)
-  }
-  render() {
-    const {input} = this.state
-    const {amount, currency, crypto, allIds, alertsByID, display} = this.props
+
     let options = crypto.map(
       id => <option value={id} key={id}>{id}</option>)
+
     let alerts = allIds.length ? allIds.map(id => (
       <AlertItem
         alerts={alertsByID}
         id={id}
         key={id}
-        onDelete={() => this.handleDelete(id)}/>
+        onDelete={() => removeAlert(id)}/>
     )) : null
+
     let cardBody
-    if (input) {
+    if (display) {
       cardBody = (
         <div className="form">
           <div className="field">
@@ -83,7 +63,7 @@ class AlertsCard extends Component {
                 name="amount"
                 placeholder="Amount"
                 value={amount}
-                onChange={this.handleChange}/>
+                onChange={handleChange}/>
             </div>
           </div>
           <div className="field">
@@ -92,7 +72,7 @@ class AlertsCard extends Component {
                 <select
                   name="currency"
                   value={currency}
-                  onChange={this.handleChange}>
+                  onChange={handleChange}>
                   {options}
                 </select>
               </div>
@@ -102,11 +82,11 @@ class AlertsCard extends Component {
             <Button
               caption="cancel"
               type="second"
-              onClick={this.toggleInput}/>
+              onClick={() => resetForm('alerts')}/>
             <Button
               caption="set"
               type="primary"
-              onClick={this.handleSubmit} />
+              onClick={handleSubmit}/>
           </div>
         </div>
       )
@@ -121,42 +101,24 @@ class AlertsCard extends Component {
       )
     }
     return (
-      <div className="alertsCard" ref={div => this.alertsCard = div}>
+      <div className="alertsCard" ref={div => alertsCard = div}>
         <div className="cardHeader">
-          <h1 className={display ? "cardTitleOpen" : "cardTitle"}
-            onClick={() => this.toggleDisplay()}>ALERTS</h1>
-          { display &&
+          <h1 className={showCard ? "cardTitleOpen" : "cardTitle"}
+            onClick={() => toggleCard(alertsCard, 'alerts')}>ALERTS</h1>
+          { showCard &&
             <div className="headerBtn"
-              onClick={() => this.toggleInput()}>
+              onClick={() => displayForm('alerts')}>
               <Cross
                 size="14px"
                 color="#fff"
-                direction={input ? 'cancel' : 'plus'} />
+                direction={display ? 'cancel' : 'plus'} />
             </div>}
         </div>
         <div className="cardBody">
-          {display && cardBody}
+          {showCard && cardBody}
         </div>
       </div>
     )
-  }
 }
 
-const mapStateToProps = state => {
-  const {form, ids, alerts, ui} = state
-  const {amount, currency} = form
-  const {crypto} = ids
-  const {allIds, alertsByID} = alerts
-  return {
-    display: ui.alerts,
-    amount,
-    currency,
-    crypto,
-    allIds,
-    alertsByID
-  }
-}
-
-export default connect(mapStateToProps, {
-  update, reset, addAlert, removeAlert, changeView
-})(AlertsCard)
+export default AlertsCard

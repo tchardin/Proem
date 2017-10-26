@@ -8,13 +8,35 @@ const FORM_RESET = 'FORM_RESET'
 const FORM_DISPLAY = 'FORM_DISPLAY'
 
 const initialState = {
-  display: false,
-  amount: '',
-  date: '',
-  currency: 'BTC'
+  alerts: {
+    display: false,
+    amount: '',
+    currency: 'BTC'
+  },
+  portfolio: {
+    display: false,
+    amount: '',
+    date: '',
+    currency: 'BTC'
+  }
 }
 
 export default (state = initialState, action) => {
+  switch (action.type) {
+    case FORM_DISPLAY:
+    case FORM_UPDATE_VALUE:
+      return {
+        ...state,
+        [action.card]: form(state[action.card], action)
+      }
+    case FORM_RESET:
+      return initialState
+    default:
+      return state
+  }
+}
+
+const form = (state, action) => {
   switch (action.type) {
     case FORM_DISPLAY:
       return {
@@ -26,22 +48,22 @@ export default (state = initialState, action) => {
         ...state,
         [action.name]: action.value
       }
-    case FORM_RESET:
-      return initialState
     default:
       return state
   }
 }
 
-export const update = (name, value) => ({
+export const updateForm = (card, name, value) => ({
   type: FORM_UPDATE_VALUE,
-  name, value
+  card, name, value
 })
 
-export const reset = () => ({
-  type: FORM_RESET
+export const resetForm = card => ({
+  type: FORM_RESET,
+  card
 })
 
-export const displayForm = () => ({
-  type: FORM_DISPLAY
+export const displayForm = card => ({
+  type: FORM_DISPLAY,
+  card
 })
