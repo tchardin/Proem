@@ -3,7 +3,7 @@
  *
  */
 
-import React, {Component} from 'react'
+import React from 'react'
 
 import {scaleTime} from 'd3-scale'
 import { format } from 'd3-format'
@@ -18,7 +18,7 @@ import {
 	MouseCoordinateX,
 	MouseCoordinateY,
 } from 'react-stockcharts/lib/coordinates'
-import { discontinuousTimeScaleProvider } from 'react-stockcharts/lib/scale'
+import {ema} from 'react-stockcharts/lib/indicator'
 
 const candlesAppearance = {
   wickStroke: d => d.close > d.open ? "#0AFE00" : "#FF0000",
@@ -36,9 +36,7 @@ const alertsLineStyle = {
   textFill: "#0AFE00"
 }
 
-class ChartComponent extends Component {
-  render() {
-    const {height, width, data, view, alerts} = this.props
+const ChartComponent = ({height, width, data, view, alerts}) => {
     const {allIds, alertsByID} = alerts
     let alertLines = allIds.length ? allIds.map(id => (
       <PriceCoordinate
@@ -49,17 +47,27 @@ class ChartComponent extends Component {
         displayFormat={format('.2f')}
         {...alertsLineStyle}/>
     )) : null
+    const ema10 = ema()
+      .merge((d, c) => {d.ema10 = c})
+      .accessor(d => d.ema10)
+      .stroke('#FF00C4')
+    const ema50 = ema()
+  		.options({ windowSize: 50 })
+  		.merge((d, c) => {d.ema50 = c})
+  		.accessor(d => d.ema50)
+      .stroke('#FFA700')
     const margin = { left: 0, right: 50, top: 0, bottom: 30 }
     const gridHeight = height - margin.top - margin.bottom
     const xGrid = {innerTickSize: -1 * gridHeight, tickStrokeOpacity: 0.1}
     const xDomain = [new Date(2017, 8, 1), new Date()]
     // const yDomain = [minBy(data, d => d.last).price, maxBy(data, d => d.last).last+(maxBy(data, d => d.last).last/4)]
-    const yExtents = view.chart === 'LINE' ? (d => d.close) : (d => [d.high, d.low])
+    const calculatedData = ema10(ema50(data))
+    const yExtents = view.chart === 'LINE' ? ([d => d.close, ema10.accessor(), ema50.accessor()]) : ([d => [d.high, d.low], ema10.accessor(), ema50.accessor()])
     return (
       <ChartCanvas ratio={1} width={width} height={height}
 					margin={margin}
 					seriesName="MSFT"
-					data={data} type="svg"
+					data={calculatedData} type="svg"
 					xAccessor={d => d.date}
 					xScale={scaleTime()}
 					xExtents={xDomain}>
@@ -104,11 +112,12 @@ class ChartComponent extends Component {
           {view.chart === 'CANDLES' &&
           <CandlestickSeries {...candlesAppearance}/>}
           {view.alerts && alertLines}
+          <LineSeries yAccessor={ema10.accessor()} stroke={ema10.stroke()}/>
+          <LineSeries yAccessor={ema50.accessor()} stroke={ema50.stroke()}/>
 				</Chart>
         <CrossHairCursor stroke="#FFFFFF"/>
 			</ChartCanvas>
     )
-  }
 }
 
 export default ChartComponent

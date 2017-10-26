@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import './App.css'
 
 import {ChartContainer, ChartController} from './chart'
-import Cards from './cards'
+import {SignInCard, MetricsCard, PortfolioCard, AlertsCard} from './cards'
 
 import {loadIds} from './store/ids'
 import {loadUser, signUserOut} from './store/user'
@@ -25,6 +25,26 @@ class App extends Component {
           <div className="center">
             <div className="ball"></div>
             <div className="ball1"></div>
+          </div>
+        </div>
+      )
+    }
+    let cards
+    if (typeof user.info === 'undefined' || user.isLoading ) {
+      cards = (
+        <div className="infoCard">
+          <div className="cardContainer">
+            <SignInCard />
+          </div>
+        </div>
+      )
+    } else {
+      cards = (
+        <div className="infoCard">
+          <div className="cardContainer">
+            <MetricsCard />
+            <PortfolioCard />
+            <AlertsCard />
           </div>
         </div>
       )
@@ -50,7 +70,7 @@ class App extends Component {
             }
           </div>
         </div>
-        <Cards />
+        {cards}
         <ChartContainer />
         <ChartController />
       </div>

@@ -30,7 +30,7 @@ class PortfolioCard extends Component {
   }
   toggleDisplay() {
     const {display} = this.props
-    const newMargin = display ? '-140px' : '10px'
+    const newMargin = display ? '-180px' : '10px'
     anime({
       targets: this.portfolioCard,
       marginLeft: newMargin,

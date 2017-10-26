@@ -11,7 +11,7 @@
 	flex-direction: row;
 }
 
-.alertsCard, .portfolioCard, .metricsCard {
+.alertsCard, .portfolioCard, .metricsCard, .signInCard {
 	 background: -moz-linear-gradient(top, #1a1c50 21%, #050610 100%);
 	 background: -webkit-linear-gradient(top, #1a1c50 21%,#050610 100%);
 	 background: linear-gradient(to bottom, #1a1c50 21%,#050610 100%);
@@ -29,34 +29,28 @@
 }
 
 .signInCard {
-	background: -moz-linear-gradient(top, #1a1c50 21%, #050610 100%);
-	background: -webkit-linear-gradient(top, #1a1c50 21%,#050610 100%);
-	background: linear-gradient(to bottom, #1a1c50 21%,#050610 100%);
- /*background-color: "#1A1C50";*/
- /*backdrop-filter: blur(10px);
- -webkit-backdrop-filter: blur(10px);*/
- box-shadow: 1px 2px 6px 0px rgba(0,0,0,0.45);
- border-radius: 8px;
- font-family: 'Gotham';
- color: #fff;
  height: 360px;
  width: 220px;
- display: flex;
- flex-direction: column;
 }
 
 .metricsCard {
 	z-index: 999;
+	height: 360px;
+	width: 220px;
 }
 
 .portfolioCard {
 	z-index: 998;
-	margin-left: -140px;
+	margin-left: -180px;
+	height: 360px;
+	width: 220px;
 }
 
 .alertsCard {
 	z-index: 997;
-	margin-left: -140px;
+	margin-left: -180px;
+	height: 360px;
+	width: 220px;
 }
 
 .signInHeader {
@@ -115,7 +109,7 @@
 .cardTitleOpen {
 	cursor: pointer;
 	max-width: 180px;
-	font-size: 1em;
+	font-size: 1.5em;
 	font-weight: bold;
 	/* padding-bottom: 20px; */
 	font-family: 'Gotham';
@@ -208,7 +202,7 @@
 }
 
 .value {
-	font-size: 0.6em;
+	font-size: 0.8em;
 	padding-left: 1em;
 }
 
@@ -237,7 +231,7 @@
 }
 
 .label {
-	font-size: 0.6em;
+	font-size: 0.8em;
 	font-weight: 500;
 }
 
