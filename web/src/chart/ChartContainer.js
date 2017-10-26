@@ -63,7 +63,6 @@ class ChartContainer extends Component {
           close: Number(child.last)
           }
         })
-      console.log(data)
     } else if (ui.chart === 'CANDLES') {
       if (typeof candles[crypto] === 'undefined' || typeof candles[crypto][fiat] === 'undefined' || candles[crypto][fiat].isFetching) {
         return null
@@ -79,7 +78,6 @@ class ChartContainer extends Component {
           }
         })
       data = data.reverse()
-      console.log(data)
     }
     return (
       <div>

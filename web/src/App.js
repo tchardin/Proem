@@ -38,7 +38,8 @@ class App extends Component {
             </h1>
             {user.info &&
               <h2 className="hello">
-                Hello, {user.info.username.slice(0, -3)}
+                Hello, {
+                  user.info.username ? user.info.username.slice(0, -3) : 'Anonymous'}
               </h2>
             }
             {user.info &&
