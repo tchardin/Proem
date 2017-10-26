@@ -1,13 +1,10 @@
 // Card displaying information about specific currencies
 
-import React, { Component } from 'react'
-import {connect} from 'react-redux'
+import React from 'react'
 // local styles
 import './Cards.css'
 
-class MetricsCard extends Component {
-  render() {
-    const {metrics, selectedFiat, selectedCrypto} = this.props
+const MetricsCard = ({metrics, selectedFiat, selectedCrypto}) => {
     if (typeof metrics[selectedCrypto] === 'undefined'
     || typeof metrics[selectedCrypto][selectedFiat] === 'undefined'
     || metrics[selectedCrypto][selectedFiat].isFetching) {
@@ -45,17 +42,6 @@ class MetricsCard extends Component {
         </div>
       </div>
     )
-  }
 }
 
-const mapStateToProps = state => {
-  const {metrics, ids} = state
-  const {selectedFiat, selectedCrypto} = ids
-  return {
-    metrics,
-    selectedFiat,
-    selectedCrypto
-  }
-}
-
-export default connect(mapStateToProps)(MetricsCard)
+export default MetricsCard

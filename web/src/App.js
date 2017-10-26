@@ -18,7 +18,7 @@ class App extends Component {
   }
 
   render() {
-    const {ids, user, signUserOut} = this.props
+    const {ids, user, signUserOut, metrics} = this.props
     if (ids.isFetching) {
       return (
         <div className="fullSize">
@@ -42,7 +42,9 @@ class App extends Component {
       cards = (
         <div className="infoCard">
           <div className="cardContainer">
-            <MetricsCard />
+            <MetricsCard
+              metrics={metrics}
+              {...ids}/>
             <PortfolioCard />
             <AlertsCard />
           </div>
@@ -79,10 +81,11 @@ class App extends Component {
 }
 
 const mapStateToProps = state => {
-  const {ids, user} = state
+  const {ids, user, metrics} = state
   return {
     ids,
-    user
+    user,
+    metrics
   }
 }
 
