@@ -1,6 +1,6 @@
 .controlContainer {
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   /*background: linear-gradient(
     to top,
@@ -12,6 +12,11 @@
   padding-bottom: 1em;
   padding-top: 1em;
 
+}
+
+.centerControl {
+  display: flex;
+  align-items: center;
 }
 
 .controlList {

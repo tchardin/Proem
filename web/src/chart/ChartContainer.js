@@ -9,6 +9,7 @@ import Chart from './Chart'
 
 import {fetchHistory} from '../store/history'
 import {fetchCandles} from '../store/candles'
+import {fetchPChart} from '../store/portfolio'
 
 class ChartContainer extends Component {
   constructor(props) {
@@ -23,11 +24,11 @@ class ChartContainer extends Component {
   windowDimensions() {
     this.setState({
       width: window.innerWidth,
-      height: window.innerHeight - 120
+      height: window.innerHeight - 160
     })
   }
   getViewData() {
-    const {ui, history, candles, crypto, fiat} = this.props
+    const {ui, history, candles, crypto, fiat, portfolio} = this.props
     if (ui.chart === 'LINE') {
       if (typeof history[crypto] === 'undefined' || typeof history[crypto][fiat] === 'undefined') {
         this.props.dispatch(fetchHistory(crypto, fiat))
@@ -50,7 +51,7 @@ class ChartContainer extends Component {
     window.removeEventListener('resize', this.windowDimensions)
   }
   render() {
-    const {history, crypto, fiat, ui, candles, alerts} = this.props
+    const {history, crypto, fiat, ui, candles, alerts, portfolio} = this.props
     const {width, height} = this.state
     let data
     if (ui.chart === 'LINE') {
@@ -87,6 +88,7 @@ class ChartContainer extends Component {
           data={data}
           view={ui}
           alerts={alerts}
+          portfolio={portfolio}
           />
       </div>
     )
@@ -94,13 +96,14 @@ class ChartContainer extends Component {
 }
 
 const mapStateToProps = state => {
-  const {candles, history, ids, ui, alerts} = state
+  const {candles, history, ids, ui, alerts, portfolio} = state
   const {selectedCrypto, selectedFiat} = ids
   return {
     alerts,
     ui,
     candles,
     history,
+    portfolio,
     crypto: selectedCrypto,
     fiat: selectedFiat
   }

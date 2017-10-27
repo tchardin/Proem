@@ -24,16 +24,17 @@ class ListItem extends Component {
     this.fetchMetricsIfNeeded(id, selectedFiat, metrics)
   }
   render() {
-    const {id, metrics, onSelect, selectedCrypto, selectedFiat} = this.props
+    const {id, metrics, onSelect, selection, selectedFiat} = this.props
     if (typeof metrics[id] === 'undefined'
     || typeof metrics[id][selectedFiat] === 'undefined'
     || metrics[id][selectedFiat].isFetching) {
       return null
     }
     const {items} = metrics[id][selectedFiat]
+    let selectedArray = Array.isArray(selection) ? selection : [selection]
     return (
       <li
-        className={id === selectedCrypto ? "activeControlItem" : "controlItem"}
+        className={selectedArray.includes(id) ? "activeControlItem" : "controlItem"}
         key={id}
         onClick={() => onSelect(id)}>
         <label

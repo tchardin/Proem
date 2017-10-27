@@ -8,7 +8,7 @@ import Curve from '../components/svg/Curve'
 import ListItem from './ListItem'
 import './Chart.css'
 
-import {updateSelected} from '../store/ids'
+import {updateSelected, updateGroup} from '../store/ids'
 import {toggleChart} from '../store/ui'
 
 class FlatListComponent extends Component {
@@ -62,45 +62,83 @@ class FlatListComponent extends Component {
   }
   render() {
     const {position} = this.state
-    const {ids, ui} = this.props
-    let list = ids.crypto.map(id => (
-      <ListItem
-        onSelect={this.selectCrypto}
-        id={id}
-        key={id}
-        />
-    ))
+    const {ids, ui, allIds, assets, updateGroup, metrics} = this.props
+    const {selectedFiat, selectedGroup} = ids
+    let list
+    let selectedShare
+    if (ui.portfolio && allIds.length) {
+      list = allIds.map(id => (
+        <ListItem
+          onSelect={updateGroup}
+          selection={selectedGroup}
+          id={id}
+          key={id}
+          />
+      ))
+      // Calculate totals for each asset
+      let allBalances = allIds.map(id =>
+        assets[id].balance * metrics[id][selectedFiat].items.price)
+
+      // Calculate the total value of the portfolio
+      let total = allBalances.reduce((a, b) => a + b, 0)
+
+      // Calculate the percent share of total portfolio for each asset
+      let allPercentShares = allBalances.map(balance => balance/total)
+      let sharesById = selectedGroup.map(id => {
+        return assets[id].balance*metrics[id][selectedFiat].items.price/total
+      })
+      selectedShare = sharesById.reduce((a, b) => a + b, 0) || 0
+    } else {
+      list = ids.crypto.map(id => (
+        <ListItem
+          onSelect={this.selectCrypto}
+          selection={ids.selectedCrypto}
+          id={id}
+          key={id}
+          />
+      ))
+    }
     let options = ids.fiat.map(id => <option value={id} key={id}>{id}</option>)
     return (
       <div className="controlContainer">
-        <div className="leftInfo">
-          <div className="curve"
-            onClick={() => this.handleChange('LINE')}>
-            <Curve color={ui.chart === 'LINE' ? "#00CEFF" : "#FFFFFF"} />
+        {
+          !ui.portfolio ? (
+            <div className="leftInfo">
+              <div className="curve"
+                onClick={() => this.handleChange('LINE')}>
+                <Curve color={ui.chart === 'LINE' ? "#00CEFF" : "#FFFFFF"} />
+              </div>
+              <div className="candle"
+                onClick={() => this.handleChange('CANDLES')}>
+                <Candle color={ui.chart === 'CANDLES' ? "#00CEFF" : "#FFFFFF"} />
+              </div>
+            </div>
+          ) : (
+            <div className="leftInfo">
+             {selectedShare ? Math.round(selectedShare*10000)/100 : 0}%
+            </div>
+          )
+        }
+        <div className="centerControl">
+          <div
+            className="arrowBtn"
+            onClick={() => this.scroll(position, position-100, 2000)}>
+            <Arrow
+              direction="left"
+              color="#fff"/>
           </div>
-          <div className="candle"
-            onClick={() => this.handleChange('CANDLES')}>
-            <Candle color={ui.chart === 'CANDLES' ? "#00CEFF" : "#FFFFFF"} />
+          <ul
+            className="controlList"
+            ref={ul => this.scrollList = ul}>
+            {list}
+          </ul>
+          <div
+            className="arrowRightBtn"
+            onClick={() => this.scroll(position, position+100, 2000)}>
+            <Arrow
+              direction="right"
+              color="#fff" />
           </div>
-        </div>
-        <div
-          className="arrowBtn"
-          onClick={() => this.scroll(position, position-100, 2000)}>
-          <Arrow
-            direction="left"
-            color="#fff"/>
-        </div>
-        <ul
-          className="controlList"
-          ref={ul => this.scrollList = ul}>
-          {list}
-        </ul>
-        <div
-          className="arrowRightBtn"
-          onClick={() => this.scroll(position, position+100, 2000)}>
-          <Arrow
-            direction="right"
-            color="#fff" />
         </div>
         <div className="rightInfo">
           <div className="fiatSelect">
@@ -118,11 +156,17 @@ class FlatListComponent extends Component {
 }
 
 const mapStateToProps = state => {
-  const {ids, ui} = state
+  const {ids, ui, portfolio, metrics} = state
+  const {allIds, assets} = portfolio
   return {
     ids,
-    ui
+    ui,
+    allIds,
+    assets,
+    metrics
   }
 }
 
-export default connect(mapStateToProps)(FlatListComponent)
+export default connect(mapStateToProps, {
+  updateGroup
+})(FlatListComponent)

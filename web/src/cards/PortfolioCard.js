@@ -55,7 +55,7 @@ const PortfolioCard = ({
             <div className="control">
               <input
                 className="input"
-                type="datetime-local"
+                type="date"
                 name="date"
                 value={date}
                 onChange={handleChange}/>

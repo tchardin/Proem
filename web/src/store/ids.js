@@ -8,13 +8,15 @@
 const REQUEST_IDS = 'REQUEST_IDS'
 const RECEIVE_IDS = 'RECEIVE_IDS'
 const UPDATE_SELECTED = 'UPDATE_SELECTED'
+const UPDATE_GROUP = 'UPDATE_GROUP'
 
 export default (state = {
   isFetching: true,
   crypto: [],
   fiat: [],
   selectedFiat: 'USD',
-  selectedCrypto: 'BTC'
+  selectedCrypto: 'BTC',
+  selectedGroup: []
 }, action) => {
   switch(action.type) {
     case REQUEST_IDS:
@@ -33,14 +35,33 @@ export default (state = {
         ...state,
         [action.selectedItem]: action.value
       }
+    case UPDATE_GROUP:
+      return {
+        ...state,
+        selectedGroup:
+          state.selectedGroup.includes(action.value) ?
+          removeItem(state.selectedGroup, state.selectedGroup.indexOf(action.value)) :
+          [...state.selectedGroup, action.value]
+      }
     default:
       return state
   }
 }
 
+const removeItem = (array, index) => {
+  let newArray = array.slice()
+  newArray.splice(index, 1)
+  return newArray
+}
+
 export const updateSelected = (selectedItem, value) => ({
   type: UPDATE_SELECTED,
   selectedItem, value
+})
+
+export const updateGroup = value => ({
+  type: UPDATE_GROUP,
+  value
 })
 
 // Fetch currencies supported by the API.

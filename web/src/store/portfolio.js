@@ -50,9 +50,9 @@ export default (state = initialState, action) => {
         ...state,
         charts: {
           ...state.charts,
-          [crypto]: {
-            ...state.charts[crypto],
-            [fiat]: {
+          [action.crypto]: {
+            ...state.charts[action.crypto],
+            [action.fiat]: {
               isFetching: false,
               chart: pChart
             }
@@ -87,11 +87,12 @@ const errorPortfolio = currency => {
 export const newTransaction = (currency, amount, date) => (dispatch, getState) => {
   const {assets} = getState().portfolio
   const currentBalance = assets[currency] ? assets[currency].balance : 0
-  const newBalance = currentBalance + amount
+  const newBalance = currentBalance + Number(amount)
   if (newBalance < 0) {
     dispatch(errorPortfolio(currency))
   } else {
     dispatch(updatePortfolio(currency, amount, date, newBalance))
+    dispatch(fetchPChart(currency))
   }
 }
 
@@ -105,23 +106,36 @@ const receivePChart = (pChart, crypto, fiat) => ({
   pChart, crypto, fiat
 })
 
-export const fetchPChart = (crypto, fiat, transactions) => dispatch => {
-  const {date} = transactions[0]
-  dispatch(requestPChart(crypto, fiat))
-  return fetch(`${API_ROOT}/${crypto}?date_from=${date}&fiat=${fiat}`)
+export const fetchPChart = crypto => (dispatch, getState) => {
+
+  const {transactions} = getState().portfolio.assets[crypto]
+  const {selectedFiat} = getState().ids
+
+  let earliestDate = Date.now()
+  transactions.forEach(t => {
+    let d = new Date(t.date)
+    if (d< earliestDate) {
+      earliestDate = new Date(t.date)
+    }
+  })
+  let dateQuery = earliestDate.toISOString().split('T')[0]
+  dispatch(requestPChart(crypto, selectedFiat))
+  return fetch(`${API_ROOT}/${crypto}?date_from=${dateQuery}&fiat=${selectedFiat}`)
   .then(response => response.json())
   .then(json => {
     let balance = 0
+    console.log(json)
+    console.log(transactions)
     let pChart = json.map(day => {
       transactions.forEach(t => {
-        if (t.date === new Date(day.date)) {
-          return balance += t.amount
+        if (t.date === day.date) {
+          balance += Number(t.amount)
         }})
       return {
         date: day.date,
-        price: balance
+        price: balance*day.last
       }
     })
-    dispatch(receivePChart(pChart, crypto, fiat))
+    dispatch(receivePChart(pChart, crypto, selectedFiat))
   })
 }
