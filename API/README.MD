@@ -123,6 +123,70 @@ Server to post to:
 Check this link for GRAPHIQL UI to interact with API:
 - http://proemgsql-dev.us-east-1.elasticbeanstalk.com/graphql/
 
+Note that each model in the API is independently queryable (eg. ticker does not need to be wrapped in markets, or markets does not need to be wrapped in asset). An example of a query, that queries all data is detailed below. Each model requires coin and fiat arguments. The candles endpoint requires an additional interval argument. Note that arguments are passed down from parent models to children model (eg. asset -> history or markets -> ticker), so only need to be specified at the highest parent model. 
+
+```
+query{
+  asset(coin: "BTC", fiat: "USD", interval: "1m"){
+    name
+    history{
+       date
+       high
+       low
+       mid
+       last
+       bid
+       ask
+       volume
+    }
+    metrics{
+      marketCap
+      price
+      lastUpdated
+      name
+      volume24H
+      percentChange7D
+      symbol
+      rank
+      percentChange1H
+      totalSupply
+      availableSupply
+      percentChange24H
+      id
+    }
+    markets{
+      ticker{
+        name
+        values{
+          date
+          high
+          low
+          mid
+          last
+          bid
+          ask
+          volume
+      	}
+      }
+      candles{
+        name
+        values{
+          date
+          high
+          low
+          open
+          close
+          volume
+        }
+      }   
+    }    
+  }  
+}
+```
+
+
+
+
 ## Plot code
 
 Check out these links for example plots:

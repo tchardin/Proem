@@ -25,7 +25,7 @@ SECRET_KEY = '!$g7ot(vblf*@9@0d0^plbpj5vhikwm(=#k=%lv__#20ju6x+g'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['proemgsql-dev.us-east-1.elasticbeanstalk.com']
+ALLOWED_HOSTS = ['proemgsql-dev.us-east-1.elasticbeanstalk.com','127.0.0.1']
 
 
 # Application definition
