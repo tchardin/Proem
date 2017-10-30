@@ -36,7 +36,9 @@ const alertsLineStyle = {
   textFill: "#0AFE00"
 }
 
-const ChartComponent = ({height, width, data, view, alerts}) => {
+const colorScale = ["#FFF500", "#FF00C4", "#FFA700", "#0089FF", "#B100FF"]
+
+const ChartComponent = ({height, width, data, view, alerts, group, pfIds}) => {
     const {allIds, alertsByID} = alerts
     let alertLines = allIds.length ? allIds.map(id => (
       <PriceCoordinate
@@ -47,6 +49,13 @@ const ChartComponent = ({height, width, data, view, alerts}) => {
         displayFormat={format('.2f')}
         {...alertsLineStyle}/>
     )) : null
+    let groupLines = group.map((id, index) => (
+      <LineSeries
+        key={id}
+        yAccessor={d => d[id]}
+        stroke={colorScale[pfIds.indexOf(id)]}
+        strokeWidth={3}/>
+    ))
     const ema10 = ema()
       .merge((d, c) => {d.ema10 = c})
       .accessor(d => d.ema10)
@@ -56,13 +65,76 @@ const ChartComponent = ({height, width, data, view, alerts}) => {
   		.merge((d, c) => {d.ema50 = c})
   		.accessor(d => d.ema50)
       .stroke('#FFA700')
-    const margin = { left: 0, right: 50, top: 0, bottom: 30 }
+    const margin = { left: 0, right: 80, top: 0, bottom: 30 }
     const gridHeight = height - margin.top - margin.bottom
     const xGrid = {innerTickSize: -1 * gridHeight, tickStrokeOpacity: 0.1}
     const xDomain = [new Date(2017, 8, 1), new Date()]
     // const yDomain = [minBy(data, d => d.last).price, maxBy(data, d => d.last).last+(maxBy(data, d => d.last).last/4)]
-    const calculatedData = ema10(ema50(data))
-    const yExtents = view.chart === 'LINE' ? ([d => d.close, ema10.accessor(), ema50.accessor()]) : ([d => [d.high, d.low], ema10.accessor(), ema50.accessor()])
+
+    if (view.portfolio) {
+      const calculatedData = data
+      const groupExtents = group.map(id => {
+        return d => d[id]
+      })
+      const yExtents = [d => d.total, d => (d.total-d.total)]
+      return (
+        <ChartCanvas ratio={1} width={width} height={height}
+            margin={margin}
+            seriesName="MSFT"
+            data={calculatedData} type="svg"
+            xAccessor={d => d.date}
+            xScale={scaleTime()}
+            xExtents={xDomain}>
+          <Chart
+            id={0}
+            yExtents={yExtents}
+            padding={{top: 140, bottom: 0}}>
+            <XAxis
+              axisAt="bottom"
+              orient="bottom"
+              ticks={6}
+              opacity={0}
+              fontFamily="Gotham"
+              tickStroke="#FFFFFF"
+              tickStrokeOpacity={0.4}/>
+            <YAxis
+              axisAt="right"
+              orient="right"
+              opacity={0}
+              ticks={8}
+              fontFamily="Gotham"
+              tickStroke="#FFFFFF"
+              tickStrokeOpacity={0.4}
+              innerTickSize={5}
+              outerTickSize={5}
+              inverted={true}/>
+            <MouseCoordinateX
+              at="bottom"
+              orient="bottom"
+              displayFormat={timeFormat("%Y-%m-%d")}
+              fill="#00CEFF"
+              fontFamily="Gotham"
+              fontSize={11}/>
+            <MouseCoordinateY
+              at="right"
+              orient="right"
+              displayFormat={format(".2f")}
+              fill="#00CEFF"
+              fontFamily="Gotham"
+              fontSize={11}/>
+            <AreaSeries
+              yAccessor={d => d.total}
+              strokeWidth={0}
+              fill="#25286E"
+              opacity={1}/>
+              {groupLines}
+          </Chart>
+          <CrossHairCursor stroke="#FFFFFF"/>
+        </ChartCanvas>
+      )
+    }
+      const calculatedData = ema10(ema50(data))
+      const yExtents = view.chart === 'LINE' ? ([d => d.close, ema10.accessor(), ema50.accessor()]) : ([d => [d.high, d.low], ema10.accessor(), ema50.accessor()])
     return (
       <ChartCanvas ratio={1} width={width} height={height}
 					margin={margin}
@@ -71,7 +143,10 @@ const ChartComponent = ({height, width, data, view, alerts}) => {
 					xAccessor={d => d.date}
 					xScale={scaleTime()}
 					xExtents={xDomain}>
-				<Chart id={0} yExtents={yExtents}>
+				<Chart
+          id={0}
+          yExtents={yExtents}
+          padding={{top: 140, bottom: 0}}>
 					<XAxis
             axisAt="bottom"
             orient="bottom"
@@ -105,15 +180,21 @@ const ChartComponent = ({height, width, data, view, alerts}) => {
             fill="#00CEFF"
             fontFamily="Gotham"
             fontSize={11}/>
-					{view.chart === 'LINE' &&
-          <LineSeries yAccessor={d => d.close}
-            stroke="#FFF500"
-            strokeWidth={2}/>}
-          {view.chart === 'CANDLES' &&
-          <CandlestickSeries {...candlesAppearance}/>}
-          {view.alerts && alertLines}
-          <LineSeries yAccessor={ema10.accessor()} stroke={ema10.stroke()}/>
-          <LineSeries yAccessor={ema50.accessor()} stroke={ema50.stroke()}/>
+              {view.chart === 'LINE' &&
+              <LineSeries yAccessor={d => d.close}
+                stroke="#FFF500"
+                strokeWidth={3}/>}
+              {view.chart === 'CANDLES' &&
+              <CandlestickSeries {...candlesAppearance}/>}
+              {view.alerts && alertLines}
+              <LineSeries
+                yAccessor={ema10.accessor()}
+                stroke={ema10.stroke()}
+                />
+              <LineSeries
+                yAccessor={ema50.accessor()}
+                stroke={ema50.stroke()}
+                />
 				</Chart>
         <CrossHairCursor stroke="#FFFFFF"/>
 			</ChartCanvas>

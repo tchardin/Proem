@@ -54,7 +54,7 @@
 }
 
 .controlItemlabel {
-  padding: 0.5em;
+  margin: 0.5em;
   cursor: pointer;
   user-select: none;
 }
@@ -80,10 +80,12 @@
 
 .pChange {
   color: #0AFE00;
+  padding-bottom: 0.5em;
 }
 
 .nChange {
   color: #FF0000;
+  padding-bottom: 0.5em;
 }
 
 .leftInfo,

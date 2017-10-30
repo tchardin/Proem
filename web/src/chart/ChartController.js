@@ -11,6 +11,8 @@ import './Chart.css'
 import {updateSelected, updateGroup} from '../store/ids'
 import {toggleChart} from '../store/ui'
 
+const colorScale = ["#FFF500", "#FF00C4", "#FFA700", "#0089FF", "#B100FF"]
+
 class FlatListComponent extends Component {
   constructor(props) {
     super(props)
@@ -51,14 +53,14 @@ class FlatListComponent extends Component {
     })
   }
   selectCrypto(id) {
-    this.props.dispatch(updateSelected('selectedCrypto', id))
+    this.props.updateSelected('selectedCrypto', id)
   }
   selectFiat({target}) {
     const {value} = target
-    this.props.dispatch(updateSelected('selectedFiat', value))
+    this.props.updateSelected('selectedFiat', value)
   }
   handleChange(view) {
-    this.props.dispatch(toggleChart(view))
+    this.props.toggleChart(view)
   }
   render() {
     const {position} = this.state
@@ -73,6 +75,7 @@ class FlatListComponent extends Component {
           selection={selectedGroup}
           id={id}
           key={id}
+          color={colorScale[allIds.indexOf(id)]}
           />
       ))
       // Calculate totals for each asset
@@ -145,7 +148,8 @@ class FlatListComponent extends Component {
             <select
               name="selectedFiat"
               value={ids.selectedFiat}
-              onChange={this.selectFiat}>
+              onChange={this.selectFiat}
+              disabled={ui.portfolio}>
               {options}
             </select>
           </div>
@@ -168,5 +172,7 @@ const mapStateToProps = state => {
 }
 
 export default connect(mapStateToProps, {
-  updateGroup
+  updateGroup,
+  updateSelected,
+  toggleChart
 })(FlatListComponent)
