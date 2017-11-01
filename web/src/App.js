@@ -15,22 +15,6 @@ import {newTransaction} from './store/portfolio'
 import {changeView} from './store/ui'
 
 class App extends Component {
-  constructor(props) {
-    super(props)
-    this.toggleCard = this.toggleCard.bind(this)
-  }
-
-  toggleCard(target, card) {
-    const {ui, changeView} = this.props
-    const newMargin = ui[card] ? '-180px' : '10px'
-    anime({
-      targets: target,
-      marginLeft: newMargin,
-      duration: 1000,
-      easing: 'easeOutElastic'
-    })
-    changeView(card)
-  }
 
   componentDidMount() {
     // Loading currencies
@@ -67,49 +51,6 @@ class App extends Component {
         </div>
       )
     }
-    let cards
-    if (typeof user.info === 'undefined' || user.isLoading ) {
-      cards = (
-        <div className="infoCard">
-          <div className="cardContainer">
-            <SignInCard />
-          </div>
-        </div>
-      )
-    } else {
-      cards = (
-        <div className="infoCard">
-          <div className="cardContainer">
-            <MetricsCard
-              metrics={metrics}
-              {...ids}/>
-            <PortfolioCard
-              {...ids}
-              {...portfolio}
-              {...form.portfolio}
-              metrics={metrics}
-              showCard={ui.portfolio}
-              resetForm={resetForm}
-              displayForm={displayForm}
-              updateForm={updateForm}
-              focusDate={focusDate}
-              newTransaction={newTransaction}
-              toggleCard={this.toggleCard}/>
-            <AlertsCard
-              {...ids}
-              {...alerts}
-              {...form.alerts}
-              showCard={ui.alerts}
-              resetForm={resetForm}
-              displayForm={displayForm}
-              updateForm={updateForm}
-              addAlert={addAlert}
-              removeAlert={removeAlert}
-              toggleCard={this.toggleCard}/>
-          </div>
-        </div>
-      )
-    }
     return (
       <div className="fullSize">
         <div className="nav">
@@ -131,7 +72,6 @@ class App extends Component {
             }
           </div>
         </div>
-        {cards}
         <ChartContainer />
         <ChartController />
       </div>
