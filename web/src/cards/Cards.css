@@ -287,7 +287,7 @@ input[type="datetime-local"] {
 }
 
 .CalendarDay_highlighted_calendar {
-	background: #1a1c50;
+	background: #050610;
 	color: #00CEFF;
 }
 
@@ -317,11 +317,13 @@ input[type="datetime-local"] {
 }
 
 .SingleDatePicker_picker {
-	background-color: #1a1c50;
+	background-color: #050610;
 }
 
 .DayPicker__horizontal {
-	background: #1a1c50;
+	background: -moz-linear-gradient(top, #1a1c50 21%, #050610 100%);
+	background: -webkit-linear-gradient(top, #1a1c50 21%,#050610 100%);
+	background: linear-gradient(to bottom, #1a1c50 21%,#050610 100%);
 }
 
 .CalendarMonthGrid {
@@ -385,12 +387,35 @@ input[type="datetime-local"] {
 	top: 50px;
 }
 
+.CalendarDay__blocked_out_of_range,
+.CalendarDay__blocked_out_of_range:active,
+.CalendarDay__blocked_out_of_range:hover {
+  background: transparent;
+  border: 1px solid transparent;
+  color: grey;
+}
+
 .select {
 	display: inline-block;
 	height: 2em;
 	max-width: 100%;
 	position: relative;
 	vertical-align: top;
+}
+
+.DayPickerNavigation_rightButton__horizontal {
+    background: transparent;
+    border: none;
+    transform: rotate(180deg);
+}
+
+.DayPickerNavigation_leftButton__horizontal {
+	background: transparent;
+	border: none;
+}
+
+.DayPickerNavigation_button__horizontal {
+	top: 24px;
 }
 
 .select::after {

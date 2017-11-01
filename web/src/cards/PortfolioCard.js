@@ -74,6 +74,18 @@ const PortfolioCard = ({
                 numberOfMonths={1}
                 isOutsideRange={day => day > new Date()}
                 hideKeyboardShortcutsPanel
+                navPrev={
+                  <Arrow
+                    color="white"
+                    className="DayPicker_navLeft"
+                    size="10px" />
+                }
+                navNext={
+                  <Arrow
+                    color="white"
+                    className="DayPicker_navRight"
+                    size="10px" />
+                }
                 />
             </div>
           </div>

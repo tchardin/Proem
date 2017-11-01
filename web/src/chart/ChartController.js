@@ -126,8 +126,9 @@ class FlatListComponent extends Component {
             className="arrowBtn"
             onClick={() => this.scroll(position, position-100, 2000)}>
             <Arrow
-              direction="left"
-              color="#fff"/>
+              styleClass="arrowLeft"
+              color="#fff"
+              size="25px"/>
           </div>
           <ul
             className="controlList"
@@ -138,8 +139,9 @@ class FlatListComponent extends Component {
             className="arrowRightBtn"
             onClick={() => this.scroll(position, position+100, 2000)}>
             <Arrow
-              direction="right"
-              color="#fff" />
+              styleClass="arrowRight"
+              color="#fff"
+              size="25px"/>
           </div>
         </div>
         <div className="rightInfo">

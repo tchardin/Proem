@@ -68,7 +68,7 @@ class App extends Component {
       )
     }
     let cards
-    if (/* typeof user.info === 'undefined' ||*/ user.isLoading ) {
+    if (typeof user.info === 'undefined' || user.isLoading ) {
       cards = (
         <div className="infoCard">
           <div className="cardContainer">
