@@ -3,6 +3,9 @@ import {connect} from 'react-redux'
 import anime from 'animejs'
 // local shared styles with all cards to maintain consistency
 import './Cards.css'
+
+import {SingleDatePicker} from 'react-dates'
+
 import Arrow from '../components/svg/Arrow' // Svg icons
 import Button from '../components/Button/Button'
 import Cross from '../components/svg/Cross'
@@ -11,6 +14,7 @@ import Portfolio from './PortfolioContainer'
 const PortfolioCard = ({
   amount,
   date,
+  focused,
   currency,
   crypto,
   selectedFiat,
@@ -22,6 +26,7 @@ const PortfolioCard = ({
   resetForm,
   displayForm,
   updateForm,
+  focusDate,
   newTransaction,
   toggleCard
 }) => {
@@ -53,12 +58,23 @@ const PortfolioCard = ({
           </div>
           <div className="field">
             <div className="control">
-              <input
-                className="input"
-                type="date"
-                name="date"
-                value={date}
-                onChange={handleChange}/>
+              <SingleDatePicker
+                date={date}
+                onDateChange={date => {
+                  let target = {
+                    name: 'date',
+                    value: date
+                  }
+                  console.log(date.format('MM-DD-YYYY'))
+                  handleChange({target})
+                }}
+                placeholder="Date"
+                focused={focused}
+                onFocusChange={({focused}) => focusDate()}
+                numberOfMonths={1}
+                isOutsideRange={day => day > new Date()}
+                hideKeyboardShortcutsPanel
+                />
             </div>
           </div>
           <div className="field">
@@ -89,7 +105,10 @@ const PortfolioCard = ({
       <div className="portfolioCard" ref={div => portfolioCard = div}>
         <div className="cardHeader">
           <h1 className={showCard ? "cardTitleOpen" : "cardTitle"}
-            onClick={() => toggleCard(portfolioCard, 'portfolio')}>PORTFOLIO</h1>
+            onClick={() => {
+              toggleCard(portfolioCard, 'portfolio')
+              resetForm('portfolio')
+            }}>PORTFOLIO</h1>
           {showCard &&
           <div className="headerBtn"
             onClick={() => displayForm('portfolio')}>

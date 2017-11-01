@@ -6,6 +6,7 @@
 const FORM_UPDATE_VALUE = 'FORM_UPDATE_VALUE'
 const FORM_RESET = 'FORM_RESET'
 const FORM_DISPLAY = 'FORM_DISPLAY'
+const TOGGLE_DATE_FOCUS = 'TOGGLE_DATE_FOCUS'
 
 const initialState = {
   alerts: {
@@ -16,8 +17,9 @@ const initialState = {
   portfolio: {
     display: false,
     amount: '',
-    date: '',
-    currency: 'BTC'
+    date: null,
+    currency: 'BTC',
+    focused: false
   }
 }
 
@@ -29,6 +31,14 @@ export default (state = initialState, action) => {
         ...state,
         [action.card]: form(state[action.card], action)
       }
+    case TOGGLE_DATE_FOCUS:
+    return {
+      ...state,
+      portfolio: {
+        ...state.portfolio,
+        focused: !state.portfolio.focused
+      }
+    }
     case FORM_RESET:
       return initialState
     default:
@@ -66,4 +76,8 @@ export const resetForm = card => ({
 export const displayForm = card => ({
   type: FORM_DISPLAY,
   card
+})
+
+export const focusDate = () => ({
+  type: TOGGLE_DATE_FOCUS
 })

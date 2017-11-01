@@ -14,7 +14,7 @@ const MetricsCard = ({metrics, selectedFiat, selectedCrypto}) => {
     return (
       <div className="metricsCard">
         <div className="cardHeader">
-          <h1 className="cardTitleOpen">METRICS</h1>
+          <h1 className="cardTitleOpen">{items.name}</h1>
         </div>
         <div className="cardBody">
           <div className="list">

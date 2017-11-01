@@ -86,6 +86,7 @@ class ChartContainer extends Component {
         let oldestAsset = portfolio.allIds.reduce((a, b) => {
           return portfolio.charts[a][fiat].chart.length > portfolio.charts[b][fiat].chart.length ? a : b
         })
+        console.log(oldestAsset)
         data = portfolio.charts[oldestAsset][fiat].chart.map(a => {
           let point = {}
           let total = 0
@@ -114,6 +115,7 @@ class ChartContainer extends Component {
             total: a.price
           }
         })
+        console.log(data)
       } else {
         return null
       }

@@ -18,7 +18,7 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case UPDATE_PORTFOLIO:
-      const {currency, date, newBalance} = action
+      const {currency, newBalance} = action
       return {
         ...state,
         allIds: state.allIds.includes(currency) ? [...state.allIds] : state.allIds.concat(currency),
@@ -67,7 +67,7 @@ export default (state = initialState, action) => {
 }
 
 const transaction = (state, action) => {
-  const {date, amount, currency} = action
+  const {date, amount} = action
   if (typeof state === 'undefined') {
     return [{date, amount}]
   }
@@ -79,10 +79,10 @@ const updatePortfolio = (currency, amount, date, newBalance) => ({
   currency, amount, date, newBalance
 })
 
-const errorPortfolio = currency => {
+const errorPortfolio = currency => ({
   type: ERROR_PORTFOLIO,
   currency
-}
+})
 
 export const newTransaction = (currency, amount, date) => (dispatch, getState) => {
   const {assets} = getState().portfolio
@@ -91,7 +91,7 @@ export const newTransaction = (currency, amount, date) => (dispatch, getState) =
   if (newBalance < 0) {
     dispatch(errorPortfolio(currency))
   } else {
-    dispatch(updatePortfolio(currency, amount, date, newBalance))
+    dispatch(updatePortfolio(currency, amount, date = date.format('YYYY-MM-DD'), newBalance))
     dispatch(fetchPChart(currency))
   }
 }
@@ -124,8 +124,6 @@ export const fetchPChart = crypto => (dispatch, getState) => {
   .then(response => response.json())
   .then(json => {
     let balance = 0
-    console.log(json)
-    console.log(transactions)
     let pChart = json.map(day => {
       transactions.forEach(t => {
         if (t.date === day.date) {
@@ -133,7 +131,7 @@ export const fetchPChart = crypto => (dispatch, getState) => {
         }})
       return {
         date: day.date,
-        price: balance*day.last
+        price: balance*Number(day.last)
       }
     })
     dispatch(receivePChart(pChart, crypto, selectedFiat))

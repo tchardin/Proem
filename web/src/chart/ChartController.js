@@ -86,7 +86,6 @@ class FlatListComponent extends Component {
       let total = allBalances.reduce((a, b) => a + b, 0)
 
       // Calculate the percent share of total portfolio for each asset
-      let allPercentShares = allBalances.map(balance => balance/total)
       let sharesById = selectedGroup.map(id => {
         return assets[id].balance*metrics[id][selectedFiat].items.price/total
       })

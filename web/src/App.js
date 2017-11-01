@@ -9,7 +9,7 @@ import {SignInCard, MetricsCard, PortfolioCard, AlertsCard} from './cards'
 
 import {loadIds} from './store/ids'
 import {loadUser, signUserOut} from './store/user'
-import {updateForm, resetForm, displayForm} from './store/form'
+import {updateForm, resetForm, displayForm, focusDate} from './store/form'
 import {addAlert, removeAlert} from './store/alerts'
 import {newTransaction} from './store/portfolio'
 import {changeView} from './store/ui'
@@ -51,9 +51,9 @@ class App extends Component {
       resetForm,
       displayForm,
       updateForm,
+      focusDate,
       addAlert,
       removeAlert,
-      changeView,
       newTransaction
     } = this.props
 
@@ -68,7 +68,7 @@ class App extends Component {
       )
     }
     let cards
-    if (typeof user.info === 'undefined' || user.isLoading ) {
+    if (/* typeof user.info === 'undefined' ||*/ user.isLoading ) {
       cards = (
         <div className="infoCard">
           <div className="cardContainer">
@@ -92,6 +92,7 @@ class App extends Component {
               resetForm={resetForm}
               displayForm={displayForm}
               updateForm={updateForm}
+              focusDate={focusDate}
               newTransaction={newTransaction}
               toggleCard={this.toggleCard}/>
             <AlertsCard
@@ -158,6 +159,7 @@ export default connect(mapStateToProps, {
   resetForm,
   displayForm,
   updateForm,
+  focusDate,
   addAlert,
   removeAlert,
   changeView,

@@ -95,6 +95,7 @@
   font-size: 3em;
   color: white;
   padding: 0 1em 0 1em;
+  user-select: none;
 }
 
 .leftInfo {
