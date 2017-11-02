@@ -1,21 +1,15 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import {Provider} from 'react-redux'
-import 'react-dates/initialize'
-import './index.css'
-import 'react-dates/lib/css/_datepicker.css'
+/**
+ * React Static Boilerplate
+ * Copyright (c) 2015-present Kriasoft. All rights reserved.
+ */
 
-import configureStore from './store/configureStore'
-import App from './App'
-import registerServiceWorker from './registerServiceWorker'
+/* @flow */
 
-const store = configureStore()
-const root = document.getElementById('root')
-// const store = configureStore()
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-const renderComponent = component => {
-  ReactDOM.render(<Provider store={store}>{component}</Provider>, root)
-}
+import App from './App';
+import registerServiceWorker from './registerServiceWorker';
 
-renderComponent(<App />)
-registerServiceWorker()
+ReactDOM.render(<App />, document.getElementById('root'));
+registerServiceWorker();

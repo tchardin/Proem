@@ -1,32 +1,58 @@
 {
-  "name": "web",
-  "version": "0.1.0",
+  "name": "app",
+  "version": "0.0.0",
   "private": true,
   "dependencies": {
-    "animejs": "^2.2.0",
-    "blockstack": "^0.11.1",
-    "flow-bin": "^0.57.3",
+    "classnames": "^2.2.5",
     "history": "^4.7.2",
-    "react": "^16.0.0",
-    "react-addons-shallow-compare": "^15.6.2",
-    "react-dates": "^15.0.0",
-    "react-dom": "^16.0.0",
-    "react-redux": "^5.0.6",
-    "react-scripts": "1.0.14",
-    "react-stockcharts": "^0.7.0-beta.19",
-    "redux": "^3.7.2",
-    "redux-thunk": "^2.2.0",
-    "victory": "^0.24.0"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "flow": "flow",
-    "deploy": "aws s3 sync build/ s3://proem.io"
+    "lodash": "^4.17.4",
+    "prop-types": "^15.5.10",
+    "query-string": "^5.0.0",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-relay": "^1.3.0",
+    "relay-runtime": "^1.3.0",
+    "styled-components": "^2.1.2",
+    "universal-router": "^3.2.0"
   },
   "devDependencies": {
-    "redux-logger": "^3.0.6"
+    "babel-plugin-relay": "^1.3.0",
+    "babel-plugin-styled-components": "^1.2.0",
+    "babel-plugin-transform-export-extensions": "^6.22.0",
+    "chai": "^4.1.1",
+    "eslint-config-prettier": "^2.3.0",
+    "eslint-plugin-flowtype": "^2.35.0",
+    "eslint-plugin-prettier": "^2.2.0",
+    "flow-bin": "^0.53.1",
+    "gh-pages": "^1.0.0",
+    "husky": "^0.14.3",
+    "lint-staged": "^4.0.4",
+    "pre-render": "^0.1.0-preview.2",
+    "prettier": "^1.6.1",
+    "react-scripts": "1.0.12",
+    "relay-compiler": "^1.3.0",
+    "stylelint": "^8.0.0",
+    "stylelint-config-primer": "^2.0.1",
+    "stylelint-config-standard": "^17.0.0",
+    "stylelint-config-styled-components-processor": "^0.1.1",
+    "stylelint-order": "^0.6.0",
+    "stylelint-processor-styled-components": "^0.4.0"
+  },
+  "lint-staged": {
+    "*.js": ["eslint --no-ignore --fix", "git add"],
+    "*.json": ["prettier --write", "git add"]
+  },
+  "scripts": {
+    "precommit": "lint-staged",
+    "lint":
+      "eslint --ignore-path .gitignore --ignore-pattern \"!**/.*\" . && stylelint \"./src/**/*.js\"",
+    "fix":
+      "eslint --ignore-path .gitignore --ignore-pattern \"!**/.*\" --fix .",
+    "relay":
+      "node ./setup --download-schema && relay-compiler --src ./src --schema ./src/schema.graphql",
+    "build": "node ./setup && react-scripts build && node ./render",
+    "test": "node ./setup && react-scripts test --env=jsdom",
+    "deploy": "node ./setup && react-scripts build && gh-pages -d build",
+    "start": "node ./setup && react-scripts start"
   }
 }
