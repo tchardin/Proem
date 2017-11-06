@@ -88,7 +88,7 @@ or if using crontab:
 ```
 cd
 crontab -r
-``
+```
 
 To update the RDS database using csv files, run:
 
@@ -123,11 +123,11 @@ Server to post to:
 Check this link for GRAPHIQL UI to interact with API:
 - http://proemgsql-dev.us-east-1.elasticbeanstalk.com/graphql/
 
-Note that each model in the API is independently queryable (eg. ticker does not need to be wrapped in markets, or markets does not need to be wrapped in asset). An example of a query, that queries all data is detailed below. Each model requires coin and fiat arguments. The candles endpoint requires an additional interval argument. Note that arguments are passed down from parent models to children model (eg. asset -> history or markets -> ticker), so only need to be specified at the highest parent model. 
+Note that each model in the API is independently queryable (eg. ticker does not need to be wrapped in markets, or markets does not need to be wrapped in asset). An example of a query, that queries all data is detailed below. Each model requires coin and fiat arguments. The candles endpoint requires an additional interval argument. Note that arguments are passed down from parent models to children model (eg. asset -> history or markets -> ticker), so only need to be specified at the highest parent model.
 
 ```
 query{
-  asset(coin: "BTC", fiat: "USD", interval: "1m"){
+  assets(coin: "BTC", fiat: "USD", interval: "1m"){
     name
     history{
        date
@@ -140,19 +140,22 @@ query{
        volume
     }
     metrics{
-      marketCap
-      price
-      lastUpdated
       name
-      volume24H
-      percentChange7D
-      symbol
-      rank
-      percentChange1H
-      totalSupply
-      availableSupply
-      percentChange24H
-      id
+      values{
+      	marketCap
+      	price
+      	lastUpdated
+      	name
+      	volume24H
+     	  percentChange7D
+      	symbol
+      	rank
+      	percentChange1H
+      	totalSupply
+      	availableSupply
+      	percentChange24H
+      	id
+      }
     }
     markets{
       ticker{

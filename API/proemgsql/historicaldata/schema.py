@@ -5,7 +5,7 @@ from historicaldata.models import History
 from django.db.models import Q
 from django.db import transaction
 from ast import literal_eval
-from json import dumps
+import json
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 
@@ -30,7 +30,7 @@ supported_currencies_exchange['KRAKEN'] = supported_currencies[1:]
 
 def get_exchange_rates(fiat):
     if (fiat != 'USD'):
-        rates = literal_eval(requests.get("http://api.fixer.io/latest?base=USD").content)
+        rates = json.loads(requests.get("http://api.fixer.io/latest?base=USD").content)
     else:
         rates = {'rates': {fiat: 1}}
     return rates
@@ -38,14 +38,20 @@ def get_exchange_rates(fiat):
 def ticker_url(market, coin):
     if market == 'BITFINEX':
         bfx_coin = 't{0}USD'.format(coin)
-        r = literal_eval(requests.get("https://api.bitfinex.com/v2/ticker/%s"%bfx_coin).content)
+        r = json.loads(requests.get("https://api.bitfinex.com/v2/ticker/%s"%bfx_coin).content)
     elif market == 'GDAX':
         gdx_coin = '{0}-USD'.format(coin)
-        r = literal_eval(requests.get('https://api.gdax.com/products/%s/ticker'%gdx_coin).content)
+        r = json.loads(requests.get('https://api.gdax.com/products/%s/ticker'%gdx_coin).content)
     elif market == 'KRAKEN':
         krk_coin = '{0}USD'.format(coin)
-        r = literal_eval(requests.get('https://api.kraken.com/0/public/Ticker?pair=%s'%krk_coin).content)
+        r = json.loads(requests.get('https://api.kraken.com/0/public/Ticker?pair=%s'%krk_coin).content)
     return r
+
+def kraken_string_format(coin):
+    if coin in ["LTC","BTC","ETH", "ETC", "ZEC", "XMR"]:
+        return 'X'+coin+'ZUSD'
+    else:
+        return coin+'USD'
 
 def ticker_data(coin, rates, fiat, responses):
     ticker_keys = ["date","high","low","mid","last","bid","ask","volume"]
@@ -62,11 +68,11 @@ def ticker_data(coin, rates, fiat, responses):
                 data.insert(3,(data[1]+data[2])/2.0)
             elif market == 'GDAX':
                 gdx_coin = '{0}-USD'.format(coin)
-                r2 = literal_eval(requests.get('https://api.gdax.com/products/%s/stats'%gdx_coin).content)
-                data = [str(datetime.now())] + [float(r2[i]) for i in ['high','low']] + [float(r[i]) for i in ['price','bid','ask','volume']]
+                r2 = json.loads(requests.get('https://api.gdax.com/products/%s/stats'%gdx_coin).content)
+                data = [str(datetime.now())] + [float(r2[i]) for i in ['high','low']] + [float(r[i])*rates['rates'][fiat] for i in ['price','bid','ask','volume']]
                 data.insert(3,(data[1]+data[2])/2.0)
             elif market == 'KRAKEN':
-                data = [str(datetime.now())] + [float(r['result']['X'+coin+'ZUSD'][i][0])*rates['rates'][fiat] for i in ['h','l','c','b','a','v']]
+                data = [str(datetime.now())] + [float(r['result'][kraken_string_format(coin)][i][0])*rates['rates'][fiat] for i in ['h','l','c','b','a','v']]
                 data.insert(3,(data[1]+data[2])/2.0)
             resp_dict[market] = [dict(zip(tuple(ticker_keys), data))]
     return resp_dict
@@ -164,16 +170,16 @@ def convert_interval_GDAX(interval, granularity):
 def candles_url(market,coin, interval):
     if market == 'BITFINEX':
         bfx_coin = 't{0}USD'.format(coin)
-        r = literal_eval(requests.get("https://api.bitfinex.com/v2/candles/trade:%s:%s/hist?limit=200"%(interval,bfx_coin)).content)
+        r = json.loads(requests.get("https://api.bitfinex.com/v2/candles/trade:%s:%s/hist?limit=200"%(interval,bfx_coin)).content)
     elif market == 'GDAX':
         gdx_coin = '{0}-USD'.format(coin)
         start, end, granularity = convert_interval_GDAX(interval,200)
-        r = literal_eval(requests.get('https://api.gdax.com/products/%s/candles?start=%s&end=%s&granularity=%s'%(gdx_coin,str(start),str(end),str(granularity))).content)
+        r = json.loads(requests.get('https://api.gdax.com/products/%s/candles?start=%s&end=%s&granularity=%s'%(gdx_coin,str(start),str(end),str(granularity))).content)
         # print('https://api.gdax.com/products/%s/candles?start=%s&end=%s&granularity=%s'%(gdx_coin,str(start),str(end),str(granularity)))
     elif market == 'KRAKEN':
         krk_coin = '{0}USD'.format(coin)
         interval = convert_interval_KRAKEN(interval)
-        r = literal_eval(requests.get('https://api.kraken.com/0/public/OHLC?pair=%s&interval=%s'%(krk_coin,interval)).content)
+        r = json.loads(requests.get('https://api.kraken.com/0/public/OHLC?pair=%s&interval=%s'%(krk_coin,interval)).content)
     return r
 
 def candles_data(coin, rates, fiat, responses):
@@ -194,7 +200,7 @@ def candles_data(coin, rates, fiat, responses):
             for point in r:
                 data.append([str(datetime.fromtimestamp(int(point[0])))] + [float(point[i])*rates['rates'][fiat] for i in [3,4,2,1,5]])
         elif market == 'KRAKEN':
-            for point in r['result'][coin+fiat]:
+            for point in r['result'][kraken_string_format(coin)]:
                 data.append([str(datetime.now())] + [float(point[i])*rates['rates'][fiat] for i in [1,4,2,3,6]])
         resp_dict[market] = [dict(zip(tuple(candles_keys), d)) for d in data]
     return resp_dict
@@ -267,13 +273,17 @@ class Query(graphene.AbstractType):
     candles = graphene.List(CandlesType, coin=graphene.String(), fiat=graphene.String(), interval=graphene.String())
     metrics = graphene.List(MetricsType, coin=graphene.String(), fiat=graphene.String())
     markets = graphene.List(MarketsType, coin=graphene.String(), fiat=graphene.String(), interval=graphene.String())
-    asset = graphene.List(AssetType, coin=graphene.String(), fiat=graphene.String(), interval=graphene.String())
+    assets = graphene.List(AssetType, coin=graphene.String(), fiat=graphene.String(), interval=graphene.String())
 
     # @graphene.resolve_only_args
     def resolve_history(self, args, context, info):
         History.objects.update()
-        coin = args.get('coin')
-        fiat = args.get('fiat')
+        fiat = args.get('fiat') or "USD"
+        coin = args.get('coin') or "BTC"
+        if fiat is None:
+            fiat = "USD"
+        if coin is None:
+            coin = "BTC"
         if coin and fiat:
             filter = (
                 Q(coin__icontains=coin) &
@@ -285,8 +295,8 @@ class Query(graphene.AbstractType):
 
     def resolve_ticker(self, args, context, info):
         tick = []
-        fiat = args.get('fiat')
-        coin = args.get('coin')
+        fiat = args.get('fiat') or "USD"
+        coin = args.get('coin') or "BTC"
         try:
             r = []
             rates = get_exchange_rates(fiat)
@@ -300,9 +310,11 @@ class Query(graphene.AbstractType):
             if exchange not in resp:
                 pass
             else:
-                bft_ticker = TickerData( date = resp['BITFINEX'][0]['date'],
+                bft_ticker = TickerData( date = resp[exchange][0]['date'],
                 high = resp[exchange][0]['high'],
                 low = resp[exchange][0]['low'],
+                mid = resp[exchange][0]['mid'],
+                last = resp[exchange][0]['last'],
                 bid = resp[exchange][0]['bid'],
                 ask = resp[exchange][0]['ask'],
                 volume = resp[exchange][0]['volume'])
@@ -310,9 +322,9 @@ class Query(graphene.AbstractType):
         return tick
 
     def resolve_candles(self, args, context, info):
-        interval = args.get('interval')
-        fiat = args.get('fiat')
-        coin = args.get('coin')
+        interval = args.get('interval') or "1D"
+        fiat = args.get('fiat') or "USD"
+        coin = args.get('coin') or "BTC"
         cand = []
         try:
             r = []
@@ -336,18 +348,19 @@ class Query(graphene.AbstractType):
                     low = re['low'],
                     volume = re['volume']))
                 cand.append(CandlesType(name=exchange,values=cand_data))
-        cand[0] = sorted(cand[0].values, key=lambda k: k.date)
+        for i in range(len(cand)):
+            cand[i].values = sorted(cand[i].values, key=lambda k: k.date)
         return cand
 
     def resolve_metrics(self, args, context, info):
-        fiat = args.get('fiat')
-        coin = args.get('coin')
+        fiat = args.get('fiat') or "USD"
+        coin = args.get('coin') or "BTC"
         coin = convert_symbols[coin]
         try:
-            r = literal_eval(requests.get("https://api.coinmarketcap.com/v1/ticker/%s/?convert=%s"%(coin,fiat)).content)
+            # print requests.get("https://api.coinmarketcap.com/v1/ticker/%s/?convert=%s"%(coin,fiat))
+            r = json.loads(requests.get("https://api.coinmarketcap.com/v1/ticker/%s/?convert=%s"%(coin,fiat)).content)
         except ValueError as valerr:
             print("Failed to get metrics data from coinmarketcap: " + str(valerr))
-        print r[0]['market_cap_'+fiat.lower()]
         metricsData = MetricsData(marketCap= r[0]['market_cap_'+fiat.lower()],
         price= r[0]['price_'+fiat.lower()],
         lastUpdated= r[0]['last_updated'],
@@ -366,19 +379,29 @@ class Query(graphene.AbstractType):
 
         return metrics
 
-    def resolve_market(self, args, context, info):
+    def resolve_markets(self, args, context, info):
         q = Query()
         markets = [MarketsType(ticker = q.resolve_ticker(args, context, info),
         candles = q.resolve_candles(args, context, info)
         )]
         return markets
 
-    def resolve_asset(self, args, context, info):
-        coin = args.get('coin')
+    def resolve_assets(self, args, context, info):
+        coin = args.get('coin') or "BTC"
         q = Query()
-        asset = [AssetType(name=coin,
-        markets = q.resolve_market(args, context, info),
-        history = q.resolve_history(args, context, info),
-        metrics = q.resolve_metrics(args, context, info)
-        )]
-        return asset
+        if coin:
+            assets = [AssetType(name=coin,
+            markets = q.resolve_markets(args, context, info),
+            history = q.resolve_history(args, context, info),
+            metrics = q.resolve_metrics(args, context, info)
+            )]
+        else:
+            assets = []
+            for coin in supported_currencies:
+                args['coin'] = coin
+                assets.append(AssetType(name=coin,
+                markets = q.resolve_markets(args, context, info),
+                history = q.resolve_history(args, context, info),
+                metrics = q.resolve_metrics(args, context, info)
+                ))
+        return assets
