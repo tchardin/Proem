@@ -13,7 +13,7 @@
 
 
  export default (state = {}, action) => {
-   const {crypto, fiat, results, receivedAt} = action
+   const {crypto, fiat} = action
    switch (action.type) {
      case REQUEST_HISTORY:
        return {

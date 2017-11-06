@@ -22,12 +22,12 @@ export default (state = {
     case ADD_ALERT:
       const {id, crypto, price} = action
       return {
-        allIds: !state.allIds.includes(action.id) ? [...state.allIds, action.id] : [...state.allIds],
+        allIds: !state.allIds.includes(id) ? [...state.allIds, id] : [...state.allIds],
         alertsByID: {
           ...state.alertsByID,
           [id]: {
-            asset: action.crypto,
-            price: action.price
+            asset: crypto,
+            price: price
           }
         }
       }

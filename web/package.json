@@ -8,6 +8,8 @@
     "flow-bin": "^0.57.3",
     "history": "^4.7.2",
     "react": "^16.0.0",
+    "react-addons-shallow-compare": "^15.6.2",
+    "react-dates": "^15.0.0",
     "react-dom": "^16.0.0",
     "react-redux": "^5.0.6",
     "react-scripts": "1.0.14",
@@ -22,7 +24,7 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "flow": "flow",
-    "deploy": "aws s3 sync build/ s3://proem"
+    "deploy": "aws s3 sync build/ s3://proem.io"
   },
   "devDependencies": {
     "redux-logger": "^3.0.6"

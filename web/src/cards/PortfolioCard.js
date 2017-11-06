@@ -3,57 +3,46 @@ import {connect} from 'react-redux'
 import anime from 'animejs'
 // local shared styles with all cards to maintain consistency
 import './Cards.css'
+
+import {SingleDatePicker} from 'react-dates'
+
 import Arrow from '../components/svg/Arrow' // Svg icons
 import Button from '../components/Button/Button'
 import Cross from '../components/svg/Cross'
 import Portfolio from './PortfolioContainer'
-import {update, reset} from '../store/form'
-import {newTransaction} from '../store/portfolio'
-import {changeView} from '../store/ui'
 
-class PortfolioCard extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      input: false
-    }
-    this.toggleInput = this.toggleInput.bind(this)
-    this.toggleDisplay = this.toggleDisplay.bind(this)
-    this.handleChange = this.handleChange.bind(this)
-    this.handleSubmit = this.handleSubmit.bind(this)
-  }
-  toggleInput() {
-    this.setState(prevState => ({
-      input: !prevState.input
-    }))
-    this.props.reset()
-  }
-  toggleDisplay() {
-    const {display} = this.props
-    const newMargin = display ? '-140px' : '10px'
-    anime({
-      targets: this.portfolioCard,
-      marginLeft: newMargin,
-      duration: 1000,
-      easing: 'easeOutElastic'
-    })
-    this.props.changeView('portfolio')
-  }
-  handleChange({target}) {
+const PortfolioCard = ({
+  amount,
+  date,
+  focused,
+  currency,
+  crypto,
+  selectedFiat,
+  metrics,
+  allIds,
+  assets,
+  display,
+  showCard,
+  resetForm,
+  displayForm,
+  updateForm,
+  focusDate,
+  newTransaction,
+  toggleCard
+}) => {
+  let portfolioCard
+  const handleChange = ({target}) => {
     const {name, value} = target
-    this.props.update(name, value)
+    updateForm('portfolio', name, value)
   }
-  handleSubmit() {
-    const {amount, date, currency} = this.props
-    this.props.newTransaction(currency, amount, date)
-    this.props.reset()
-    this.toggleInput()
+  const handleSubmit = () => {
+    newTransaction(currency, amount, date)
+    resetForm('portfolio')
   }
-  render() {
-    const {input} = this.state
-    const {amount, date, currency, ids, allIds, display} = this.props
-    let options = ids.crypto.map(
+
+    let options = crypto.map(
       id => <option value={id} key={id}>{id}</option>)
+
     let inputFields = (
         <div className="form">
           <div className="field">
@@ -64,17 +53,40 @@ class PortfolioCard extends Component {
                 name="amount"
                 placeholder="Amount"
                 value={amount}
-                onChange={this.handleChange}/>
+                onChange={handleChange}/>
             </div>
           </div>
           <div className="field">
             <div className="control">
-              <input
-                className="input"
-                type="datetime-local"
-                name="date"
-                value={date}
-                onChange={this.handleChange}/>
+              <SingleDatePicker
+                date={date}
+                onDateChange={date => {
+                  let target = {
+                    name: 'date',
+                    value: date
+                  }
+                  console.log(date.format('MM-DD-YYYY'))
+                  handleChange({target})
+                }}
+                placeholder="Date"
+                focused={focused}
+                onFocusChange={({focused}) => focusDate()}
+                numberOfMonths={1}
+                isOutsideRange={day => day > new Date()}
+                hideKeyboardShortcutsPanel
+                navPrev={
+                  <Arrow
+                    color="white"
+                    className="DayPicker_navLeft"
+                    size="10px" />
+                }
+                navNext={
+                  <Arrow
+                    color="white"
+                    className="DayPicker_navRight"
+                    size="10px" />
+                }
+                />
             </div>
           </div>
           <div className="field">
@@ -83,7 +95,7 @@ class PortfolioCard extends Component {
                 <select
                   name="currency"
                   value={currency}
-                  onChange={this.handleChange}>
+                  onChange={handleChange}>
                   {options}
                 </select>
               </div>
@@ -92,58 +104,42 @@ class PortfolioCard extends Component {
           <div className="btnContainer">
             <Button
               caption="cancel"
-              type="second" />
+              type="second"
+              onClick={() => resetForm('portfolio')}/>
             <Button
               caption="import"
               type="primary"
-              onClick={this.handleSubmit} />
+              onClick={handleSubmit} />
           </div>
         </div>
       )
     return (
-      <div className="portfolioCard" ref={div => this.portfolioCard = div}>
+      <div className="portfolioCard" ref={div => portfolioCard = div}>
         <div className="cardHeader">
-          <h1 className={display ? "cardTitleOpen" : "cardTitle"}
-            onClick={() => this.toggleDisplay()}>PORTFOLIO</h1>
-          {display &&
+          <h1 className={showCard ? "cardTitleOpen" : "cardTitle"}
+            onClick={() => {
+              toggleCard(portfolioCard, 'portfolio')
+              resetForm('portfolio')
+            }}>PORTFOLIO</h1>
+          {showCard &&
           <div className="headerBtn"
-            onClick={() => this.toggleInput()}>
+            onClick={() => displayForm('portfolio')}>
             <Cross
               size="14px"
               color="#fff"
-              direction={input ? 'cancel' : 'plus'} />
+              direction={display ? 'cancel' : 'plus'} />
           </div>}
         </div>
         <div className="cardBody">
-          {input ? inputFields :
-          <Portfolio />}
+          {display ? inputFields :
+          <Portfolio
+            selectedFiat={selectedFiat}
+            metrics={metrics}
+            allIds={allIds}
+            assets={assets}/>}
         </div>
       </div>
     )
-  }
 }
 
-const mapStateToProps = state => {
-  const {form, ids, portfolio, ui} = state
-  const {
-    amount,
-    date,
-    currency
-  } = form
-  const {allIds} = portfolio
-  return {
-    display: ui.portfolio,
-    amount,
-    date,
-    currency,
-    ids,
-    allIds
-  }
-}
-
-export default connect(mapStateToProps, {
-  update,
-  newTransaction,
-  reset,
-  changeView
-})(PortfolioCard)
+export default PortfolioCard

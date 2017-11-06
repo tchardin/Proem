@@ -24,20 +24,22 @@ class ListItem extends Component {
     this.fetchMetricsIfNeeded(id, selectedFiat, metrics)
   }
   render() {
-    const {id, metrics, onSelect, selectedCrypto, selectedFiat} = this.props
+    const {id, metrics, onSelect, selection, selectedFiat, color} = this.props
     if (typeof metrics[id] === 'undefined'
     || typeof metrics[id][selectedFiat] === 'undefined'
     || metrics[id][selectedFiat].isFetching) {
       return null
     }
     const {items} = metrics[id][selectedFiat]
+    let selectedArray = Array.isArray(selection) ? selection : [selection]
     return (
       <li
-        className={id === selectedCrypto ? "activeControlItem" : "controlItem"}
+        className={selectedArray.includes(id) ? "activeControlItem" : "controlItem"}
         key={id}
         onClick={() => onSelect(id)}>
         <label
-          className="controlItemlabel">
+          className="controlItemlabel"
+          style={color && {borderBottom: `${color} solid 3px`}}>
           <div className="controlId">{id}</div>
           <div className="controlPrice">{new Intl.NumberFormat('en-US', { style: 'currency', currency: selectedFiat }).format(items.price)}</div>
           <div className={items.percent_change_24h > 0 ? "pChange" : "nChange"}>

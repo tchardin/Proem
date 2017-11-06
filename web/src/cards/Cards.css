@@ -11,7 +11,7 @@
 	flex-direction: row;
 }
 
-.alertsCard, .portfolioCard, .metricsCard {
+.alertsCard, .portfolioCard, .metricsCard, .signInCard {
 	 background: -moz-linear-gradient(top, #1a1c50 21%, #050610 100%);
 	 background: -webkit-linear-gradient(top, #1a1c50 21%,#050610 100%);
 	 background: linear-gradient(to bottom, #1a1c50 21%,#050610 100%);
@@ -29,34 +29,28 @@
 }
 
 .signInCard {
-	background: -moz-linear-gradient(top, #1a1c50 21%, #050610 100%);
-	background: -webkit-linear-gradient(top, #1a1c50 21%,#050610 100%);
-	background: linear-gradient(to bottom, #1a1c50 21%,#050610 100%);
- /*background-color: "#1A1C50";*/
- /*backdrop-filter: blur(10px);
- -webkit-backdrop-filter: blur(10px);*/
- box-shadow: 1px 2px 6px 0px rgba(0,0,0,0.45);
- border-radius: 8px;
- font-family: 'Gotham';
- color: #fff;
  height: 360px;
  width: 220px;
- display: flex;
- flex-direction: column;
 }
 
 .metricsCard {
 	z-index: 999;
+	height: 360px;
+	width: 220px;
 }
 
 .portfolioCard {
 	z-index: 998;
-	margin-left: -140px;
+	margin-left: -180px;
+	height: 360px;
+	width: 220px;
 }
 
 .alertsCard {
 	z-index: 997;
-	margin-left: -140px;
+	margin-left: -180px;
+	height: 360px;
+	width: 220px;
 }
 
 .signInHeader {
@@ -115,7 +109,7 @@
 .cardTitleOpen {
 	cursor: pointer;
 	max-width: 180px;
-	font-size: 1em;
+	font-size: 1.5em;
 	font-weight: bold;
 	/* padding-bottom: 20px; */
 	font-family: 'Gotham';
@@ -208,19 +202,19 @@
 }
 
 .value {
-	font-size: 0.6em;
+	font-size: 0.8em;
 	padding-left: 1em;
 }
 
 .upValue {
 	color: #0AFE00;
-	font-size: 0.6em;
+	font-size: 0.8em;
 	padding-left: 1em;
 }
 
 .downValue {
 	color: #FF0000;
-	font-size: 0.6em;
+	font-size: 0.8em;
 	padding-left: 1em;
 }
 
@@ -237,7 +231,7 @@
 }
 
 .label {
-	font-size: 0.6em;
+	font-size: 0.8em;
 	font-weight: 500;
 }
 
@@ -292,12 +286,136 @@ input[type="datetime-local"] {
 	font-family: 'Gotham'
 }
 
+.CalendarDay_highlighted_calendar {
+	background: #050610;
+	color: #00CEFF;
+}
+
+.DateInput {
+ background: transparent;
+ width: 100%;
+ color: white;
+}
+
+.DateInput_input {
+	background-color: transparent;
+	border-bottom: 1px solid #00CEFF;
+	font-size: 0.7em;
+	padding: 0 0 0.4em 0;
+	width: 100%;
+	color: white;
+}
+
+.SingleDatePickerInput {
+	background: transparent;
+	border: none;
+	width: 100%;
+}
+
+.SingleDatePicker {
+	width: 100%;
+}
+
+.SingleDatePicker_picker {
+	background-color: #050610;
+}
+
+.DayPicker__horizontal {
+	background: -moz-linear-gradient(top, #1a1c50 21%, #050610 100%);
+	background: -webkit-linear-gradient(top, #1a1c50 21%,#050610 100%);
+	background: linear-gradient(to bottom, #1a1c50 21%,#050610 100%);
+}
+
+.CalendarMonthGrid {
+	background: transparent;
+}
+
+.CalendarMonth {
+	background: transparent;
+}
+
+.CalendarMonth_caption {
+	color: white;
+}
+
+.DayPickerNavigation_button__default {
+	border: 1px solid transparent;
+	background-color: transparent;
+	color: #00CEFF;
+}
+
+.DayPickerNavigation_button__default:focus,
+.DayPickerNavigation_button__default:hover {
+  border: 1px solid transparent;
+}
+
+.CalendarDay__selected,
+.CalendarDay__selected:active,
+.CalendarDay__selected:hover {
+  background: #00CEFF !important;
+  border: 1px solid #00a699;
+  color: #fff
+}
+
+.CalendarDay_container {
+	background: transparent;
+	color: white;
+	border: none;
+}
+
+.CalendarDay_container:hover {
+  background: #00CEFF;
+	border: 1px double transparent;
+}
+
+.DayPicker_weekHeader {
+	color: white;
+}
+
+.DayPickerNavigation_svg__horizontal {
+	fill: white;
+	stroke: white;
+	stroke-width: 1px;
+}
+
+.DateInput__openDown::after {
+	border-bottom-color: #1a1c50;
+	top: 40px;
+}
+
+.SingleDatePicker_picker__openDown {
+	top: 50px;
+}
+
+.CalendarDay__blocked_out_of_range,
+.CalendarDay__blocked_out_of_range:active,
+.CalendarDay__blocked_out_of_range:hover {
+  background: transparent;
+  border: 1px solid transparent;
+  color: grey;
+}
+
 .select {
 	display: inline-block;
 	height: 2em;
 	max-width: 100%;
 	position: relative;
 	vertical-align: top;
+}
+
+.DayPickerNavigation_rightButton__horizontal {
+    background: transparent;
+    border: none;
+    transform: rotate(180deg);
+}
+
+.DayPickerNavigation_leftButton__horizontal {
+	background: transparent;
+	border: none;
+}
+
+.DayPickerNavigation_button__horizontal {
+	top: 24px;
 }
 
 .select::after {
@@ -315,7 +433,7 @@ input[type="datetime-local"] {
     margin-top: -0.375em;
     right: 1.125em;
     top: 50%;
-    z-index: 4;
+    z-index: 0;
 }
 
 .select select {
