@@ -65,7 +65,7 @@ class ChartComponent extends React.Component {
           <Chart
             id={0}
             yExtents={[d => d.close]}
-            padding={{top: 140, bottom: 0}}>
+            padding={{top: 0, bottom: 0}}>
             <XAxis
               axisAt="bottom"
               orient="bottom"

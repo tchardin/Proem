@@ -1,7 +1,3 @@
-/**
- * React Static Boilerplate
- * Copyright (c) 2015-present Kriasoft. All rights reserved.
- */
 
 /* @flow */
 
@@ -9,6 +5,7 @@ import React from 'react';
 import styled from 'styled-components';
 import isEqual from 'lodash/isEqual';
 
+import AppToolbar from './AppToolbar'
 import ErrorPage from '../ErrorPage';
 
 const AppContainer = styled.div`
@@ -116,6 +113,7 @@ class AppRenderer extends React.Component<any, Props, State> {
       <ErrorPage error={this.state.error} />
     ) : (
       <AppContainer>
+        <AppToolbar />
         <Main>{this.state.body || <p>Loading...</p>}</Main>
         {this.state.footer}
       </AppContainer>

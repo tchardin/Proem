@@ -1,30 +1,20 @@
-/**
- * React Static Boilerplate
- * Copyright (c) 2015-present Kriasoft. All rights reserved.
- */
 
 /* @flow */
 
-import React from 'react';
-import styled from 'styled-components';
+import React from 'react'
+import styled from 'styled-components'
 
-import Link from '../Link';
-import AppLogo from './AppLogo';
+import Link from '../Link'
+import AppLogo from './AppLogo'
 
 const Header = styled.header`
-  position: relative;
-  display: flex;
-  width: 100%;
-  height: 100vh;
-  box-sizing: border-box;
-  color: #fff;
-  flex-direction: column;
-  background: black;
-  justify-content: flex-start;
-`;
+  position: absolute;
+  top: 20px;
+  left: 0;
+  z-index: 777;
+`
 
 const Row = styled.div`
-  position: relative;
   display: flex;
   width: 100%;
   height: 64px;
@@ -39,7 +29,6 @@ const Row = styled.div`
 `;
 
 const Section = styled.section`
-  z-index: 1;
   display: inline-flex;
   min-width: 0;
   height: 100%;
@@ -51,7 +40,6 @@ const Section = styled.section`
 `;
 
 const TitleLink = styled(Link)`
-  z-index: 1;
   display: inline-flex;
   padding: 16px 0;
   margin: 0;
@@ -59,7 +47,7 @@ const TitleLink = styled(Link)`
   overflow: hidden;
   font-family: 'Gotham', sans-serif;
   font-weight: bold;
-  font-size: 2em;
+  font-size: 3.5em;
   line-height: 1.5rem;
   color: white;
   text-decoration: none;
@@ -79,29 +67,9 @@ const TitleLink = styled(Link)`
   }
 `;
 
-const Logo = styled(AppLogo)`
-  width: 48px;
-  height: 48px;
-  margin-right: 16px;
-`;
-
-const NavLink = styled(Link)`
-  padding-right: 8px;
-  padding-left: 8px;
-  font-family: 'Roboto', sans-serif;
-  font-size: 14px;
-  color: #fff;
-  text-decoration: none;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-`;
-
-const NavLinkLast = styled(NavLink)`
-  margin-right: 24px;
-  @media (max-width: 599px) {
-    margin-right: 16px;
-  }
-`;
+const Burger = styled.div`
+  
+`
 
 class AppToolbar extends React.Component {
   props: {
@@ -117,18 +85,7 @@ class AppToolbar extends React.Component {
               PROEM
             </TitleLink>
           </Section>
-          <Section end>
-            <NavLink href="/getting-started">Get Started</NavLink>
-            <NavLinkLast href="/about">About</NavLinkLast>
-          </Section>
         </Row>
-        {this.props.hero &&
-          React.cloneElement(this.props.hero, {
-            style: {
-              maxWidth: '1000px',
-              alignSelf: 'center',
-            },
-          })}
       </Header>
     );
   }
