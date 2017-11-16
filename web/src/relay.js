@@ -16,16 +16,14 @@ function fetchQuery(
   // uploadables,
 ) {
   return fetch(
-    process.env.REACT_APP_API
-      ? `${process.env.REACT_APP_API}/graphql`
-      : 'https://graphql-demo.kriasoft.com/',
+    'http://proemgsql-dev.us-east-1.elasticbeanstalk.com/graphql/',
     {
       method: 'POST',
       headers: {
         // Add authentication and other headers here
         'content-type': 'application/json',
       },
-      credentials: 'include',
+      credentials: 'omit',
       body: JSON.stringify({
         query: operation.text, // GraphQL text from input
         variables,

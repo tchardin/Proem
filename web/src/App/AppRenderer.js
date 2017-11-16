@@ -9,15 +9,21 @@ import React from 'react';
 import styled from 'styled-components';
 import isEqual from 'lodash/isEqual';
 
-import AppToolbar from './AppToolbar';
-import AppFooter from './AppFooter';
 import ErrorPage from '../ErrorPage';
 
+const AppContainer = styled.div`
+  min-height: 100vh;
+  display: flex;
+  flex-direction:  column;
+  justify-content: flex-end;
+  background: black;
+`
+
 const Main = styled.div`
-  max-width: 600px;
-  padding: 1rem;
+  width: 100%;
+  height: 100%;
+  padding: 0;
   margin: 0 auto;
-  background: rgba(0, 0, 0, 0.1);
 `;
 
 type Props = {
@@ -100,7 +106,7 @@ class AppRenderer extends React.Component<any, Props, State> {
       this.props.error !== nextState.error ||
       this.state.title !== nextState.title ||
       this.state.description !== nextState.description ||
-      this.state.hero !== nextState.hero ||
+      this.state.footer !== nextState.footer ||
       this.state.body !== nextState.body
     );
   }
@@ -109,13 +115,12 @@ class AppRenderer extends React.Component<any, Props, State> {
     return this.state.error ? (
       <ErrorPage error={this.state.error} />
     ) : (
-      <div>
-        <AppToolbar me={null} hero={this.state.hero} />
+      <AppContainer>
         <Main>{this.state.body || <p>Loading...</p>}</Main>
-        <AppFooter />
-      </div>
-    );
+        {this.state.footer}
+      </AppContainer>
+    )
   }
 }
 
-export default AppRenderer;
+export default AppRenderer

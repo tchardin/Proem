@@ -16,30 +16,30 @@ import { graphql } from 'relay-runtime';
 const routes = [
   {
     path: '/',
-    query: graphql`query routerHomeQuery {
-      me { ...App_me }
-      stories(first: 50) { ...Home_stories }
+    query: graphql`query routerChartQuery {
+      history(coin: "BTC", fiat: "USD") {
+        date
+        last
+      }
+      assets(fiat: "USD") {
+        metrics {
+          ...ListItem_item
+        }
+      }
+      supported {
+        fiats
+      }
     }`, // prettier-ignore
     components: () => [
-      import(/* webpackChunkName: 'home' */ './Home'),
-      import(/* webpackChunkName: 'home' */ './Home/Hero'),
+      import(/* webpackChunkName: 'home' */ './Home/Chart'),
+      import('./Home/AppFooter'),
     ],
-    render: ([Home, Hero], data) => ({
+    render: ([Chart, AppFooter], data) => ({
       title: 'Home page',
-      hero: <Hero />,
-      body: <Home stories={data.stories} />,
-    }),
-  },
-  {
-    path: '/story-:id',
-    query: graphql`query routerStoryQuery($id: ID!) {
-      me { ...App_me }
-      story: node(id: $id) { ...Story_story }
-    }`, // prettier-ignore
-    components: () => [import(/* webpackChunkName: 'home' */ './Story')],
-    render: ([Story], data) => ({
-      title: data.title,
-      body: <Story story={data.story} />,
+      body: <Chart data={data.history} />,
+      footer: <AppFooter
+                assets={data.assets}
+                fiats={data.supported[0].fiats}/>,
     }),
   },
   {
@@ -49,35 +49,7 @@ const routes = [
       title: 'Error',
       body: <ErrorPage />,
     }),
-  },
-  {
-    path: '/getting-started',
-    query: graphql`query routerGettingStartedQuery { me { ...App_me } }`, // prettier-ignore
-    components: () => [
-      import(/* webpackChunkName: 'start' */ './GettingStarted'),
-    ],
-    render: ([GettingStarted]) => ({
-      title: 'Getting Started',
-      body: <GettingStarted />,
-    }),
-  },
-  {
-    path: '/about',
-    query: graphql`query routerAboutQuery { me { ...App_me } }`, // prettier-ignore
-    components: () => [import(/* webpackChunkName: 'about' */ './About')],
-    render: ([About]) => ({
-      title: 'About Us',
-      body: <About />,
-    }),
-  },
-  {
-    path: '/tasks/:status(pending|completed)?',
-    components: () => [import(/* webpackChunkName: 'home' */ './Home')],
-    render: ([Home]) => ({
-      title: 'Untitled Page',
-      body: <Home />,
-    }),
-  },
+  }
 ];
 
 function resolveRoute({ route, fetch, next }, params) {

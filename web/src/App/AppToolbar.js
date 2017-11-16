@@ -7,21 +7,20 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import { graphql, createFragmentContainer } from 'react-relay';
 
 import Link from '../Link';
 import AppLogo from './AppLogo';
-import type { AppToolbar_me } from './__generated__/AppToolbar_me.graphql';
 
 const Header = styled.header`
   position: relative;
   display: flex;
   width: 100%;
+  height: 100vh;
   box-sizing: border-box;
   color: #fff;
   flex-direction: column;
-  background: linear-gradient(to bottom, #050610 0%,#1a1c50 20%,#1a1c50 71%,#050610 100%);
-  justify-content: center;
+  background: black;
+  justify-content: flex-start;
 `;
 
 const Row = styled.div`
@@ -58,13 +57,13 @@ const TitleLink = styled(Link)`
   margin: 0;
   margin-left: 24px;
   overflow: hidden;
-  font-family: 'Roboto Mono', monospace;
-  font-size: 1.25em;
+  font-family: 'Gotham', sans-serif;
+  font-weight: bold;
+  font-size: 2em;
   line-height: 1.5rem;
-  color: #00d8ff;
+  color: white;
   text-decoration: none;
   text-overflow: ellipsis;
-  letter-spacing: 0.0625em;
   white-space: nowrap;
   align-self: center;
   align-items: center;
@@ -106,7 +105,6 @@ const NavLinkLast = styled(NavLink)`
 
 class AppToolbar extends React.Component {
   props: {
-    me: AppToolbar_me,
     hero: React.Element<*>,
   };
 
@@ -116,7 +114,7 @@ class AppToolbar extends React.Component {
         <Row>
           <Section start>
             <TitleLink href="/">
-              <Logo />
+              PROEM
             </TitleLink>
           </Section>
           <Section end>
@@ -136,11 +134,4 @@ class AppToolbar extends React.Component {
   }
 }
 
-export default createFragmentContainer(
-  AppToolbar,
-  graphql`
-    fragment AppToolbar_me on User {
-      displayName
-    }
-  `,
-);
+export default AppToolbar

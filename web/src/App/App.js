@@ -37,13 +37,6 @@ injectGlobal`
   }
 `
 
-// eslint-disable-next-line no-unused-expressions
-graphql`
-  fragment App_me on User {
-    ...AppToolbar_me
-  }
-`;
-
 type ReadyState = {
   error: ?Error,
   props: ?Object,

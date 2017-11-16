@@ -1,150 +1,105 @@
-type Comment implements Node {
-  # The ID of an object
-  id: ID!
-  story: Story!
-  parent: Comment!
-  author: User!
-  comments: [Comment]
-  text: String
-  pointsCount: Int!
-  createdAt: String!
-  updatedAt: String!
-}
-
-input CreateCommentInput {
-  storyId: ID!
-  parentId: ID
-  text: String
-  clientMutationId: String
-}
-
-type CreateCommentPayload {
-  story: Comment
-  clientMutationId: String
-}
-
-input CreateStoryInput {
-  title: String
-  text: String
-  url: String
-  clientMutationId: String
-}
-
-type CreateStoryPayload {
-  story: Story
-  clientMutationId: String
-}
-
-type Email {
-  email: String!
-  verified: Boolean!
-}
-
-type Mutation {
-  createStory(input: CreateStoryInput!): CreateStoryPayload
-  updateStory(input: UpdateStoryInput!): UpdateStoryPayload
-  createComment(input: CreateCommentInput!): CreateCommentPayload
-  updateComment(input: UpdateCommentInput!): UpdateCommentPayload
-}
-
-# An object with an ID
-interface Node {
-  # The id of the object.
-  id: ID!
-}
-
-# Information about pagination in a connection.
-type PageInfo {
-  # When paginating forwards, are there more items?
-  hasNextPage: Boolean!
-
-  # When paginating backwards, are there more items?
-  hasPreviousPage: Boolean!
-
-  # When paginating backwards, the cursor to continue.
-  startCursor: String
-
-  # When paginating forwards, the cursor to continue.
-  endCursor: String
+schema {
+  query: Query
 }
 
 type Query {
-  # Fetches an object given its ID
-  node(
-    # The ID of an object
-    id: ID!
-  ): Node
-
-  # Fetches objects given their IDs
-  nodes(
-    # The IDs of objects
-    ids: [ID!]!
-  ): [Node]!
-  me: User
-  stories(after: String, first: Int): StoryConnection
+  history(coin: String, fiat: String): [HistoryType]
+  ticker(coin: String, fiat: String): [TickerType]
+  candles(coin: String, fiat: String, interval: String): [CandlesType]
+  books(coin: String, fiat: String): [BookType]
+  metrics(coin: String, fiat: String): [MetricsType]
+  markets(coin: String, fiat: String, interval: String): [MarketsType]
+  assets(coin: String, fiat: String, interval: String): [AssetType]
+  supported: [SupportedType]
 }
 
-type Story implements Node {
-  # The ID of an object
-  id: ID!
-  author: User!
-  title: String!
+type HistoryType {
+  date: String!
+  high: String
+  low: String
+  mid: String
+  last: String
+  bid: String
+  ask: String
+  volume: String
+  coin: String
+  fiat: String
+}
+
+type TickerType {
+  name: String
   url: String
-  text: String
-  comments: [Comment]
-  pointsCount: Int!
-  commentsCount: Int!
-  createdAt: String!
-  updatedAt: String!
+  values: [TickerData]
 }
 
-# A connection to a list of items.
-type StoryConnection {
-  # Information to aid in pagination.
-  pageInfo: PageInfo!
-
-  # A list of edges.
-  edges: [StoryEdge]
-  totalCount: Int!
+type TickerData {
+  date: String
+  high: String
+  low: String
+  mid: String
+  last: String
+  bid: String
+  ask: String
+  volume: String
 }
 
-# An edge in a connection.
-type StoryEdge {
-  # The item at the end of the edge
-  node: Story
-
-  # A cursor for use in pagination
-  cursor: String!
-}
-
-input UpdateCommentInput {
-  id: ID!
-  text: ID
-  clientMutationId: String
-}
-
-type UpdateCommentPayload {
-  story: Comment
-  clientMutationId: String
-}
-
-input UpdateStoryInput {
-  id: ID!
-  title: String
-  text: String
+type CandlesType {
+  name: String
   url: String
-  clientMutationId: String
+  values: [CandlesData]
 }
 
-type UpdateStoryPayload {
-  story: Story
-  clientMutationId: String
+type CandlesData {
+  date: String
+  open: String
+  close: String
+  high: String
+  low: String
+  volume: String
 }
 
-type User implements Node {
-  # The ID of an object
-  id: ID!
-  displayName: String
-  imageUrl: String
-  emails: [Email]
+type BookType {
+  name: String
+  date: String
+  asks: [OrderData]
+  bids: [OrderData]
+}
+
+type OrderData {
+  price: String
+  volume: String
+}
+
+type MetricsType {
+  sourceName: String
+  marketCap: String
+  price: String
+  lastUpdated: String
+  name: String
+  volume24H: String
+  percentChange7D: String
+  symbol: String
+  rank: String
+  percentChange1H: String
+  totalSupply: String
+  availableSupply: String
+  percentChange24H: String
+  id: String
+}
+
+type MarketsType {
+  ticker: [TickerType]
+  candles: [CandlesType]
+  orderBooks: [BookType]
+}
+
+type AssetType {
+  name: String
+  metrics: [MetricsType]
+}
+
+type SupportedType {
+  markets: [String]
+  coins: [String]
+  fiats: [String]
 }

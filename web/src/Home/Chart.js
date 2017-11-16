@@ -1,12 +1,6 @@
-/**
- * React Static Boilerplate
- * Copyright (c) 2015-present Kriasoft. All rights reserved.
- */
-
 /* @flow */
 
 import React from 'react';
-import styled from 'styled-components';
 
 import {scaleTime} from 'd3-scale'
 import { format } from 'd3-format'
@@ -23,43 +17,7 @@ import {
 } from 'react-stockcharts/lib/coordinates'
 import {ema} from 'react-stockcharts/lib/indicator'
 
-import Link from '../Link';
-
-const Container = styled.div`
-padding: 1em 1em 2em;
-`
-
-const Title = styled.h2`
-  font-family: 'Gotham', sans-serif;
-  font-weight: bold;
-  font-size: 3em;
-`
-
-const Description = styled.p`
-  font-family: 'Gotham', sans-serif;
-  font-size: 3em;
-`
-
-const Button = styled(Link)`
-  display: inline-block;
-  padding: 0.5em 2em;
-  margin-top: 1em;
-  font-family: 'Roboto', sans-serif;
-  color: #333;
-  text-decoration: none;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  background-color: #fff;
-  border-radius: 2px;
-
-  &:active,
-  &:hover,
-  &:visited {
-    color: #333;
-  }
-`;
-
-class Hero extends React.Component {
+class ChartComponent extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -72,7 +30,7 @@ class Hero extends React.Component {
   windowDimensions() {
     this.setState({
       width: window.innerWidth,
-      height: window.innerHeight
+      height: window.innerHeight - 120
     })
   }
 
@@ -90,7 +48,7 @@ class Hero extends React.Component {
     const {data} = this.props
     const margin = { left: 0, right: 80, top: 0, bottom: 30 }
     const xDomain = [new Date(2017, 8, 1), new Date()]
-    const  calculatedData = data.map(d => {
+    const  calculatedData = data.map(child => {
       return {
         date: new Date(child.date),
         close: Number(child.last)
@@ -151,4 +109,4 @@ class Hero extends React.Component {
   }
 }
 
-export default Hero;
+export default ChartComponent
