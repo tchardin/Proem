@@ -8,3 +8,4 @@ quandl
 graphene
 graphene_django
 Django
+django-cors-headers

@@ -4,7 +4,7 @@
 from flask import Flask, request, Response
 from flask_restful import Resource, Api
 from sqlalchemy import create_engine
-from json import dumps
+from json import dumps, loads
 from datetime import datetime, timedelta
 from ast import literal_eval
 import requests
@@ -137,7 +137,7 @@ def convert_interval_GDAX(interval, granularity):
 
 def get_exchange_rates(fiat):
     if (fiat != 'USD'):
-        rates = literal_eval(requests.get("http://api.fixer.io/latest?base=USD").content)
+        rates = loads(requests.get("http://api.fixer.io/latest?base=USD").content)
     else:
         rates = {'rates': {fiat: 1}}
     return rates
@@ -145,13 +145,13 @@ def get_exchange_rates(fiat):
 def ticker_url(market, coin):
     if market == 'BITFINEX':
         bfx_coin = 't{0}USD'.format(coin)
-        r = literal_eval(requests.get("https://api.bitfinex.com/v2/ticker/%s"%bfx_coin).content)
+        r = loads(requests.get("https://api.bitfinex.com/v2/ticker/%s"%bfx_coin).content)
     elif market == 'GDAX':
         gdx_coin = '{0}-USD'.format(coin)
-        r = literal_eval(requests.get('https://api.gdax.com/products/%s/ticker'%gdx_coin).content)
+        r = loads(requests.get('https://api.gdax.com/products/%s/ticker'%gdx_coin).content)
     elif market == 'KRAKEN':
         krk_coin = '{0}USD'.format(coin)
-        r = literal_eval(requests.get('https://api.kraken.com/0/public/Ticker?pair=%s'%krk_coin).content)
+        r = loads(requests.get('https://api.kraken.com/0/public/Ticker?pair=%s'%krk_coin).content)
     return r
 
 def ticker_data(coin, rates, fiat, responses):
@@ -166,7 +166,7 @@ def ticker_data(coin, rates, fiat, responses):
             data.insert(3,(data[1]+data[2])/2.0)
         elif market == 'GDAX':
             gdx_coin = '{0}-USD'.format(coin)
-            r2 = literal_eval(requests.get('https://api.gdax.com/products/%s/stats'%gdx_coin).content)
+            r2 = loads(requests.get('https://api.gdax.com/products/%s/stats'%gdx_coin).content)
             data = [str(datetime.now())] + [float(r2[i]) for i in ['high','low']] + [float(r[i]) for i in ['price','bid','ask','volume']]
             data.insert(3,(data[1]+data[2])/2.0)
         elif market == 'KRAKEN':
@@ -179,16 +179,16 @@ def ticker_data(coin, rates, fiat, responses):
 def candles_url(market,coin, interval):
     if market == 'BITFINEX':
         bfx_coin = 't{0}USD'.format(coin)
-        r = literal_eval(requests.get("https://api.bitfinex.com/v2/candles/trade:%s:%s/hist?limit=200"%(interval,bfx_coin)).content)
+        r = loads(requests.get("https://api.bitfinex.com/v2/candles/trade:%s:%s/hist?limit=200"%(interval,bfx_coin)).content)
     elif market == 'GDAX':
         gdx_coin = '{0}-USD'.format(coin)
         start, end, granularity = convert_interval_GDAX(interval,200)
-        r = literal_eval(requests.get('https://api.gdax.com/products/%s/candles?start=%s&end=%s&granularity=%s'%(gdx_coin,str(start),str(end),str(granularity))).content)
+        r = loads(requests.get('https://api.gdax.com/products/%s/candles?start=%s&end=%s&granularity=%s'%(gdx_coin,str(start),str(end),str(granularity))).content)
         # print('https://api.gdax.com/products/%s/candles?start=%s&end=%s&granularity=%s'%(gdx_coin,str(start),str(end),str(granularity)))
     elif market == 'KRAKEN':
         krk_coin = '{0}USD'.format(coin)
         interval = convert_interval_KRAKEN(interval)
-        r = literal_eval(requests.get('https://api.kraken.com/0/public/OHLC?pair=%s&interval=%s'%(krk_coin,interval)).content)
+        r = loads(requests.get('https://api.kraken.com/0/public/OHLC?pair=%s&interval=%s'%(krk_coin,interval)).content)
     return r
 
 def candles_data(market, coin, rates, fiat, r):
@@ -223,8 +223,6 @@ def format_metrics(r,fiat):
     'id': r[0]['id'],
     }]
     return r_formatted
-
-
 
 #### EXTRACTS DATA FROM PROEM MAINTAINED DATABASE ######################################
 class All_Data(Resource):
@@ -264,7 +262,7 @@ class Data_Metrics(Resource):
         data = []
         coin = convert_symbols[coin]
         try:
-            r = literal_eval(requests.get("https://api.coinmarketcap.com/v1/ticker/%s/?convert=%s"%(coin,fiat)).content)
+            r = loads(requests.get("https://api.coinmarketcap.com/v1/ticker/%s/?convert=%s"%(coin,fiat)).content)
         except ValueError as valerr:
             print("Failed to get metrics data from coinmarketcap: " + str(valerr))
             return Response(dumps("currency not supported"))
