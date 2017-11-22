@@ -2,31 +2,16 @@
 /* @flow */
 
 import React from 'react'
-import styled from 'styled-components'
+import {connect} from 'react-redux'
+import styled, {keyframes} from 'styled-components'
 
 import Link from '../Link'
-import AppLogo from './AppLogo'
+import {toggleLeft} from '../store/ui'
 
 const Header = styled.header`
-  position: absolute;
-  top: 20px;
-  left: 0;
-  z-index: 777;
+  position: relative;
+  padding-left: 1em;
 `
-
-const Row = styled.div`
-  display: flex;
-  width: 100%;
-  height: 64px;
-  box-sizing: border-box;
-  align-items: center;
-  @media (max-width: 959px) and (orientation: landscape) {
-    min-height: 48px;
-  }
-  @media (max-width: 599px) {
-    min-height: 56px;
-  }
-`;
 
 const Section = styled.section`
   display: inline-flex;
@@ -68,27 +53,63 @@ const TitleLink = styled(Link)`
 `;
 
 const Burger = styled.div`
-  
+  height: 40px;
+  width: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+`
+
+const StripeA = styled.span`
+  height: 8px;
+  width: 100%;
+  background-color: white;
+  transform: ${props => props.open ? 'rotate(45deg) translateY(12px) translateX(10px)' : 'rotate(0deg)'};
+  transition: all .12s linear;
+`
+const StripeB = styled.span`
+  height: 8px;
+  width: 100%;
+  background-color: white;
+  opacity: ${props => props.open ? 0 : 1};
+  transition: all .12s linear;
+`
+const StripeC = styled.span`
+  height: 8px;
+  width: 100%;
+  background-color: white;
+  transform: ${props => props.open ? 'rotate(-45deg) translateY(-12px) translateX(10px)' : 'rotate(0deg)'};
+  transition: all .12s linear;
 `
 
 class AppToolbar extends React.Component {
-  props: {
-    hero: React.Element<*>,
-  };
-
   render() {
+    const {open, toggleLeft} = this.props
     return (
       <Header>
-        <Row>
           <Section start>
+            <Burger onClick={() => toggleLeft()}>
+              <StripeA open={open}/>
+              <StripeB open={open}/>
+              <StripeC open={open}/>
+            </Burger>
             <TitleLink href="/">
               PROEM
             </TitleLink>
           </Section>
-        </Row>
       </Header>
     );
   }
 }
 
-export default AppToolbar
+const mapStateToProps = state => {
+  return {
+    open: !!state.left > 0
+  }
+}
+
+export default connect(mapStateToProps, {
+  toggleLeft
+})(AppToolbar)

@@ -30,6 +30,8 @@ import Candle from '../svg/Candle'
     user-select: none;
     display: flex;
     flex-direction: row;
+    flex: 1;
+    justify-content: center;
   `
 
   const RightControls = styled.div`
@@ -39,10 +41,17 @@ import Candle from '../svg/Candle'
     color: white;
     padding: 0 1em 0 1em;
     user-select: none;
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
   `
   const CenterControls = styled.div`
     display: flex;
     align-items: center;
+    width: 50%;
+    display: flex;
+    flex: 2;
   `
 
   const LeftBtn = styled.div`
@@ -57,7 +66,6 @@ import Candle from '../svg/Candle'
   `
 
   const ControlList = styled.div`
-    max-width: 500px;
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -115,7 +123,8 @@ class AppFooter extends React.Component {
               this.props.assets.map((a, i) => (
                 <ListItem
                   item={a.metrics[0]}
-                  key={i}/>
+                  key={i}
+                  selected={this.props.selected}/>
               ))
             }
           </ControlList>

@@ -1,6 +1,6 @@
 /**
  * React Static Boilerplate
- * 
+ *
  */
 
 /* @flow */
@@ -16,7 +16,7 @@ import { graphql } from 'relay-runtime';
 const routes = [
   {
     path: '/',
-    query: graphql`query routerChartQuery {
+    query: graphql`query routerHomeQuery {
       history(coin: "BTC", fiat: "USD") {
         date
         last
@@ -36,11 +36,45 @@ const routes = [
     ],
     render: ([Chart, AppFooter], data) => ({
       title: 'Home page',
-      body: <Chart data={data.history} />,
+      chart: <Chart data={data.history} />,
       footer: <AppFooter
                 assets={data.assets}
                 fiats={data.supported[0].fiats}/>,
     }),
+  },
+  {
+    path: '/history',
+    children: [
+      {
+        path: '/:coin/:fiat',
+        query: graphql`query routerHistoryQuery($coin: String!, $fiat: String!) {
+          history(coin: $coin, fiat: $fiat) {
+            date
+            last
+          }
+          assets(fiat: "USD") {
+            metrics {
+              ...ListItem_item
+            }
+          }
+          supported {
+            fiats
+          }
+        }`,
+        components: () => [
+          import(/* webpackChunkName: 'home' */ './Home/Chart'),
+          import('./Home/AppFooter'),
+        ],
+        render: ([Chart, AppFooter], data, params) => ({
+          title: 'Home page',
+          chart: <Chart data={data.history} />,
+          footer: <AppFooter
+                    selected={params.coin}
+                    assets={data.assets}
+                    fiats={data.supported[0].fiats}/>,
+        }),
+      }
+    ]
   },
   {
     path: '/error',

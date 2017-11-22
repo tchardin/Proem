@@ -1,13 +1,13 @@
 /**
- * React Static Boilerplate
- * Copyright (c) 2015-present Kriasoft. All rights reserved.
+ * Link
+ *
  */
 
 /* @flow */
 
-import React from 'react';
-import PropTypes from 'prop-types';
-import history from '../history';
+import React from 'react'
+import PropTypes from 'prop-types'
+import history from '../history'
 
 function isLeftClickEvent(event) {
   return event.button === 0;

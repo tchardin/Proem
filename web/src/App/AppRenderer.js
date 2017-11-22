@@ -1,19 +1,21 @@
 
 /* @flow */
 
-import React from 'react';
-import styled from 'styled-components';
-import isEqual from 'lodash/isEqual';
+import React from 'react'
+import styled from 'styled-components'
+import isEqual from 'lodash/isEqual'
 
 import AppToolbar from './AppToolbar'
-import ErrorPage from '../ErrorPage';
+import ErrorPage from '../ErrorPage'
+import Chart from '../Home/Chart'
+import AppMain from './AppMain'
 
 const AppContainer = styled.div`
-  min-height: 100vh;
   display: flex;
-  flex-direction:  column;
+  flex-direction: row;
   justify-content: flex-end;
-  background: black;
+  height: 100%;
+  width: 100%;
 `
 
 const Main = styled.div`
@@ -21,7 +23,20 @@ const Main = styled.div`
   height: 100%;
   padding: 0;
   margin: 0 auto;
-`;
+`
+
+const Right = styled.div`
+  min-height: 100vh;
+  display: flex;
+  flex-direction:  column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  background: black;
+`
+
+const Left = styled.div`
+  display: none;
+`
 
 type Props = {
   error: ?Error,
@@ -32,23 +47,23 @@ type Props = {
   params: Object,
   components: Array<React.Element<*>> | Promise<Array<React.Element<*>>>,
   render: ?(Array<React.Element<*>>, ?Object, ?Object) => any,
-};
+}
 
 type State = {
   error: ?Error,
   title: ?string,
   description: ?string,
-  hero: ?React.Element<*>,
-  body: ?React.Element<*>,
-};
+  chart: ?React.Element<*>,
+  footer: ?React.Element<*>
+}
 
 const defaults = {
   error: null,
-  title: 'React Static Boilerplate',
+  title: 'PROEM',
   description: '',
-  hero: null,
-  body: null,
-};
+  chart: null,
+  footer: null
+}
 
 class AppRenderer extends React.Component<any, Props, State> {
   state = { ...defaults };
@@ -104,18 +119,19 @@ class AppRenderer extends React.Component<any, Props, State> {
       this.state.title !== nextState.title ||
       this.state.description !== nextState.description ||
       this.state.footer !== nextState.footer ||
-      this.state.body !== nextState.body
+      this.state.chart !== nextState.chart
     );
   }
 
   render() {
+    console.log(this.props.data)
     return this.state.error ? (
       <ErrorPage error={this.state.error} />
     ) : (
       <AppContainer>
-        <AppToolbar />
-        <Main>{this.state.body || <p>Loading...</p>}</Main>
-        {this.state.footer}
+        <AppMain
+          chart={this.state.chart}
+          footer={this.state.footer}/>
       </AppContainer>
     )
   }

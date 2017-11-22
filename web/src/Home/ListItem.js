@@ -3,8 +3,9 @@
 import React, {Component} from 'react'
 import styled from 'styled-components'
 import { graphql, createFragmentContainer } from 'react-relay'
+import Link from '../Link'
 
-const Container = styled.li`
+const Container = styled(Link)`
   color: #fff;
   display: flex;
   flex-direction: row;
@@ -44,15 +45,18 @@ class ListItem extends Component {
   render() {
     const item = this.props.item || {}
     return (
-      <Container>
-        <Label>
-          <Title>{item.symbol}</Title>
-          <Price>{item.price}</Price>
-          <Change
-            positive={item.percentChange24H > 0}>
-            {item.percentChange24H}
-          </Change>
-        </Label>
+      <Container
+        href={`/history/${item.symbol}/USD`}
+        selected={item.symbol === this.props.selected}>
+          <Label>
+            <Title>{item.symbol}</Title>
+            <Price>{new Intl.NumberFormat('en-US', {
+              style: 'currency', currency: 'USD' }).format(item.price)}</Price>
+            <Change
+              positive={item.percentChange24H > 0}>
+              {item.percentChange24H}%
+            </Change>
+          </Label>
       </Container>
     )
   }

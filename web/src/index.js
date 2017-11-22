@@ -1,15 +1,19 @@
 /**
- * React Static Boilerplate
- * Copyright (c) 2015-present Kriasoft. All rights reserved.
+ * Plugging a Reddux provider to the root component
+ *
  */
 
 /* @flow */
 
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {Provider} from 'react-redux'
 
-import App from './App';
-import registerServiceWorker from './registerServiceWorker';
+import configureStore from './store/configureStore'
+import App from './App'
+import registerServiceWorker from './registerServiceWorker'
 
-ReactDOM.render(<App />, document.getElementById('root'));
-registerServiceWorker();
+const store = configureStore()
+
+ReactDOM.render(<Provider store={store}><App /></Provider>, document.getElementById('root'))
+registerServiceWorker()

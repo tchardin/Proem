@@ -1,6 +1,7 @@
 /* @flow */
 
-import React from 'react';
+import React from 'react'
+import {connect} from 'react-redux'
 
 import {scaleTime} from 'd3-scale'
 import { format } from 'd3-format'
@@ -17,43 +18,30 @@ import {
 } from 'react-stockcharts/lib/coordinates'
 import {ema} from 'react-stockcharts/lib/indicator'
 
+import {resizeChart} from '../store/ui'
+
 class ChartComponent extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      width: 450,
-      height: 300
-    }
-    this.windowDimensions = this.windowDimensions.bind(this)
-  }
-
-  windowDimensions() {
-    this.setState({
-      width: window.innerWidth,
-      height: window.innerHeight - 120
-    })
-  }
-
   componentDidMount() {
-    this.windowDimensions()
-    window.addEventListener('resize', this.windowDimensions)
+    this.props.resizeChart()
+    window.addEventListener('resize', () => this.props.resizeChart())
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.windowDimensions)
+    window.removeEventListener('resize', () => this.props.resizeChart())
   }
 
   render() {
-    const {width, height} = this.state
-    const {data} = this.props
+    const {data, width, height} = this.props
     const margin = { left: 0, right: 80, top: 0, bottom: 30 }
     const xDomain = [new Date(2017, 8, 1), new Date()]
     const  calculatedData = data.map(child => {
+      let newDate = child.date.split(' ')
       return {
-        date: new Date(child.date),
-        close: Number(child.last)
+        date: new Date(newDate[0]),
+        last: Number(child.last)
       }
     })
+    console.log(calculatedData)
     return (
       <ChartCanvas ratio={1} width={width} height={height}
             margin={margin}
@@ -64,7 +52,7 @@ class ChartComponent extends React.Component {
             xExtents={xDomain}>
           <Chart
             id={0}
-            yExtents={[d => d.close]}
+            yExtents={[d => d.last]}
             padding={{top: 0, bottom: 0}}>
             <XAxis
               axisAt="bottom"
@@ -99,7 +87,7 @@ class ChartComponent extends React.Component {
               fill="#00CEFF"
               fontFamily="Gotham"
               fontSize={11}/>
-            <LineSeries yAccessor={d => d.close}
+            <LineSeries yAccessor={d => d.last}
               stroke="#FFF500"
               strokeWidth={3}/>
           </Chart>
@@ -109,4 +97,13 @@ class ChartComponent extends React.Component {
   }
 }
 
-export default ChartComponent
+const mapStateToProps = state => {
+  return {
+    height: state.chartHeight,
+    width: state.chartWidth - state.left,
+  }
+}
+
+export default connect(mapStateToProps, {
+  resizeChart
+})(ChartComponent)
