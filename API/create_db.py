@@ -27,8 +27,18 @@ except ValueError as valerr:
 def get_rates(dates):
     exchange_rates = []
     for d in dates:
-        sleep(0.2)
-        exchange_rates.append(literal_eval(requests.get("http://api.fixer.io/" + d + "?base=USD").content))
+        sleep(1.0)
+        headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36',
+        'Content-Type': 'json',
+        }
+        try:
+            print(d)
+            #print literal_eval(requests.get("http://api.fixer.io/" + str(d) + "?base=USD", headers=headers).content)
+            exchange_rates.append(literal_eval(requests.get("http://api.fixer.io/" + str(d) + "?base=USD", headers=headers).content))
+        except ValueError as valerr:
+            print("Unable to populate table: " + str(valerr))
+            print(d)
     return exchange_rates
 
 
