@@ -11,18 +11,18 @@ from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 from api_package.functions import *
 
-supported_currencies = ["BTC","ETH", "LTC", "BCH", "ETC","ZEC","XMR"]
-supported_fiat = ['USD', 'EUR', 'JPY', 'GBP', 'CHF', 'CAD', 'AUD',  'CNY', 'NZD', 'ZAR']
-supported_currencies_writted = ["bitcoin","ethereum", "litecoin","bitcoin-cash", "ethereum-classic","zcash","monero"]
+supported_currencies = ["BTC","ETH","LTC", "BCH", "ETC","ZEC","XMR","XRP","DASH"]
+supported_fiat = ['USD', 'EUR', 'JPY', 'GBP', 'CHF', 'CAD', 'AUD','CNY','NZD','ZAR']
+supported_currencies_writted = ["bitcoin","ethereum", "litecoin","bitcoin-cash", "ethereum-classic","zcash","monero","ripple","dash"]
 exchanges = ['BITFINEX','GDAX', 'KRAKEN', 'BITSTAMP']
-url_exchanges = ['https://www.bitfinex.com','https://www.gdax.com', 'https://www.kraken.com', 'https://www.bitstamp.net']
+url_exchanges = ['https://www.bitfinex.com','https://www.gdax.com','https://www.kraken.com','https://www.bitstamp.net']
 
 url_dict = dict()
 for idx,exchange in enumerate(exchanges):
     url_dict[exchange] = url_exchanges[idx]
 
 convert_symbols = dict()
-convert_symbols['DASH'] = "dash"
+# convert_symbols['DASH'] = "dash"
 for idx,currency in enumerate(supported_currencies):
     convert_symbols[currency] = supported_currencies_writted[idx]
 
@@ -30,7 +30,7 @@ supported_currencies_exchange = dict()
 supported_currencies_exchange['BITFINEX'] = supported_currencies
 supported_currencies_exchange['GDAX'] = supported_currencies[0:3]
 supported_currencies_exchange['KRAKEN'] = supported_currencies[1:]
-supported_currencies_exchange['BITSTAMP'] = supported_currencies[0:3]
+supported_currencies_exchange['BITSTAMP'] = supported_currencies[0:3].append("XRP")
 
 class HistoryType(DjangoObjectType):
     class Meta:

@@ -8,7 +8,7 @@ from time import sleep
 import StringIO
 
 
-supported_currencies = ["BTC","ETH", "LTC", "BCH", "ETC","ZEC","XMR"]
+supported_currencies = ["BTC","ETH","LTC", "BCH", "ETC","ZEC","XMR","XRP","DASH"]
 supported_fiat = ['USD', 'EUR', 'JPY', 'GBP', 'CHF', 'CAD', 'AUD',  'CNY', 'NZD', 'ZAR']
 
 

@@ -86,7 +86,8 @@ DATABASES = {
         'NAME': 'proemdbdev',
         'USER': 'proem_admin',
         'PASSWORD': 'iloveproems',
-        'HOST': 'proemdb-dev.c6mmcimaihhy.us-west-2.rds.amazonaws.com',
+        # 'HOST': 'proemdb-dev.c6mmcimaihhy.us-west-2.rds.amazonaws.com',
+        'HOST': 'proemdbdev.czaefluoxrgv.us-east-1.rds.amazonaws.com',
         'PORT': '',
     }
 }

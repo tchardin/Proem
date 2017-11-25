@@ -6,6 +6,8 @@ curl https://www.quandl.com/api/v3/datasets/BITFINEX/ETCUSD.csv?api_key=25hmrVod
 curl https://www.quandl.com/api/v3/datasets/BITFINEX/LTCUSD.csv?api_key=25hmrVodDAz9wn53zGbv > BITFINEX-LTCUSD.csv
 curl https://www.quandl.com/api/v3/datasets/BITFINEX/XMRUSD.csv?api_key=25hmrVodDAz9wn53zGbv > BITFINEX-XMRUSD.csv
 curl https://www.quandl.com/api/v3/datasets/BITFINEX/ZECUSD.csv?api_key=25hmrVodDAz9wn53zGbv > BITFINEX-ZECUSD.csv
+curl https://www.quandl.com/api/v3/datasets/BITFINEX/XRPUSD.csv?api_key=25hmrVodDAz9wn53zGbv > BITFINEX-XRPUSD.csv
+curl https://www.quandl.com/api/v3/datasets/BITFINEX/DSHUSD.csv?api_key=25hmrVodDAz9wn53zGbv > BITFINEX-DASHUSD.csv
 
 
 sudo rm USDEUR.csv USDGBP.csv USDJPY.csv USDCHF.csv USDCAD.csv USDAUD.csv USDNZD.csv USDZAR.csv USDCNY.csv

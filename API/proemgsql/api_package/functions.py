@@ -15,6 +15,7 @@ def get_exchange_rates(fiat):
 
 def ticker_url(market, coin):
     if market == 'BITFINEX':
+        if(coin=="DASH"): coin = "DSH"
         bfx_coin = 't{0}USD'.format(coin)
         r = json.loads(requests.get("https://api.bitfinex.com/v2/ticker/%s"%bfx_coin).content)
     elif market == 'GDAX':
@@ -29,7 +30,7 @@ def ticker_url(market, coin):
     return r
 
 def kraken_string_format(coin):
-    if coin in ["LTC","BTC","ETH", "ETC", "ZEC", "XMR"]:
+    if coin in ["LTC","BTC","ETH","ETC","ZEC","XMR","XRP"]:
         return 'X'+coin+'ZUSD'
     else:
         return coin+'USD'
@@ -120,6 +121,7 @@ def convert_interval_BITSTAMP(interval):
 
 def candles_url(market,coin, interval):
     if market == 'BITFINEX':
+        if(coin=="DASH"): coin = "DSH"
         bfx_coin = 't{0}USD'.format(coin)
         r = json.loads(requests.get("https://api.bitfinex.com/v2/candles/trade:%s:%s/hist?limit=200"%(interval,bfx_coin)).content)
     elif market == 'GDAX':
@@ -165,6 +167,7 @@ def candles_data(coin, rates, fiat, responses):
 
 def books_url(market,coin):
     if market == 'BITFINEX':
+        if(coin=="DASH"): coin = "DSH"
         bfx_coin = 't{0}USD'.format(coin)
         r = json.loads(requests.get("https://api.bitfinex.com/v2/book/%s/P0"%(bfx_coin)).content)
     elif market == 'GDAX':
