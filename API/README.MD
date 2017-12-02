@@ -67,7 +67,7 @@ The endpoint to post to is
 
 If opened in a browser, this link includes documentation for each of the endpoints in a UI. Note that each endpoint in the API is independently queryable. Each endpoint requires coins and fiat arguments. The candles endpoint requires an additional interval argument. The API uses a connection to a database that contains all historical values for coin-USD pairs. This database can be created using the `create_database.sh` file and is linked to the API in the settings.py file in the proemgsql folder. The api_package folder, contained within proemgsql, contains API specific data processing functions that normalises and formats data from different exchange APIs.
 
-API servers are managed by AWS beanstalk. New API instances can be deployed within the command line using: 
+API servers are managed by AWS beanstalk. New API instances can be deployed within the command line using:
 
 ```
 eb deploy
@@ -99,14 +99,5 @@ crontab -r
 To update the RDS database using csv files, run:
 
 ```
-python create_db.py
-```
-
-## Querying AWS
-
-The API is hosted on a public EC2 instance with an entry-point of the format: http://proem-io-api-dev.us-east-1.elasticbeanstalk.com/<query>
-New version of the API can be deployed using:
-
-```
-eb deploy
+python create_database.sh
 ```

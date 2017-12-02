@@ -6,5 +6,6 @@
 !.elasticbeanstalk/*.global.yml
 proem_api/
 proemsocketsgsql/
+data_csv/ 
 config.py
 config.pyc
