@@ -53,22 +53,28 @@ And now install all requirements defined in requirements.text:
 pip install -r requirements.txt
 ```
 
-That's done with the environment set up. To run our api cd into the API directory and run :
+That's done with the environment set up. To run our api,  cd into the API directory (proemgsql) and run :
 ```
-./run_api.sh
+python manage.py runserver
+
 ```
-API calls can now be made to `http://0.0.0.0:8080/`.
+API calls can now be made to `http://0.0.0.0:8000/`.
+
+## GraphQL API
+
+The endpoint to post to is
+- http://proemgsql-dev.us-east-1.elasticbeanstalk.com/graphql/
+
+If opened in a browser, this link includes documentation for each of the endpoints in a UI. Note that each endpoint in the API is independently queryable. Each endpoint requires coins and fiat arguments. The candles endpoint requires an additional interval argument. The API uses a connection to a database that contains all historical values for coin-USD pairs. This database can be created using the `create_database.sh` file and is linked to the API in the settings.py file in the proemgsql folder. The api_package folder, contained within proemgsql, contains API specific data processing functions that normalises and formats data from different exchange APIs.
+
+API servers are managed by AWS beanstalk. New API instances can be deployed within the command line using: 
+
+```
+eb deploy
+```
 
 ## Database Maintenance
  To automate the maintenance of the database of daily historical data and a local cache of minute precision values run:
-```
-cd maintain_db
-ssh -i "proem-key-pair.pem" ec2-user@ec2-54-191-34-79.us-west-2.compute.amazonaws.com
-cd Proem/API/maintain_db
-nohup python application.py &
-```
-
-OR :
 
 ```
 cd maintain_db
@@ -78,7 +84,7 @@ crontab -e
 :wq
 ```
 
-To kill, with PID the process ID:
+To kill, with PID:
 ```
 ps -ef | grep python
 kill -9 PID
@@ -96,17 +102,6 @@ To update the RDS database using csv files, run:
 python create_db.py
 ```
 
-## API Endpoints
-
-There are currently four endpoints for the API.
-
-1. '/<string:coin>?fiat=<string:fiat>'' which collects historical data for a coin. The coin argument is passed as the ticker symbol capitalised: eg: 'BTC'. Fiat currencies are passed in symbolic form eg: 'USD' and default to USD if not passed.
-2. '/<string:coin>?date_from=<string:date_from>&date_to=<string:date_to>&fiat=<string:fiat>' searches the locally hosted database between two date strings passed in the format 'YYYY-MM-DD'. date_to and date_from default to None, returning all historical data.
-3. '/now/<string:coin>?fiat=<string:fiat> queries all supported market APIs for the most recent data points.
-4. '/candles/<string:coin>?interval=<string:interval>&fiat=<string:fiat>&market=<string:fiat>'' queries the specified market API for candle milestones for plotting, the query automatically demands for the highest resolution possible. Possible resolutions are: '1m', '5m', '15m', '30m', '1h', '3h', '6h', '12h', '1D', '7D', '14D', '1M'. These give an order of magnitude for the dates returned '1M' for example actually returns a couple months worth of data. Interval defaults to '1M'. The coin argument is passed as the ticker symbol capitalised: eg: 'BTC' and defaults to USD?
-5. '/supported?market=<string:fiat>' returns the supported currencies for a given market.
-6. '/metrics/<string:coin>?fiat=<string:fiat>' to return the current metrics for a coin from coinmarketcap. The coin argument is passed as the ticker symbol capitalised: eg: 'BTC'. Fiat values defaults to USD.
-
 ## Querying AWS
 
 The API is hosted on a public EC2 instance with an entry-point of the format: http://proem-io-api-dev.us-east-1.elasticbeanstalk.com/<query>
@@ -115,85 +110,3 @@ New version of the API can be deployed using:
 ```
 eb deploy
 ```
-## GraphQL API
-
-Server to post to:
-- http://proemgsql-dev.us-east-1.elasticbeanstalk.com
-
-Check this link for GRAPHIQL UI to interact with API:
-- http://proemgsql-dev.us-east-1.elasticbeanstalk.com/graphql/
-
-Note that each model in the API is independently queryable (eg. ticker does not need to be wrapped in markets, or markets does not need to be wrapped in asset). An example of a query, that queries all data is detailed below. Each model requires coin and fiat arguments. The candles endpoint requires an additional interval argument. Note that arguments are passed down from parent models to children model (eg. asset -> history or markets -> ticker), so only need to be specified at the highest parent model.
-
-```
-query{
-  assets(coin: "BTC", fiat: "USD", interval: "1m"){
-    name
-    history{
-       date
-       high
-       low
-       mid
-       last
-       bid
-       ask
-       volume
-    }
-    metrics{
-      name
-      values{
-      	marketCap
-      	price
-      	lastUpdated
-      	name
-      	volume24H
-     	  percentChange7D
-      	symbol
-      	rank
-      	percentChange1H
-      	totalSupply
-      	availableSupply
-      	percentChange24H
-      	id
-      }
-    }
-    markets{
-      ticker{
-        name
-        values{
-          date
-          high
-          low
-          mid
-          last
-          bid
-          ask
-          volume
-      	}
-      }
-      candles{
-        name
-        values{
-          date
-          high
-          low
-          open
-          close
-          volume
-        }
-      }   
-    }    
-  }  
-}
-```
-
-
-
-
-## Plot code
-
-Check out these links for example plots:
-
-- https://codepen.io/acamuto/pen/yzxeXQ for 2D animated area plot.
-- https://codepen.io/plotly/pen/WwXEoV for range selector time series plot.
-- https://codepen.io/plotly/pen/ae3a2b41e18e5ee8b54fe163fe270f36 for pie charts.

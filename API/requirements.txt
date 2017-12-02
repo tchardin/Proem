@@ -9,3 +9,6 @@ flask
 flask_restful
 sqlalchemy
 psycopg2
+django
+graphene_django
+graphene

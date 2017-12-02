@@ -10,7 +10,7 @@ from __future__ import unicode_literals
 from django.db import models
 
 
-
+#extracts data from our RDS database
 class History(models.Model):
     date = models.TextField(blank=True, null=False, primary_key=True)
     high = models.TextField(blank=True, null=True)
@@ -25,15 +25,3 @@ class History(models.Model):
     class Meta:
         managed = False
         db_table = 'alldata'
-
-
-# class Markets(models.Model):
-#     name = models.TextField(blank=True, null=False, primary_key=True)
-#     ticker = models.ForeignKey(Ticker,null=True)
-#     candles = models.ForeignKey(Candles,null=True)
-
-# class Asset(models.Model):
-#     name = models.TextField(blank=True, null=False, primary_key=True)
-#     description = models.TextField(blank=True, null=True)
-#     markets = models.ForeignKey(Markets,null=True)
-#     history = models.ForeignKey(History,null=True)

@@ -96,5 +96,7 @@ for currency in supported_currencies:
             print("Unable to populate table: " + valerr)
             conn.rollback()
 
+
+
 print("DB created.")
 conn.close()
