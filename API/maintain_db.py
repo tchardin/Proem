@@ -8,8 +8,6 @@ import pandas
 import requests
 
 
-
-
 try:
     conn=psycopg2.connect(dbname= 'proemdbdev', host= config.database_host,
     port= '5432', user= 'proem_admin', password= config.RDS_password)
