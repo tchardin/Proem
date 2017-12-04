@@ -7,6 +7,10 @@
 
 import React from 'react'
 import styled from 'styled-components'
+import history from '../history'
+
+import {connect} from 'react-redux'
+import {toggleChart, updateSelected, updateGroup} from '../store/ui'
 
 import ListItem from './ListItem'
 import Arrow from '../svg/Arrow'
@@ -18,7 +22,7 @@ import Candle from '../svg/Candle'
     justify-content: space-around;
     align-items: center;
     background color: transparent;
-    padding: 1em 0 1em 0;
+    padding: 0.5em 1em;
   `
 
   const LeftControls = styled.div`
@@ -26,12 +30,11 @@ import Candle from '../svg/Candle'
     font-weight: bold;
     font-size: 3em;
     color: white;
-    padding: 0 1em 0 1em;
     user-select: none;
     display: flex;
     flex-direction: row;
     flex: 1;
-    justify-content: center;
+    justify-content: flex-start;
   `
 
   const RightControls = styled.div`
@@ -39,19 +42,20 @@ import Candle from '../svg/Candle'
     font-weight: bold;
     font-size: 3em;
     color: white;
-    padding: 0 1em 0 1em;
     user-select: none;
     display: flex;
     flex: 1;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
+    padding-right: 0.5em;
   `
   const CenterControls = styled.div`
     display: flex;
     align-items: center;
-    width: 50%;
+    width: 70%;
     display: flex;
     flex: 2;
+    padding: 0 3em 0 3em;
   `
 
   const LeftBtn = styled.div`
@@ -104,47 +108,147 @@ import Candle from '../svg/Candle'
     outline: none;
   `
 
+  const CurveIcon = styled.span`
+    cursor: pointer;
+    padding: 0.25em;
+  `
+
+  const CandleIcon = styled.span`
+    cursor: pointer;
+    padding: 0.25em;
+  `
+
+  const colorScale = ["#FFF500", "#FF00C4", "#FFA700", "#0089FF", "#B100FF"]
+
 class AppFooter extends React.Component {
+  state = {
+    position: 0
+  }
+  scroll = (start, end, duration) => {
+    const {scrollList} = this
+    let delta = end - start
+    let startTime
+		  if (window.performance && window.performance.now) {
+			  startTime = performance.now()
+		  }
+		  else if (Date.now) {
+			  startTime = Date.now()
+		  }
+		  else {
+			  startTime = new Date().getTime()
+		  }
+    const easeOutExpo = (x, t, b, c, d) => {
+		   return (t==d) ? b+c : c * (-Math.pow(2, -10 * t/d) + 1) + b;
+	  }
+    const tweenLoop = (time) => {
+      let t = !time ? 0 : time - startTime
+      let factor = easeOutExpo(null, t, 0, 1, duration)
+      scrollList.scrollLeft = start + delta * factor
+      if (t < duration && scrollList.scrollLeft != end)
+        requestAnimationFrame(tweenLoop)
+    }
+    tweenLoop()
+    this.setState({
+      position: end
+    })
+  }
+
+  selectFiat = ({target}) => {
+    const {value, name} = target
+    const {selectedCoin, updateSelected, view} = this.props
+    const path = view.toLowerCase()
+    updateSelected(name, value)
+    history.push(`/${path}/${selectedCoin}/${value}`)
+  }
+  selectCoin = coin =>
+    this.props.updateSelected('coin', coin)
+
+  toggleView = view => {
+    const {selectedCoin, selectedFiat} = this.props
+    toggleChart(view)
+    history.push(`/${view.toLowerCase()}/${selectedCoin}/${selectedFiat}`)
+  }
+
   render() {
+    const {
+      selectedCoin,
+      selectedFiat,
+      selectedGroup,
+      closed,
+      toggleChart,
+      view,
+      portfolio,
+      metrics,
+      group
+    } = this.props
+    const {position} = this.state
     return (
       <Footer>
-        <LeftControls>
-          <Curve color="#FFFFFF" />
-          <Candle color="#FFFFFF" />
-        </LeftControls>
+        {closed &&
+          <LeftControls>
+            <CurveIcon
+              onClick={() => this.toggleView('HISTORY')}>
+              <Curve color={view === 'HISTORY' ? "#00CEFF" : "#FFFFFF"} />
+            </CurveIcon>
+            <CandleIcon
+              onClick={() => this.toggleView('CANDLES')}>
+              <Candle color={view === 'CANDLES' ? "#00CEFF" : "#FFFFFF"} />
+            </CandleIcon>
+          </LeftControls>}
         <CenterControls>
-          <LeftBtn>
+          <LeftBtn
+            onClick={() => this.scroll(position, position-100, 2000)}>
             <Arrow
               color="#fff"
-              size="25px" />
+              size="25px"/>
           </LeftBtn>
-          <ControlList>
-            {
-              this.props.assets.map((a, i) => (
-                <ListItem
-                  item={a.metrics[0]}
-                  key={i}
-                  selected={this.props.selected}/>
-              ))
-            }
+          <ControlList
+            innerRef={div => {this.scrollList = div}}>
+            {this.props.assets.map((a, i) => (
+              <ListItem
+                portfolio={portfolio}
+                item={a.metrics[0]}
+                key={i}
+                chartView={view}
+                selected={portfolio ? selectedGroup : selectedCoin}
+                selectedFiat={selectedFiat}
+                handleSelect={portfolio ? this.props.updateGroup : this.selectCoin}
+                metrics={metrics}
+                color={portfolio && group.length ? colorScale[i] : false}/>
+            ))}
           </ControlList>
-          <RightBtn>
+          <RightBtn
+            onClick={() => this.scroll(position, position+100, 2000)}>
             <Arrow
               color="#fff"
-              size="25px" />
+              size="25px"/>
           </RightBtn>
         </CenterControls>
         <RightControls>
           <FiatSelector>
-            <Selector>
+            <Selector
+              name="fiat"
+              value={selectedFiat}
+              onChange={this.selectFiat}>
               {this.props.fiats.map(
                 f => <option value={f} key={f}>{f}</option>)}
             </Selector>
           </FiatSelector>
         </RightControls>
       </Footer>
-    );
+    )
   }
 }
 
-export default AppFooter
+const mapStateToProps = state => ({
+  selectedFiat: state.routing.variables.fiat,
+  selectedCoin: state.routing.variables.coin,
+  selectedGroup: state.ui.selectedGroup,
+  group: state.routing.variables.group
+})
+
+export default connect(mapStateToProps, {
+  toggleChart,
+  updateSelected,
+  updateGroup
+})(AppFooter)

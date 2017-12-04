@@ -3,17 +3,22 @@ schema {
 }
 
 type Query {
-  history(coin: String, fiat: String): [HistoryType]
-  ticker(coin: String, fiat: String): [TickerType]
-  candles(coin: String, fiat: String, interval: String): [CandlesType]
-  books(coin: String, fiat: String): [BookType]
-  metrics(coin: String, fiat: String): [MetricsType]
-  markets(coin: String, fiat: String, interval: String): [MarketsType]
-  assets(coin: String, fiat: String, interval: String): [AssetType]
+  history(coins: [String], fiat: String, dateFrom: String, dateTo: String): [HistoryType]
+  ticker(coins: [String], fiat: String, exchange: String): [TickerType]
+  candles(coins: [String], fiat: String, interval: String, exchange: String): [CandlesType]
+  books(coins: [String], fiat: String): [BookType]
+  metrics(coins: [String], fiat: String): [MetricsType]
+  markets(coins: [String], fiat: String, interval: String): [MarketsType]
+  assets(coins: [String], fiat: String, interval: String): [AssetType]
   supported: [SupportedType]
 }
 
 type HistoryType {
+  coin: String
+  values: [HistoryData]
+}
+
+type HistoryData {
   date: String!
   high: String
   low: String
@@ -27,7 +32,8 @@ type HistoryType {
 }
 
 type TickerType {
-  name: String
+  exchange: String
+  coin: String
   url: String
   values: [TickerData]
 }
@@ -44,7 +50,8 @@ type TickerData {
 }
 
 type CandlesType {
-  name: String
+  exchange: String
+  coin: String
   url: String
   values: [CandlesData]
 }
@@ -72,6 +79,7 @@ type OrderData {
 
 type MetricsType {
   sourceName: String
+  description: String
   marketCap: String
   price: String
   lastUpdated: String
@@ -94,7 +102,7 @@ type MarketsType {
 }
 
 type AssetType {
-  name: String
+  coin: String
   metrics: [MetricsType]
 }
 

@@ -3,20 +3,25 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
+    "blockstack": "^0.13.7",
     "classnames": "^2.2.5",
     "history": "^4.7.2",
     "lodash": "^4.17.4",
+    "moment": "^2.19.3",
     "prop-types": "^15.5.10",
     "query-string": "^5.0.0",
     "react": "^15.6.1",
+    "react-day-picker": "^7.0.2",
     "react-dom": "^15.6.1",
     "react-redux": "^5.0.6",
     "react-relay": "^1.3.0",
     "react-stockcharts": "^0.7.0-beta.19",
     "redux": "^3.7.2",
+    "redux-thunk": "^2.2.0",
     "relay-runtime": "^1.3.0",
     "styled-components": "^2.1.2",
-    "universal-router": "^3.2.0"
+    "universal-router": "^3.2.0",
+    "victory": "^0.24.2"
   },
   "devDependencies": {
     "babel-plugin-relay": "^1.3.0",
@@ -53,13 +58,12 @@
     ]
   },
   "scripts": {
-    "precommit": "lint-staged",
     "lint": "eslint --ignore-path .gitignore --ignore-pattern \"!**/.*\" . && stylelint \"./src/**/*.js\"",
     "fix": "eslint --ignore-path .gitignore --ignore-pattern \"!**/.*\" --fix .",
     "relay": "relay-compiler --src ./src --schema ./src/schema.graphql",
     "build": "node ./setup && react-scripts build && node ./render",
     "test": "node ./setup && react-scripts test --env=jsdom",
-    "deploy": "node ./setup && react-scripts build && gh-pages -d build",
+    "deploy": "node ./setup && react-scripts build && aws s3 sync build/ s3://proem.io",
     "start": "node ./setup && react-scripts start"
   }
 }

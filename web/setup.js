@@ -1,7 +1,4 @@
-/**
- * React Static Boilerplate
- * Copyright (c) 2015-present Kriasoft. All rights reserved.
- */
+
 
 /* @flow */
 
@@ -65,13 +62,13 @@ if (!text.includes('babel-plugin-transform-export-extensions')) {
 //
 // Download the GraphQL schema
 // -----------------------------------------------------------------------------
-if (process.argv.includes('--download-schema')) {
-  file = fs.createWriteStream('./src/schema.graphql');
-  https.get('https://graphql-demo.kriasoft.com/schema', resp => {
-    if (resp.statusCode === 200) {
-      resp.pipe(file);
-    } else {
-      throw new Error('Failed to download the schema.');
-    }
-  });
-}
+// if (process.argv.includes('--download-schema')) {
+//   file = fs.createWriteStream('./src/schema.graphql');
+//   https.get('https://graphql-demo.kriasoft.com/schema', resp => {
+//     if (resp.statusCode === 200) {
+//       resp.pipe(file);
+//     } else {
+//       throw new Error('Failed to download the schema.');
+//     }
+//   });
+// }

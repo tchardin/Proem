@@ -9,27 +9,24 @@ import Link from '../Link'
 import {toggleLeft} from '../store/ui'
 
 const Header = styled.header`
-  position: relative;
-  padding-left: 1em;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 999;
 `
-
 const Section = styled.section`
   display: inline-flex;
-  min-width: 0;
-  height: 100%;
   flex: 1;
   align-items: center;
-  justify-content: ${props =>
-    props.start ? 'flex-start' : props.end ? 'flex-end' : 'center'};
-  order: ${props => (props.start ? -1 : props.end ? 1 : null)};
+  justify-content: 'flex-start';
+  margin: 1.5em 0 0 1.5em;
 `;
 
 const TitleLink = styled(Link)`
   display: inline-flex;
-  padding: 16px 0;
+  padding: 0;
   margin: 0;
   margin-left: 24px;
-  overflow: hidden;
   font-family: 'Gotham', sans-serif;
   font-weight: bold;
   font-size: 3.5em;
@@ -106,7 +103,7 @@ class AppToolbar extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    open: !!state.left > 0
+    open: !!state.ui.left > 0
   }
 }
 

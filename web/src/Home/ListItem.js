@@ -1,3 +1,5 @@
+
+// TODO: Do not rerender when selected is not equal to symbol
 /* @flow */
 
 import React, {Component} from 'react'
@@ -16,9 +18,14 @@ const Container = styled(Link)`
 `
 
 const Label = styled.label`
-  margin: 0.5em;
+  margin: 0 1.2em;
+  padding: 0.5em 0;
   cursor: pointer;
   user-select: none;
+  line-height: 1em;
+  border-bottom-color: ${props => props.color || 'transparent'};
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
 `
 
 const Title = styled.h3`
@@ -43,15 +50,24 @@ const Change = styled.p`
 
 class ListItem extends Component {
   render() {
+    const {
+      chartView,
+      selectedFiat,
+      portfolio,
+      metrics,
+      color
+    } = this.props
     const item = this.props.item || {}
     return (
       <Container
-        href={`/history/${item.symbol}/USD`}
-        selected={item.symbol === this.props.selected}>
-          <Label>
+        href={portfolio ? `/portfolio/${selectedFiat}` : metrics ? `/${chartView.toLowerCase()}/${item.symbol}/${selectedFiat}/metrics` : `/${chartView.toLowerCase()}/${item.symbol}/${selectedFiat}/`}
+        selected={this.props.selected === item.symbol || this.props.selected.includes(item.symbol)}
+        onClick={() => this.props.handleSelect(item.symbol)}>
+          <Label
+            color={color}>
             <Title>{item.symbol}</Title>
             <Price>{new Intl.NumberFormat('en-US', {
-              style: 'currency', currency: 'USD' }).format(item.price)}</Price>
+              style: 'currency', currency: this.props.selectedFiat }).format(item.price)}</Price>
             <Change
               positive={item.percentChange24H > 0}>
               {item.percentChange24H}%

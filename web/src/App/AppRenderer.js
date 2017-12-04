@@ -9,33 +9,14 @@ import AppToolbar from './AppToolbar'
 import ErrorPage from '../ErrorPage'
 import Chart from '../Home/Chart'
 import AppMain from './AppMain'
+import AppMenu from './AppMenu'
 
 const AppContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
+  position: relative;
   height: 100%;
   width: 100%;
-`
-
-const Main = styled.div`
-  width: 100%;
-  height: 100%;
+  margin: 0;
   padding: 0;
-  margin: 0 auto;
-`
-
-const Right = styled.div`
-  min-height: 100vh;
-  display: flex;
-  flex-direction:  column;
-  justify-content: flex-end;
-  align-items: flex-end;
-  background: black;
-`
-
-const Left = styled.div`
-  display: none;
 `
 
 type Props = {
@@ -54,7 +35,10 @@ type State = {
   title: ?string,
   description: ?string,
   chart: ?React.Element<*>,
-  footer: ?React.Element<*>
+  footer: ?React.Element<*>,
+  menuHeader: ?React.Element<*>,
+  menuBody: ?React.Element<*>,
+  menuFooter: ?React.Element<*>,
 }
 
 const defaults = {
@@ -62,7 +46,10 @@ const defaults = {
   title: 'PROEM',
   description: '',
   chart: null,
-  footer: null
+  footer: null,
+  menuHeader: null,
+  menuBody: null,
+  menuFooter: null
 }
 
 class AppRenderer extends React.Component<any, Props, State> {
@@ -119,8 +106,11 @@ class AppRenderer extends React.Component<any, Props, State> {
       this.state.title !== nextState.title ||
       this.state.description !== nextState.description ||
       this.state.footer !== nextState.footer ||
-      this.state.chart !== nextState.chart
-    );
+      this.state.chart !== nextState.chart ||
+      this.state.menuHeader !== nextState.menuHeader ||
+      this.state.menuBody !== nextState.menuBody ||
+      this.state.menuFooter !== nextState.menuFooter
+    )
   }
 
   render() {
@@ -129,6 +119,10 @@ class AppRenderer extends React.Component<any, Props, State> {
       <ErrorPage error={this.state.error} />
     ) : (
       <AppContainer>
+        <AppMenu
+          header={this.state.menuHeader}
+          body={this.state.menuBody}
+          footer={this.state.menuFooter}/>
         <AppMain
           chart={this.state.chart}
           footer={this.state.footer}/>

@@ -30,7 +30,6 @@ function fetchQuery(
   ) {
     return fromCache
   }
-
   return fetch(
     'http://proemgsql-dev.us-east-1.elasticbeanstalk.com/graphql/',
     {

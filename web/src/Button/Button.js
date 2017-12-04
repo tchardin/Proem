@@ -1,77 +1,90 @@
 /**
- * React Static Boilerplate
- * Copyright (c) 2015-present Kriasoft. All rights reserved.
+ * Reusable Button
+ *
  */
 
 /* @flow */
 
-import React from 'react';
-import PropTypes from 'prop-types';
-import cx from 'classnames';
-import Link from '../Link';
+import React from 'react'
+import Link from '../Link'
+import styled from 'styled-components'
+import Arrow from '../svg/Arrow'
+
+const Blank = styled(Link)`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`
+
+const Primary = styled(Blank)`
+  border: 1px solid #e6e6e6;
+  min-width: 190px;
+  background: transparent;
+  justify-content: center;
+  width: 100%;
+  height: 42px;
+`
+
+const Menu = styled(Blank)`
+  justify-content: space-between;
+`
+
+const Caption = styled.span`
+  font-family: 'Gotham', sans-serif;
+  text-transform: uppercase;
+  font-size: 1em;
+  color: black;
+  font-weight: bold;
+  line-height: ${props => props.primary ? '3em' : '1em'};
+`
+
+const RotateRight = styled.span`
+  transform: rotate(180deg);
+  display: flex;
+`
 
 class Button extends React.Component {
-  static propTypes = {
-    component: PropTypes.oneOf([
-      PropTypes.string,
-      PropTypes.element,
-      PropTypes.func,
-    ]),
-    type: PropTypes.oneOf(['raised', 'fab', 'mini-fab', 'icon']),
-    to: PropTypes.oneOf([PropTypes.string, PropTypes.object]),
-    href: PropTypes.string,
-    className: PropTypes.string,
-    colored: PropTypes.bool,
-    primary: PropTypes.bool,
-    accent: PropTypes.bool,
-    ripple: PropTypes.bool,
-    children: PropTypes.node,
-  };
-
-  componentDidMount() {
-    window.componentHandler.upgradeElement(this.root);
+  props: {
+    type: 'primary' | 'menu' | 'back',
+    caption: string,
+    href: string,
+    onPress: () => mixed,
   }
-
-  componentWillUnmount() {
-    window.componentHandler.downgradeElements(this.root);
-  }
-
   render() {
-    const {
-      component,
-      type,
-      className,
-      colored,
-      to,
-      href,
-      primary,
-      accent,
-      ripple,
-      children,
-      ...other
-    } = this.props;
-    return React.createElement(
-      component || (to ? Link : href ? 'a' : 'button'), // eslint-disable-line no-nested-ternary
-      {
-        ref: node => (this.root = node),
-        className: cx(
-          'mdl-button mdl-js-button',
-          type && `mdl-button--${type}`,
-          {
-            'mdl-button--colored': colored,
-            'mdl-button--primary': primary,
-            'mdl-button--accent': accent,
-            'mdl-js-ripple-effect': ripple,
-          },
-          className,
-        ),
-        to,
-        href,
-        ...other,
-      },
-      children,
-    );
+    const {type, caption, href, onPress} = this.props
+    if (type === 'primary') {
+      return (
+        <Primary
+          href={href}
+          onClick={onPress}>
+          <Caption primary>{caption}</Caption>
+        </Primary>
+      )
+    } else if (type === 'menu') {
+      return (
+        <Menu
+          href={href}
+          onClick={onPress}>
+          <Caption>{caption}</Caption>
+          <RotateRight>
+            <Arrow
+              size="10px"
+              color="#000"/>
+          </RotateRight>
+        </Menu>
+      )
+    } else if (type === 'back') {
+      return (
+        <Menu
+          href={href}
+          onClick={onPress}>
+          <Arrow
+            size="10px"
+            color="#000"/>
+        </Menu>
+      )
+    }
   }
 }
 
-export default Button;
+export default Button

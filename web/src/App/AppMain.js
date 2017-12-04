@@ -15,10 +15,14 @@ const Main = styled.div`
   height: 100vh;
   width: ${props => props.size};
 `
+const Relative = styled.div`
+  position: relative;
+`
 
 class AppMain extends Component {
   props: {
     chart: React.Element<*>,
+    footer: React.Element<*>
   }
   state = {
     width: '100%'
@@ -33,11 +37,15 @@ class AppMain extends Component {
     return (
       <Main
         size={this.state.width}>
-        <AppToolbar />
-        {this.props.chart &&
-          React.cloneElement(this.props.chart)}
-        {this.props.footer &&
-          React.cloneElement(this.props.footer)}
+        <Relative>
+          <AppToolbar />
+          {this.props.chart &&
+            React.cloneElement(this.props.chart)}
+          {this.props.footer &&
+            React.cloneElement(this.props.footer, {
+              closed: this.props.left === 0
+            })}
+        </Relative>
       </Main>
     )
   }
@@ -45,8 +53,8 @@ class AppMain extends Component {
 
 const mapStateToProps = state => {
   return {
-    left: state.left,
-    windowWidth: state.chartWidth
+    left: state.ui.left,
+    windowWidth: state.ui.chartWidth
   }
 }
 
