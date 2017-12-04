@@ -1,8 +1,6 @@
 /* @flow */
 import React from 'react'
 import styled from 'styled-components'
-import {connect} from 'react-redux'
-import history from '../history'
 import Button from '../Button'
 
 const Title = styled.div`

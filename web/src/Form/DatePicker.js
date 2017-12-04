@@ -5,10 +5,7 @@
  */
 
 import React from 'react'
-import {connect} from 'react-redux'
 import styled from 'styled-components'
-import Arrow from '../svg/Arrow'
-import {updateForm, focusDate} from '../store/form'
 
 import DayPickerInput from 'react-day-picker/DayPickerInput'
 import {formatDate, parseDate} from 'react-day-picker/moment'
@@ -54,7 +51,6 @@ class DatePicker extends React.Component {
       handleChange,
       date
     } = this.props
-    let future = {after: new Date()}
     return (
       <Wrapper>
         <DayPickerInput

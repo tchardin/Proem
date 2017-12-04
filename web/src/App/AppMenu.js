@@ -3,9 +3,6 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import MenuHeader from './MenuHeader'
-import MenuList from './MenuList'
-import ToolBox from './ToolBox'
 
 const MenuContainer = styled.div`
   display: flex;

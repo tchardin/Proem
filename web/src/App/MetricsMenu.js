@@ -2,8 +2,8 @@
 
 import React from 'react'
 import styled from 'styled-components'
-import {graphql, createFragmentContainer} from 'react-relay'
-import Button from '../Button'
+// TODO: use fragment container for better data handling
+//import {graphql, createFragmentContainer} from 'react-relay'
 
 const Title = styled.h2`
   font-family: 'Gotham', sans-serif;
@@ -13,7 +13,7 @@ const Title = styled.h2`
 
 const Description = styled.p`
   font-family: 'Gotham', sans-serif;
-  font-size: 0.6em;
+  font-size: 0.7em;
   line-height: 1.6em;
   color: black;
 `
@@ -29,7 +29,7 @@ const MetricsContainer = styled.div`
 
 const Row = styled.div`
   font-family: 'Gotham', sans-serif;
-  font-size: 0.6em;
+  font-size: 0.7em;
   line-height: 1.5em;
   color: black;
   display: flex;
@@ -68,7 +68,7 @@ class MetricsMenu extends React.Component {
           {metrics.percentChange24H > 0 ? (
             <Color positive>{metrics.percentChange7D}%</Color>
           ) : (
-            <Color>{metrics.percentChange24H}%</Color>
+            <Color>{metrics.percentChange7D}%</Color>
           )}
         </Row>
         <Row>
@@ -84,7 +84,7 @@ class MetricsMenu extends React.Component {
           {metrics.percentChange24H > 0 ? (
             <Color positive>{metrics.percentChange1H}%</Color>
           ) : (
-            <Color>{metrics.percentChange24H}%</Color>
+            <Color>{metrics.percentChange1H}%</Color>
           )}
         </Row>
       </MetricsContainer>

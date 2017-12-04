@@ -5,9 +5,8 @@
 
 import router from '../router'
 import history from '../history'
-import isEqual from 'lodash/isEqual'
+// import isEqual from 'lodash/isEqual'
 import moment from 'moment'
-import {updateUI} from './ui'
 
 type Render = (Array<React.Element<*>>, ?Object, ?Object) => any;
 
@@ -21,9 +20,10 @@ type State = {
 };
 
 const UPDATE_GROUP = 'UPDATE_GROUP'
-const UPDATE_SELECTED = 'UPDATE_SELECTED'
+// const UPDATE_SELECTED = 'UPDATE_SELECTED'
 const UPDATE_DATE = 'UPDATE_DATE'
 const SWITCH_ROUTE = 'SWITCH_ROUTE'
+const LOAD_GROUP = 'LOAD_GROUP'
 
 const initialState = {
   location: history.location,
@@ -47,6 +47,14 @@ export default (state: State = initialState, action): State => {
           location: action.location,
           variables: {...state.variables, ...action.variables}
         }
+      case LOAD_GROUP:
+        return {
+          ...state,
+          variables: {
+            ...state.variables,
+            group: action.group
+          }
+        }
       case UPDATE_GROUP:
         return {
           ...state,
@@ -69,15 +77,15 @@ export default (state: State = initialState, action): State => {
     }
 }
 
-const updateObject = (action, state) => ({
-  ...state,
-  [action.id]: action.value
-})
-
-const updateSelected = (id, value) => ({
-  type: UPDATE_SELECTED,
-  id, value
-})
+// const updateObject = (action, state) => ({
+//   ...state,
+//   [action.id]: action.value
+// })
+//
+// const updateSelected = (id, value) => ({
+//   type: UPDATE_SELECTED,
+//   id, value
+// })
 
 const switchRoute = (route, location, variables) => ({
   type: SWITCH_ROUTE,
@@ -93,6 +101,27 @@ export const updateDate = date => ({
   type: UPDATE_DATE,
   date
 })
+
+const loadGroup = group => ({
+  type: LOAD_GROUP,
+  group
+})
+const earliestDate = assets => {
+  let eD = moment()
+  for (const prop in assets) {
+    assets[prop].transactions.forEach(t => {
+      eD = moment(t.date).isBefore(eD) ? moment(t.date) : eD
+    })
+  }
+  return eD.format('YYYY-MM-DD')
+}
+
+export const findPortfolio = () => (dispatch, getState) => {
+  const persistedPortfolio = getState().portfolio
+  const date = earliestDate(persistedPortfolio.assets)
+  dispatch(loadGroup(persistedPortfolio.allIds))
+  dispatch(updateDate(date))
+}
 
 export const resolveRoute = location => (dispatch, getState) =>
   router.resolve({ path: location.pathname}).then(route => {

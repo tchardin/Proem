@@ -23,6 +23,8 @@ const Input = styled.input`
   outlined: 0;
   height: 54px;
   padding: 0 0 0 0.5em;
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
   &::placeholder {
     color: white;
   }
@@ -75,7 +77,7 @@ class InputField extends React.Component {
     this.props.onChange('portfolio', name, value)
   }
   render() {
-    const {onChange, amount, ids, currency} = this.props
+    const {amount, ids, currency} = this.props
     let options = ids.map(
       id => <option value={id} key={id}>{id}</option>)
     return (

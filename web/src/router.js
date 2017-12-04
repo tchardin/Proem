@@ -55,6 +55,47 @@ const routes = [
     }),
   },
   {
+    path: '/about',
+    query: graphql`query routerAboutQuery($coin: [String], $fiat: String) {
+      history(coins: $coin, fiat: $fiat) {
+        values {
+          date
+          last
+        }
+      }
+      assets(fiat: $fiat) {
+        metrics {
+          ...ListItem_item
+        }
+      }
+      supported {
+        fiats
+      }
+    }`, // prettier-ignore
+    components: () => [
+      import(/* webpackChunkName: 'home' */ './Home/Chart'),
+      import('./Home/AppFooter'),
+      import('./App/MenuHeader'),
+      import('./App/AboutMenu'),
+      import('./App/ToolBox'),
+    ],
+    render: ([Chart, AppFooter, MenuHeader, AboutMenu, ToolBox], data) => ({
+      title: 'Home',
+      chart: <Chart
+              data={data.history[0].values}
+              view="HISTORY"/>,
+      footer: <AppFooter
+                assets={data.assets}
+                fiats={data.supported[0].fiats}
+                view="HISTORY"/>,
+      menuHeader: <MenuHeader
+                    title="About"
+                    href={`/`}/>,
+      menuBody: <AboutMenu />,
+      menuFooter: <ToolBox />
+    }),
+  },
+  {
     path: '/candles',
     children: [
       {
@@ -106,7 +147,64 @@ const routes = [
             }),
           },
           {
-
+            path: '/metrics',
+            query: graphql`query routerMetricsCandlesQuery($coin: [String], $fiat: String) {
+              candles(coins: $coin, fiat: $fiat) {
+                exchange
+                url
+                values {
+                  date
+                  open
+                  close
+                  high
+                  low
+                }
+              }
+              metrics(coins: $coin, fiat: $fiat) {
+                name
+                description
+                marketCap
+                volume24H
+                availableSupply
+                totalSupply
+                percentChange7D
+                percentChange24H
+                percentChange1H
+              }
+              assets(fiat: $fiat) {
+                metrics {
+                  ...ListItem_item
+                }
+              }
+              supported {
+                fiats
+              }
+            }`,
+            components: () => [
+              import(/* webpackChunkName: 'home' */ './Home/Chart'),
+              import('./Home/AppFooter'),
+              import('./App/MenuHeader'),
+              import('./App/MetricsMenu'),
+              import('./App/ToolBox')
+            ],
+            render: ([Chart, AppFooter, MenuHeader, MetricsMenu, ToolBox], data, params) => ({
+              title: 'Metrics',
+              chart: <Chart
+                        data={data.candles[0].values}
+                        view="CANDLES"/>,
+              footer: <AppFooter
+                        assets={data.assets}
+                        fiats={data.supported[0].fiats}
+                        view="CANDLES"
+                        metrics={true}/>,
+              menuHeader: <MenuHeader
+                            title="Metrics"
+                            href={`/history/${params.coin}/${params.fiat}`}/>,
+              menuBody: <MetricsMenu
+                          metrics={data.metrics[0]}
+                          fiat={params.fiat}/>,
+              menuFooter: <ToolBox />
+            }),
           }
         ]
       }
@@ -160,7 +258,7 @@ const routes = [
           },
           {
             path: '/metrics',
-            query: graphql`query routerMetricsQuery($coin: [String], $fiat: String) {
+            query: graphql`query routerMetricsHistoryQuery($coin: [String], $fiat: String) {
               history(coins: $coin, fiat: $fiat) {
                 values {
                   date
@@ -250,9 +348,9 @@ const routes = [
           import('./Home/AppFooter'),
           import('./App/MenuHeader'),
           import('./Portfolio/Portfolio'),
-          import('./Button')
+          import('./Portfolio/PFooter')
         ],
-        render: ([PChart, AppFooter, MenuHeader, Portfolio, Button], data, params) => ({
+        render: ([PChart, AppFooter, MenuHeader, Portfolio, PFooter], data, params) => ({
           title: 'Portfolio',
           chart: <PChart
                     data={data.history}
@@ -269,9 +367,7 @@ const routes = [
                         allAssets={data.supported[0].coins}
                         fiats={data.supported[0].fiats}
                         pfAssets={data.metrics}/>,
-          menuFooter: <Button
-                        type="primary"
-                        caption="Import from exchange" />
+          menuFooter: <PFooter />
         }),
       }
     ]

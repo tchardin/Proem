@@ -3,7 +3,7 @@
 
 import React from 'react'
 import {connect} from 'react-redux'
-import styled, {keyframes} from 'styled-components'
+import styled from 'styled-components'
 
 import Link from '../Link'
 import {toggleLeft} from '../store/ui'

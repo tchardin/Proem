@@ -158,7 +158,7 @@ class AppFooter extends React.Component {
     const {selectedCoin, updateSelected, view} = this.props
     const path = view.toLowerCase()
     updateSelected(name, value)
-    history.push(`/${path}/${selectedCoin}/${value}`)
+    history.push(path === 'portfolio' ? `/portfolio/${value}` : `/${path}/${selectedCoin}/${value}`)
   }
   selectCoin = coin =>
     this.props.updateSelected('coin', coin)
@@ -175,7 +175,6 @@ class AppFooter extends React.Component {
       selectedFiat,
       selectedGroup,
       closed,
-      toggleChart,
       view,
       portfolio,
       metrics,

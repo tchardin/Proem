@@ -12,8 +12,7 @@ const ERROR_PORTFOLIO = 'ERROR_PORTFOLIO'
 
 const initialState = {
   allIds: [],
-  assets: {},
-  charts: {}
+  assets: {}
 }
 
 export default (state = initialState, action) => {
@@ -56,13 +55,13 @@ export default (state = initialState, action) => {
    currency
  })
 
- const earliestDate = (state, id) => {
-   let eD = new Date()
-   state.assets[id].transactions.forEach(t => {
-     t.date < eD ? t.date : eD
-   })
-   return eD
- }
+ // const earliestDate = (state, id) => {
+ //   let eD = new Date()
+ //   state.assets[id].transactions.forEach(t => {
+ //     t.date < eD ? t.date : eD
+ //   })
+ //   return eD
+ // }
 
  export const newTransaction = (currency, amount, date) => (dispatch, getState) => {
    const {assets} = getState().portfolio

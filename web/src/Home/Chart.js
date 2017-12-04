@@ -9,14 +9,12 @@ import { timeFormat } from 'd3-time-format'
 
 import {ChartCanvas, Chart} from 'react-stockcharts'
 import {
-  AreaSeries,
   LineSeries,
   CandlestickSeries,
   BollingerSeries,
 } from 'react-stockcharts/lib/series'
 import {XAxis, YAxis} from 'react-stockcharts/lib/axes'
 import {
-  PriceCoordinate,
 	CrossHairCursor,
 	MouseCoordinateX,
 	MouseCoordinateY,

@@ -45,7 +45,6 @@ class PForm extends React.Component {
       date,
       currency,
       options,
-      newTransaction
     } = this.props
     return (
       <List>

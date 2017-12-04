@@ -5,9 +5,7 @@ import React from 'react'
 import styled from 'styled-components'
 import isEqual from 'lodash/isEqual'
 
-import AppToolbar from './AppToolbar'
 import ErrorPage from '../ErrorPage'
-import Chart from '../Home/Chart'
 import AppMain from './AppMain'
 import AppMenu from './AppMenu'
 

@@ -12,17 +12,13 @@ import {ChartCanvas, Chart} from 'react-stockcharts'
 import {
   AreaSeries,
   LineSeries,
-  CandlestickSeries,
-  BollingerSeries,
 } from 'react-stockcharts/lib/series'
 import {XAxis, YAxis} from 'react-stockcharts/lib/axes'
 import {
-  PriceCoordinate,
 	CrossHairCursor,
 	MouseCoordinateX,
 	MouseCoordinateY,
 } from 'react-stockcharts/lib/coordinates'
-import {ema, sma, bollingerBand} from 'react-stockcharts/lib/indicator'
 
 import {resizeChart} from '../store/ui'
 
@@ -50,11 +46,10 @@ class PChartComponent extends React.Component {
       width,
       height,
       pfIds,
-      pfStart,
       selectedIds,
       assets
     } = this.props
-    if (!pfIds.length || !data[0].date) {
+    if (!pfIds.length || data[0].values.length <= 1) {
       return (
         <EmptyChart
           width={width}
@@ -66,6 +61,7 @@ class PChartComponent extends React.Component {
       let firstAsset = data.reduce((a, b) => {
         return a.values.length > b.values.length ? a : b
       }, data[0])
+
     const calculatedData = firstAsset.values.map(a => {
         let point = {}
         let total = 0
@@ -91,6 +87,7 @@ class PChartComponent extends React.Component {
           total
         }
       })
+
     console.log(calculatedData)
     // } else {
     //   calculatedData = data[0].values.map(a => ({
@@ -105,12 +102,12 @@ class PChartComponent extends React.Component {
        <LineSeries
          key={id}
          yAccessor={d => d[id]}
-         stroke={colorScale[index]}
+         stroke={colorScale[pfIds.indexOf(id)]}
          strokeWidth={3}/>
      ))
-      const groupExtents = selectedIds.map(id => {
-        return d => d[id]
-      })
+      // const groupExtents = selectedIds.map(id => {
+      //   return d => d[id]
+      // })
       const yExtents = [d => d.total, d => (d.total-d.total)]
       return (
         <ChartCanvas ratio={1} width={width} height={height}

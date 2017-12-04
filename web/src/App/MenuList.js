@@ -4,11 +4,7 @@ import React from 'react'
 import styled from 'styled-components'
 import {connect} from 'react-redux'
 import {signUserIn, signUserOut} from '../store/user'
-import Arrow from '../svg/Arrow'
-import Link from '../Link'
 import Button from '../Button'
-import Input from '../Form/Input'
-import DatePicker from '../Form/DatePicker'
 
 const List = styled.ul`
   display: flex;
@@ -27,11 +23,6 @@ const Option = styled.li`
   padding: 1.5em 0.5em 1.5em 0.5em;
   width: 100%;
   box-sizing: border-box;
-`
-
-const RotateRight = styled.span`
-  transform: rotate(180deg);
-  display: flex;
 `
 
 
@@ -62,7 +53,8 @@ class MenuList extends React.Component {
         <Option>
           <Button
             caption="About"
-            type="menu"/>
+            type="menu"
+            href={'/about'}/>
         </Option>
         <Option>
           {user.info ? (

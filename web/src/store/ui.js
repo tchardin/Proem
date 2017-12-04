@@ -85,12 +85,12 @@ export const updateSelected = (selectedItem, value) => ({
   selectedItem, value
 })
 
-export const updateUI = ({coin, fiat}) => (dispatch, getState) => {
-  const {selectedCoin, selectedFiat} = getState().ui
-  if (coin != selectedCoin) {
-    dispatch(updateSelected('selectedCoin', coin))
-  }
-  if (fiat != selectedFiat) {
-    dispatch(updateSelected('selectedFiat', fiat))
-  }
-}
+// export const updateUI = ({coin, fiat}) => (dispatch, getState) => {
+//   const {selectedCoin, selectedFiat} = getState().ui
+//   if (coin != selectedCoin) {
+//     dispatch(updateSelected('selectedCoin', coin))
+//   }
+//   if (fiat != selectedFiat) {
+//     dispatch(updateSelected('selectedFiat', fiat))
+//   }
+// }

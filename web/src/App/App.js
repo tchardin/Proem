@@ -6,15 +6,14 @@
 /* @flow */
 
 import React from 'react';
-import isEqual from 'lodash/isEqual';
-import { graphql, QueryRenderer } from 'react-relay';
+// import isEqual from 'lodash/isEqual';
+import {QueryRenderer } from 'react-relay';
 
 import relay from '../relay';
-import router from '../router';
 import history from '../history';
 import AppRenderer from './AppRenderer';
 import {connect} from 'react-redux'
-import {resolveRoute} from '../store/routing.js'
+import {resolveRoute, findPortfolio} from '../store/routing.js'
 import {loadUser} from '../store/user.js'
 
 import {injectGlobal} from 'styled-components'
@@ -52,6 +51,7 @@ class App extends React.Component<any, any, State> {
   componentDidMount() {
     // Start watching for changes in the URL (window.location)
     this.props.loadUser()
+    this.props.findPortfolio()
     this.unlisten = history.listen(this.props.resolveRoute)
     this.props.resolveRoute(history.location)
   }
@@ -91,5 +91,6 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps, {
   loadUser,
-  resolveRoute
+  resolveRoute,
+  findPortfolio
 })(App)

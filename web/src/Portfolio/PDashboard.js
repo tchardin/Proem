@@ -9,11 +9,13 @@ const Container = styled.div`
   flex: 2;
   flex-direction: column;
   align-items: flex-start;
-  margin-bottom: 1em;
+  margin-bottom: 2em;
+  justify-content: space-between;
 `
 const Message = styled.div`
   font-family: 'Gotham', sans-serif;
   font-size: 1em;
+  padding: 1em 0;
 `
 
 const Header = styled.div`
