@@ -33,11 +33,11 @@ const Wrapper = styled.div`
     border: 0;
     outlined: 0;
     height: 54px;
-    padding: 0;
     width: 100%;
+    padding: 0 0.5em;
+    box-sizing: border-box;
     &::placeholder {
       color: white;
-      padding-left: 0.5em;
     }
     &:focus {
       outline: none;

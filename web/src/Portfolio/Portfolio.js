@@ -7,8 +7,9 @@ import PForm from './PForm'
 
 const PContainer = styled.div`
   display: flex;
+  flex: 8;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 `
 

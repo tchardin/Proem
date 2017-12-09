@@ -15,6 +15,7 @@ const Title = styled.div`
 
 const Header = styled.div`
   display: flex;
+  flex: 1;
   flex-direction: row;
   align-items: center;
   width: 100%;

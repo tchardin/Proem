@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 const AboutContainer = styled.div`
   display: flex;
-  flex: 2;
+  flex: 8;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;

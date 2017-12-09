@@ -9,19 +9,18 @@ import Button from '../Button'
 
 const List = styled.ul`
   display: flex;
-  flex: 2;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
   list-style-type: none;
   padding: 0;
-  margin: 0;
+  margin: 2em 0;
   width: 100%;
 `
 
 const Option = styled.li`
   /* border-bottom: solid #e6e6e6 1px; */
-  padding: 1em 0;
+  padding: 0.5em 0;
   width: 100%;
   box-sizing: border-box;
 `

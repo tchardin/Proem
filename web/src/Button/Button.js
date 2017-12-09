@@ -23,6 +23,9 @@ const Primary = styled(Blank)`
   justify-content: center;
   width: 100%;
   height: 42px;
+  & :not(:last-child) {
+    margin-bottom: 0.5em;
+  }
 `
 
 const Menu = styled(Blank)`

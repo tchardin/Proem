@@ -8,9 +8,10 @@ import Button from '../Button'
 
 const Container = styled.div`
   display: flex;
-  min-height: 100px;
+  flex: 1;
+  /* min-height: 100px; */
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: flex-start;
   font-family: 'Gotham', sans-serif;
   color: black;
