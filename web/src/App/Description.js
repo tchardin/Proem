@@ -50,7 +50,7 @@ const Description = ({isOpen, handleClick, text}) => {
     return (
       <Container>
         <Row
-          onClick={() => handleClick()}>
+          onClick={() => handleClick('description')}>
           <Label>info</Label>
           <Sign
             down={isOpen}>

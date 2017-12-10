@@ -17,9 +17,11 @@ export default (state = {
   selectedCoin: 'BTC',
   selectedFiat: 'USD',
   selectedGroup: [],
+  selectedTxs: null,
   ema: false,
   sma: false,
   bol: false,
+  vol: false,
 }, action) => {
   switch (action.type) {
     case RESIZE_CHART:

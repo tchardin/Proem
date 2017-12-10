@@ -103,7 +103,7 @@ class ToolBox extends React.Component {
   }
   render() {
     const {
-      sma, ema, bol
+      sma, ema, bol, vol
     } = this.props
     return (
       <ToolContainer>
@@ -112,6 +112,14 @@ class ToolBox extends React.Component {
           <Title>TOOLBOX</Title>
         </ToolHeader>
         <ToolList>
+          <Tool>
+            <label htmlFor="vol">Volume</label>
+            <Switch
+              type="checkbox"
+              name="vol"
+              checked={vol}
+              onChange={this.handleChange}/>
+          </Tool>
           <Tool>
             <label htmlFor="sma">Simple Moving Average</label>
             <Switch
@@ -146,7 +154,8 @@ const mapStateToProps = state => {
   return {
     sma: state.ui.sma,
     ema: state.ui.ema,
-    bol: state.ui.bol
+    bol: state.ui.bol,
+    vol: state.ui.vol,
   }
 }
 

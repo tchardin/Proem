@@ -12,6 +12,7 @@ import {
   LineSeries,
   CandlestickSeries,
   BollingerSeries,
+  BarSeries
 } from 'react-stockcharts/lib/series'
 import {XAxis, YAxis} from 'react-stockcharts/lib/axes'
 import {
@@ -56,7 +57,8 @@ class ChartComponent extends React.Component {
       height,
       emaLines,
       smaLines,
-      bbLines
+      bbLines,
+      volumeChart
     } = this.props
     const ema10 = ema()
       .merge((d, c) => {d.ema10 = c})
@@ -78,7 +80,7 @@ class ChartComponent extends React.Component {
 
     const bbFill = "#4682B4"
 
-    const margin = { left: 20, right: 80, top: 0, bottom: 30 }
+    const margin = { left: 50, right: 80, top: 0, bottom: 30 }
     const xDomain = [new Date(2017, 9, 1), new Date()]
 
     let formattedData
@@ -87,7 +89,8 @@ class ChartComponent extends React.Component {
         let newDate = child.date.split(' ')
         return {
           date: new Date(newDate[0]),
-          close: Number(child.last)
+          close: Number(child.last),
+          volume: Number(child.volume),
         }
       })
     } else {
@@ -99,6 +102,7 @@ class ChartComponent extends React.Component {
           close: Number(child.close),
           high: Number(child.high),
           low: Number(child.low),
+          volume: Number(child.volume),
         }
       })
     }
@@ -129,7 +133,7 @@ class ChartComponent extends React.Component {
             xScale={scaleTime()}
             xExtents={xDomain}>
           <Chart
-            id={0}
+            id={1}
             yExtents={yExtents}
             padding={{top: 90, bottom: 0}}>
             <XAxis
@@ -184,6 +188,26 @@ class ChartComponent extends React.Component {
                     yAccessor={sma20.accessor()}
                     stroke={sma20.stroke()}/>}
           </Chart>
+          {volumeChart &&
+          <Chart
+            id={2}
+            yExtents={d => d.volume}>
+            <YAxis
+              axisAt="left"
+              orient="left"
+              ticks={5}
+              tickFormat={format(".2s")}
+              opacity={0}
+              fontFamily="Gotham"
+              tickStroke="#FFFFFF"
+              tickStrokeOpacity={0.4}
+              innerTickSize={5}
+              outerTickSize={5}
+              inverted={true}/>
+            <BarSeries
+              yAccessor={d => d.volume}
+              stroke={false}/>
+          </Chart>}
           <CrossHairCursor stroke="#FFFFFF"/>
         </ChartCanvas>
     )
@@ -197,6 +221,7 @@ const mapStateToProps = state => {
     emaLines: state.ui.ema,
     smaLines: state.ui.sma,
     bbLines: state.ui.bol,
+    volumeChart: state.ui.vol,
   }
 }
 

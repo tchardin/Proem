@@ -1,8 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 import {connect} from 'react-redux'
-
+import moment from 'moment'
 import {VictoryPie} from 'victory'
+import {updateSelected} from '../store/ui'
 
 const Container = styled.div`
   display: flex;
@@ -10,7 +11,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: flex-start;
   margin-bottom: 2em;
-  justify-content: space-between;
+  justify-content: flex-start;
 `
 const Message = styled.div`
   font-family: 'Gotham', sans-serif;
@@ -33,12 +34,52 @@ const Change = styled.h3`
   '#0AFE00' : '#FF0000'};
 `
 
+const List = styled.div`
+  width: 100%;
+`
+
+const Row = styled.div`
+  font-family: 'Gotham', sans-serif;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  border-top: solid #e6e6e6 1px;
+  height: 52px;
+  & :last-child {
+    border-bottom: solid #e6e6e6 1px;
+  }
+`
+
+const Label = styled.p`
+  text-transform: uppercase;
+  font-size: 0.7em;
+  font-weight: 500;
+  line-height: 0;
+  color: #5A5A5A;
+`
+
+const Value = styled.p`
+  font-size: 1em;
+  color: black;
+`
+
+const Title = styled.h2`
+  font-family: 'Gotham', sans-serif;
+  font-size: 1em;
+  color: black;
+  padding: 0.5em 0;
+`
+
 class PDashboard extends React.Component {
   render() {
     const {
       allIds,
       assets,
-      metrics
+      metrics,
+      selectedTxs,
+      updateSelected
     } = this.props
     if (!allIds.length) {
       return (
@@ -50,7 +91,6 @@ class PDashboard extends React.Component {
       )
     }
     // Calculate totals for each asset
-    console.log(`Metrics: ${JSON.stringify(metrics)}, Assets: ${JSON.stringify(assets)}`)
     let allBalances = metrics.map(m =>
       assets[m.symbol].balance * m.price)
 
@@ -84,8 +124,39 @@ class PDashboard extends React.Component {
                 colorScale={["#FFF500", "#FF00C4", "#FFA700", "#0089FF", "#B100FF"]}
                 innerRadius={100}
                 labelRadius={130}
-                style={{ labels: { fill: "#00CEFF", fontSize: 30, fontWeight: "bold", fontFamily: 'Gotham' } }}
-                />
+                style={{
+                  data: {cursor: 'pointer'},
+                  labels: { fill: "#00CEFF", fontSize: 30, fontWeight: "bold", fontFamily: 'Gotham', cursor: 'pointer'}}}
+                events={[
+                  {
+                    target: 'data',
+                    eventHandlers: {
+                      onClick: () => {
+                        return [{
+                          target: 'data',
+                          mutation: props => updateSelected('selectedTxs', props.datum.x)
+                        }]
+                      }
+                    }
+                  },{
+                    target: 'labels',
+                    eventHandlers: {
+                      onClick: () => {
+                        return [{
+                          target: 'labels',
+                          mutation: props => updateSelected('selectedTxs', props.datum.x)
+                        }]
+                      }
+                    }
+                  }
+                ]}/>
+
+    let txs = selectedTxs ? assets[selectedTxs].transactions.map((t, i) => (
+      <Row key={i}>
+        <Label>{moment(t.date).format("MMM Do, YYYY")}</Label>
+        <Value>{t.amount}</Value>
+      </Row>
+    )) : null
 
     return (
       <Container>
@@ -98,7 +169,13 @@ class PDashboard extends React.Component {
               {Math.round(totalPercentChange*100)/100}%
           </Change>
         </Header>
-        {pie}
+        <div>
+          {pie}
+        </div>
+        <Title>{selectedTxs || "Click on chart to see transaction details"}</Title>
+        <List>
+          {txs}
+        </List>
       </Container>
     )
   }
@@ -108,7 +185,10 @@ const mapStateToProps = state => {
   return {
     allIds: state.portfolio.allIds,
     assets: state.portfolio.assets,
+    selectedTxs: state.ui.selectedTxs,
   }
 }
 
-export default connect(mapStateToProps)(PDashboard)
+export default connect(mapStateToProps, {
+  updateSelected
+})(PDashboard)

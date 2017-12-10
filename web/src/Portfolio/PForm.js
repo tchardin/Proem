@@ -6,6 +6,32 @@ import {newTransaction} from '../store/portfolio'
 import Input from '../Form/Input'
 import DatePicker from '../Form/DatePicker'
 import Button from '../Button'
+import CrossSvg from '../svg/Cross'
+
+const Cross = styled.div`
+  height: 20px;
+  width: 26px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+`
+
+const Line1 = styled.span`
+  display: flex;
+  height: 3px;
+  background-color: black;
+  transform: rotate(45deg) translateX(12px);
+  border-radius: 2px;
+`
+
+const Line2 = styled.span`
+  display: flex;
+  height: 3px;
+  background-color: black;
+  transform: rotate(-45deg) translateX(12px);
+  border-radius: 2px;
+`
 
 const List = styled.ul`
   display: flex;
@@ -23,6 +49,7 @@ const Option = styled.li`
   padding: 0.5em 0;
   width: 100%;
   box-sizing: border-box;
+  text-align: right;
 `
 
 class PForm extends React.Component {
@@ -44,6 +71,7 @@ class PForm extends React.Component {
       date,
       currency,
       options,
+      resetForm
     } = this.props
     return (
       <List>
@@ -64,6 +92,12 @@ class PForm extends React.Component {
             type="primary"
             caption="Save"
             onPress={() => this.submitForm()}/>
+        </Option>
+        <Option>
+          <Button
+            type="secondary"
+            caption="cancel"
+            onPress={() => resetForm('portfolio')} />
         </Option>
       </List>
     )

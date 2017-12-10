@@ -21,6 +21,7 @@ const routes = [
         values {
           date
           last
+          volume
         }
       }
       assets(fiat: $fiat) {
@@ -61,6 +62,7 @@ const routes = [
         values {
           date
           last
+          volume
         }
       }
       assets(fiat: $fiat) {
@@ -113,6 +115,7 @@ const routes = [
                   close
                   high
                   low
+                  volume
                 }
               }
               assets(fiat: "USD") {
@@ -158,6 +161,7 @@ const routes = [
                   close
                   high
                   low
+                  volume
                 }
               }
               metrics(coins: $coin, fiat: $fiat) {
@@ -223,6 +227,7 @@ const routes = [
                 values {
                   date
                   last
+                  volume
                 }
               }
               assets(fiat: $fiat) {
@@ -263,6 +268,15 @@ const routes = [
                 values {
                   date
                   last
+                  volume
+                }
+              }
+              books(coins: $coin, fiat: $fiat) {
+                asks {
+                  price
+                }
+                bids {
+                  price
                 }
               }
               metrics(coins: $coin, fiat: $fiat) {
@@ -307,6 +321,7 @@ const routes = [
                             href={`/history/${params.coin}/${params.fiat}`}/>,
               menuBody: <MetricsMenu
                           metrics={data.metrics[0]}
+                          books={data.books[0]}
                           fiat={params.fiat}/>,
               menuFooter: <ToolBox />
             }),

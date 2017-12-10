@@ -4,12 +4,19 @@ import React from 'react'
 import styled from 'styled-components'
 import {connect} from 'react-redux'
 
+import imgLink from '../img/logo_large.png'
+
 type Props = {
   user: Object,
 }
 
 const Margin = styled.div`
   width: 100%;
+  margin: 0 0 1.5em 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 `
 
 const Title = styled.div`
@@ -24,14 +31,37 @@ const User = styled.div`
   font-family: 'Gotham', sans-serif;
   font-size: 1em;
   color: black;
+  padding: 0.5em 0;
+`
+
+const Image = styled.figure`
+  height: 148px;
+  width: 148px;
+  margin: 0;
+`
+
+const Logo = styled.img`
+  display: block;
+  height: auto;
+  width: 100%;
+`
+
+const TagLine = styled.p`
+  font-family: 'Gotham', sans-serif;
+  font-weight: bold;
+  font-size: 2em;
+  color: black;
+  margin: 1em 0 0 0;
 `
 
 const UserGreetings = ({user}: Props) => {
   if (typeof user.profile === 'undefined') {
     return (
       <Margin>
-        <Title>HELLO,</Title>
-        <User>Anonymous.</User>
+        <Image>
+          <Logo
+            src={imgLink}/>
+        </Image>
       </Margin>
     )
   }

@@ -26,12 +26,8 @@ class PFooter extends React.Component {
         {display &&
           <Button
             type="primary"
-            caption="Import manually"
+            caption="Input new asset"
             onPress={() => displayForm('portfolio')}/>}
-        <Button
-          type="primary"
-          caption="Import from exchange"
-          onPress={() => alert('Coming soon!')}/>
       </Container>
     )
   }

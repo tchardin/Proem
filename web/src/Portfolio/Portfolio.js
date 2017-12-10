@@ -22,11 +22,13 @@ class Portfolio extends React.Component {
     } = this.props
     return (
       <PContainer>
-        <PDashboard
-          metrics={pfAssets}/>
-        {display &&
+        {display ? (
           <PForm
-            options={allAssets}/>}
+            options={allAssets}/>
+        ) : (
+          <PDashboard
+            metrics={pfAssets}/>
+        )}
       </PContainer>
     )
   }

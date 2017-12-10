@@ -60,7 +60,7 @@ export const loadUser = () => dispatch => {
 
 export const signUserIn = () => dispatch => {
   dispatch(requestLogin())
-  blockstack.redirectToSignIn()
+  blockstack.redirectToSignIn(`${window.location.origin}/login`)
 }
 
 export const signUserOut = () => dispatch => {

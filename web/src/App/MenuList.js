@@ -10,7 +10,7 @@ const List = styled.ul`
   display: flex;
   flex: 2;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: flex-start;
   list-style-type: none;
   padding: 0;
@@ -65,7 +65,7 @@ class MenuList extends React.Component {
           ) : (
             <Button
               caption="Sign in"
-              type="primary"
+              type="secondary"
               onPress={() => signUserIn()}/>
           )}
         </Option>

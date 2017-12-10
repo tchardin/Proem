@@ -6,6 +6,7 @@ import styled from 'styled-components'
 //import {graphql, createFragmentContainer} from 'react-relay'
 
 import Description from './Description'
+import OrderBook from './OrderBook'
 
 const Title = styled.h2`
   font-family: 'Gotham', sans-serif;
@@ -67,23 +68,29 @@ const List = styled.div`
 
 class MetricsMenu extends React.Component {
   state = {
-    isOpen: false
+    description: false,
+    orderBook: false,
   }
-  toggleText = () => {
+  toggleText = (item) => {
     this.setState(prevState => ({
-      isOpen: !prevState.isOpen
+      [item]: !prevState[item]
     }))
   }
   render() {
-    const {metrics, fiat} = this.props
+    const {metrics, fiat, books} = this.props
     return (
       <MetricsContainer>
         <Title>{metrics.name}</Title>
         <Description
           text={metrics.description}
-          isOpen={this.state.isOpen}
+          isOpen={this.state.description}
           handleClick={this.toggleText}/>
-        {!this.state.isOpen &&
+        {!this.state.description &&
+          <OrderBook
+            books={books}
+            isOpen={this.state.orderBook}
+            handleClick={this.toggleText}/>}
+        {!this.state.description && !this.state.orderBook &&
           <List>
             <Row>
               <Label>mkt cap</Label>
