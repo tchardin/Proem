@@ -45,28 +45,25 @@ const Wrapper = styled.div`
   }
 `
 
-class DatePicker extends React.Component {
-  render() {
-    const {
-      handleChange,
-      date
-    } = this.props
-    return (
-      <Wrapper>
-        <DayPickerInput
-          onDayChange={day => handleChange('portfolio', 'date', day)}
-          dayPickerProps={{
-            selectedDays: date,
-            disabledDays: day => day > new Date(),
-            toMonth: new Date()
-          }}
-          formatDate={formatDate}
-          parseDate={parseDate}
-          placeholder="MM/DD/YYYY"
-          value={date}/>
-      </Wrapper>
-    )
-  }
+const DatePicker = ({
+  handleChange,
+  date
+}) => {
+  return (
+    <Wrapper>
+      <DayPickerInput
+        onDayChange={day => handleChange('portfolio', 'date', day)}
+        dayPickerProps={{
+          selectedDays: date,
+          disabledDays: day => day > new Date(),
+          toMonth: new Date()
+        }}
+        formatDate={formatDate}
+        parseDate={parseDate}
+        placeholder="MM/DD/YYYY"
+        value={date}/>
+    </Wrapper>
+  )
 }
 
 export default DatePicker

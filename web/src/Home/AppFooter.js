@@ -120,6 +120,12 @@ import Candle from '../svg/Candle'
 
   const colorScale = ["#FFF500", "#FF00C4", "#FFA700", "#0089FF", "#B100FF"]
 
+  const Message = styled.h2`
+    font-family: 'Gotham', sans-serif;
+    font-size: 2em;
+    color: white;
+  `
+
 class AppFooter extends React.Component {
   state = {
     position: 0
@@ -138,13 +144,13 @@ class AppFooter extends React.Component {
 			  startTime = new Date().getTime()
 		  }
     const easeOutExpo = (x, t, b, c, d) => {
-		   return (t==d) ? b+c : c * (-Math.pow(2, -10 * t/d) + 1) + b;
+		   return (t===d) ? b+c : c * (-Math.pow(2, -10 * t/d) + 1) + b;
 	  }
     const tweenLoop = (time) => {
       let t = !time ? 0 : time - startTime
       let factor = easeOutExpo(null, t, 0, 1, duration)
       scrollList.scrollLeft = start + delta * factor
-      if (t < duration && scrollList.scrollLeft != end)
+      if (t < duration && scrollList.scrollLeft !== end)
         requestAnimationFrame(tweenLoop)
     }
     tweenLoop()
@@ -181,6 +187,27 @@ class AppFooter extends React.Component {
       group
     } = this.props
     const {position} = this.state
+    console.log('AppFooter renders')
+    let optionList
+    if (portfolio && group.length === 0) {
+      optionList = (
+        <Message>
+          Add assets to your portfolio to get started.
+        </Message>)
+    } else {
+      optionList = this.props.assets.map((a, i) => (
+      <ListItem
+        portfolio={portfolio}
+        item={a.metrics[0]}
+        key={i}
+        chartView={view}
+        selected={portfolio ? selectedGroup : selectedCoin}
+        selectedFiat={selectedFiat}
+        handleSelect={portfolio ? this.props.updateGroup : this.selectCoin}
+        metrics={metrics}
+        color={portfolio && group.length ? colorScale[i] : false}/>
+    ))
+  }
     return (
       <Footer>
         {closed &&
@@ -203,18 +230,7 @@ class AppFooter extends React.Component {
           </LeftBtn>
           <ControlList
             innerRef={div => {this.scrollList = div}}>
-            {this.props.assets.map((a, i) => (
-              <ListItem
-                portfolio={portfolio}
-                item={a.metrics[0]}
-                key={i}
-                chartView={view}
-                selected={portfolio ? selectedGroup : selectedCoin}
-                selectedFiat={selectedFiat}
-                handleSelect={portfolio ? this.props.updateGroup : this.selectCoin}
-                metrics={metrics}
-                color={portfolio && group.length ? colorScale[i] : false}/>
-            ))}
+            {optionList}
           </ControlList>
           <RightBtn
             onClick={() => this.scroll(position, position+100, 2000)}>

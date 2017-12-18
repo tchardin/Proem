@@ -18,7 +18,7 @@ const Container = styled.div`
   width: 100%;
 `
 
-class PFooter extends React.Component {
+class PFooter extends React.PureComponent {
   render() {
     const {display, displayForm} = this.props
     return (

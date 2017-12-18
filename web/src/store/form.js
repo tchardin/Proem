@@ -7,6 +7,7 @@ const FORM_UPDATE_VALUE = 'FORM_UPDATE_VALUE'
 const FORM_RESET = 'FORM_RESET'
 const FORM_DISPLAY = 'FORM_DISPLAY'
 const TOGGLE_DATE_FOCUS = 'TOGGLE_DATE_FOCUS'
+const ERROR_PORTFOLIO = 'ERROR_PORTFOLIO'
 
 const initialState = {
   alerts: {
@@ -19,7 +20,8 @@ const initialState = {
     amount: '',
     date: '',
     currency: 'BTC',
-    focused: false
+    focused: false,
+    error: false
   }
 }
 
@@ -39,6 +41,14 @@ export default (state = initialState, action) => {
         focused: !state.portfolio.focused
       }
     }
+    case ERROR_PORTFOLIO:
+      return {
+        ...state,
+        portfolio: {
+          ...state.portfolio,
+          error: true
+        }
+      }
     case FORM_RESET:
       return initialState
     default:

@@ -64,7 +64,7 @@ class ListItem extends Component {
         selected={this.props.selected === item.symbol || this.props.selected.includes(item.symbol)}
         onClick={() => this.props.handleSelect(item.symbol)}>
           <Label
-            color={color}>
+            color={color ? color : undefined}>
             <Title>{item.symbol}</Title>
             <Price>{new Intl.NumberFormat('en-US', {
               style: 'currency', currency: this.props.selectedFiat }).format(item.price)}</Price>

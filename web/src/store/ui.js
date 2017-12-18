@@ -7,7 +7,8 @@ const TOGGLE_LEFT = 'TOGGLE_LEFT'
 const RESIZE_CHART = 'RESIZE_CHART'
 const TOGGLE_CHART = 'TOGGLE_CHART'
 const UPDATE_SELECTED = 'UPDATE_SELECTED'
-const UPDATE_GROUP = 'UPDATE_GROUP'
+const UPDATE_CHART_GROUP = 'UPDATE_CHART_GROUP'
+const TOGGLE_EDIT = 'TOGGLE_EDIT'
 
 export default (state = {
   left: 0,
@@ -18,6 +19,7 @@ export default (state = {
   selectedFiat: 'USD',
   selectedGroup: [],
   selectedTxs: null,
+  edit: false,
   ema: false,
   sma: false,
   bol: false,
@@ -30,6 +32,11 @@ export default (state = {
         chartHeight: window.innerHeight - 110,
         chartWidth: window.innerWidth
       }
+    case TOGGLE_EDIT:
+      return {
+        ...state,
+        edit: !state.edit
+      }
     case TOGGLE_LEFT:
       return {
         ...state,
@@ -40,7 +47,7 @@ export default (state = {
         ...state,
         [action.selectedItem]: action.value
       }
-    case UPDATE_GROUP:
+    case UPDATE_CHART_GROUP:
       return {
         ...state,
         selectedGroup:
@@ -64,8 +71,12 @@ const removeItem = (array, index) => {
   return newArray
 }
 
+export const toggleEdit = () => ({
+  type: TOGGLE_EDIT
+})
+
 export const updateGroup = value => ({
-  type: UPDATE_GROUP,
+  type: UPDATE_CHART_GROUP,
   value
 })
 

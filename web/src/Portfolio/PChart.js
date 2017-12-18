@@ -1,6 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import styled from 'styled-components'
+import isEqual from 'lodash/isEqual'
 
 import {scaleTime} from 'd3-scale'
 import { format } from 'd3-format'
@@ -20,24 +21,89 @@ import {
 	MouseCoordinateY,
 } from 'react-stockcharts/lib/coordinates'
 
-import {resizeChart} from '../store/ui'
-
 const colorScale = ["#FFF500", "#FF00C4", "#FFA700", "#0089FF", "#B100FF"]
 
 const EmptyChart = styled.div`
   height: ${props => props.height}px;
   width: ${props => props.width}px;
   display: inline-block;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `
 
 class PChartComponent extends React.Component {
-  componentDidMount() {
-    this.props.resizeChart()
-    window.addEventListener('resize', () => this.props.resizeChart())
+  /* state = {
+    data: []
   }
+  computePfData = (nextProps) => {
+    let t0 = performance.now()
+    const {data, assets, pfIds} = nextProps
+    if (pfIds.length) {
+      // Find the longest array
+      let firstAsset = data.reduce((a, b) => {
+        return a.values.length > b.values.length ? a : b
+      }, data[0])
+      let t1 = performance.now()
+      console.log(`Reduce operation time:  ${t1-t0}`)
 
-  componentWillUnmount() {
-    window.removeEventListener('resize', () => this.props.resizeChart())
+      const calculatedData = firstAsset.values.map(a => {
+          let point = {}
+          let total = 0
+          // Looping through the different coins in the portfolio
+        for (let i=0, n=data.length; i<n; i++) {
+            let balance = 0
+            // Looping through the historical values
+            for (let j=0, o=data[i].values.length; j<o; j++) {
+              let val = data[i].values[j]
+              // Looping through the transactions in the portfolio
+              for (let k=0, p=assets[data[i].coin].transactions.length; k<p; k++) {
+                let tx = assets[data[i].coin].transactions[k]
+                // Checking if there's a transaction corresponding to the historical value
+                if (moment(tx.date).format('YYYY-MM-DD') === val.date) {
+                  balance += Number(tx.amount)
+                }
+              }
+              if (val.date === a.date) {
+                point[data[i].coin] = Number(val.last)*balance
+              }
+            }
+          }
+          for (const prop in point) {
+            total += point[prop]
+          }
+          return {
+            date: new Date(a.date),
+            ...point,
+            total
+          }
+        })
+        let t2 = performance.now()
+        console.log(`Operation time: ${t2-t1}`)
+        this.setState({
+          data: calculatedData
+        })
+    } else {
+      this.setState({
+        data: []
+      })
+    }
+  }
+  componentWillReceiveProps(nextProps) {
+    if (!isEqual(this.props.data, nextProps.data)) {
+      this.computePfData(nextProps)
+    }
+  }
+  componentDidMount() {
+    this.computePfData(this.props)
+  } */
+  shouldComponentUpdate(nextProps) {
+    return (
+      !isEqual(this.props.data, nextProps.data) ||
+      this.props.selectedIds !== nextProps.selectedIds ||
+      this.props.width !== nextProps.width
+    )
   }
 
   render() {
@@ -49,7 +115,10 @@ class PChartComponent extends React.Component {
       selectedIds,
       assets
     } = this.props
-    if (!pfIds.length || data[0].values.length <= 1) {
+    console.log('PChart rendered')
+    // const calculatedData = this.state.data
+    if (!pfIds.length || data[0].values.length <= 1 /* || !calculatedData.length */) {
+      console.log('Render ball')
       return (
         <EmptyChart
           width={width}
@@ -57,45 +126,52 @@ class PChartComponent extends React.Component {
         </EmptyChart>
       )
     }
-    // if (pfIds.length > 1) {
+
+    let t0 = performance.now()
+    // const {data, assets, pfIds} = nextProps
+    //if (pfIds.length) {
+      // Find the longest array
       let firstAsset = data.reduce((a, b) => {
         return a.values.length > b.values.length ? a : b
       }, data[0])
+      let t1 = performance.now()
+      console.log(`Reduce operation time:  ${t1-t0}`)
 
-    const calculatedData = firstAsset.values.map(a => {
-        let point = {}
-        let total = 0
-        data.forEach(d => {
-          let balance = 0
-          d.values.forEach(v => {
-            assets[d.coin].transactions.forEach(t => {
-              if (moment(t.date).format('YYYY-MM-DD') === v.date) {
-                balance += Number(t.amount)
+      const calculatedData = firstAsset.values.map(a => {
+          let point = {}
+          let total = 0
+          // Looping through the different coins in the portfolio
+        for (let i=0, n=data.length; i<n; i++) {
+            let balance = 0
+            // Looping through the historical values
+            for (let j=0, o=data[i].values.length; j<o; j++) {
+              let val = data[i].values[j]
+              // Looping through the transactions in the portfolio
+              for (let k=0, p=assets[data[i].coin].transactions.length; k<p; k++) {
+                let tx = assets[data[i].coin].transactions[k]
+                // Checking if there's a transaction corresponding to the historical value
+                if (moment(tx.date).format('YYYY-MM-DD') === val.date) {
+                  balance += Number(tx.amount)
+                }
               }
-            })
-            if (v.date === a.date) {
-              return point[d.coin] = Number(v.last)*balance
+              if (val.date === a.date) {
+                point[data[i].coin] = Number(val.last)*balance
+              }
             }
-          })
+          }
+          for (const prop in point) {
+            total += point[prop]
+          }
+          return {
+            date: new Date(a.date),
+            ...point,
+            total
+          }
         })
-        for (const prop in point) {
-          total += point[prop]
-        }
-        return {
-          date: new Date(a.date),
-          ...point,
-          total
-        }
-      })
+        let t2 = performance.now()
+        console.log(`Operation time: ${t2-t1}`)
+        console.log(calculatedData)
 
-    console.log(calculatedData)
-    // } else {
-    //   calculatedData = data[0].values.map(a => ({
-    //     date: new Date(a.date),
-    //     [data[0].coin]: a.last,
-    //     total: a.last
-    //   }))
-    // }
     const margin = { left: 20, right: 80, top: 0, bottom: 30 }
     const xDomain = [new Date(2017, 9, 1), new Date()]
     let groupLines = selectedIds.map((id, index) => (
@@ -176,6 +252,4 @@ const mapStateToProps = state => ({
   assets: state.portfolio.assets
 })
 
-export default connect(mapStateToProps, {
-  resizeChart
-})(PChartComponent)
+export default connect(mapStateToProps)(PChartComponent)

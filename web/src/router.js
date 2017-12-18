@@ -164,6 +164,14 @@ const routes = [
                   volume
                 }
               }
+              books(coins: $coin, fiat: $fiat) {
+                asks {
+                  price
+                }
+                bids {
+                  price
+                }
+              }
               metrics(coins: $coin, fiat: $fiat) {
                 name
                 description
@@ -206,7 +214,8 @@ const routes = [
                             href={`/history/${params.coin}/${params.fiat}`}/>,
               menuBody: <MetricsMenu
                           metrics={data.metrics[0]}
-                          fiat={params.fiat}/>,
+                          fiat={params.fiat}
+                          books={data.books[0]}/>,
               menuFooter: <ToolBox />
             }),
           }
@@ -389,7 +398,7 @@ const routes = [
   },
   {
     path: '/error',
-    components: () => [import(/* webpackChunkName: 'main' */ './ErrorPage')],
+    components: () => [import('./ErrorPage')],
     render: ([ErrorPage]) => ({
       title: 'Error',
       body: <ErrorPage />,

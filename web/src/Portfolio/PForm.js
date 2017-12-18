@@ -6,32 +6,6 @@ import {newTransaction} from '../store/portfolio'
 import Input from '../Form/Input'
 import DatePicker from '../Form/DatePicker'
 import Button from '../Button'
-import CrossSvg from '../svg/Cross'
-
-const Cross = styled.div`
-  height: 20px;
-  width: 26px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  cursor: pointer;
-`
-
-const Line1 = styled.span`
-  display: flex;
-  height: 3px;
-  background-color: black;
-  transform: rotate(45deg) translateX(12px);
-  border-radius: 2px;
-`
-
-const Line2 = styled.span`
-  display: flex;
-  height: 3px;
-  background-color: black;
-  transform: rotate(-45deg) translateX(12px);
-  border-radius: 2px;
-`
 
 const List = styled.ul`
   display: flex;
@@ -49,20 +23,23 @@ const Option = styled.li`
   padding: 0.5em 0;
   width: 100%;
   box-sizing: border-box;
-  text-align: right;
+`
+const Message = styled.div`
+  font-family: 'Gotham', sans-serif;
+  font-size: 1em;
+  padding: 1em 0;
+  color: black;
 `
 
-class PForm extends React.Component {
+class PForm extends React.PureComponent {
   submitForm = () => {
     const {
       currency,
       amount,
       date,
       newTransaction,
-      resetForm,
     } = this.props
     newTransaction(currency, amount, date)
-    resetForm('portfolio')
   }
   render() {
     const {
@@ -71,7 +48,8 @@ class PForm extends React.Component {
       date,
       currency,
       options,
-      resetForm
+      resetForm,
+      error
     } = this.props
     return (
       <List>
@@ -99,6 +77,13 @@ class PForm extends React.Component {
             caption="cancel"
             onPress={() => resetForm('portfolio')} />
         </Option>
+        {error &&
+          <Option>
+            <Message>
+              Please type in a valid transaction!
+            </Message>
+          </Option>
+        }
       </List>
     )
   }
@@ -107,7 +92,8 @@ class PForm extends React.Component {
 const mapStateToProps = state => ({
   amount: state.form.portfolio.amount,
   date: state.form.portfolio.date,
-  currency: state.form.portfolio.currency
+  currency: state.form.portfolio.currency,
+  error: state.form.portfolio.error
 })
 
 export default connect(mapStateToProps, {

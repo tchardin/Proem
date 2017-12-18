@@ -25,6 +25,7 @@ const Title = styled.div`
   font-size: 3.5em;
   line-height: 0.7em;
   color: black;
+  align-self: flex-start;
 `
 
 const User = styled.div`
@@ -32,6 +33,7 @@ const User = styled.div`
   font-size: 1em;
   color: black;
   padding: 0.5em 0;
+  align-self: flex-start;
 `
 
 const Image = styled.figure`
@@ -44,14 +46,6 @@ const Logo = styled.img`
   display: block;
   height: auto;
   width: 100%;
-`
-
-const TagLine = styled.p`
-  font-family: 'Gotham', sans-serif;
-  font-weight: bold;
-  font-size: 2em;
-  color: black;
-  margin: 1em 0 0 0;
 `
 
 const UserGreetings = ({user}: Props) => {

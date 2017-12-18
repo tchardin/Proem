@@ -86,7 +86,7 @@ class AppToolbar extends React.Component {
     const {open, toggleLeft} = this.props
     return (
       <Header>
-          <Section start>
+          <Section>
             <Burger onClick={() => toggleLeft()}>
               <StripeA open={open}/>
               <StripeB open={open}/>

@@ -28,10 +28,6 @@ const Label = styled.p`
   color: #5A5A5A;
 `
 
-const Value = styled.p`
-  font-size: 5em;
-  color: black;
-`
 const Sign = styled.span`
   transform: ${props => props.down === true ? 'rotate(90deg)' : 'rotate(-90deg)'};
 `

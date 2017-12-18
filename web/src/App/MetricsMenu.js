@@ -106,7 +106,7 @@ class MetricsMenu extends React.Component {
             </Row>
             <Row>
               <Label>change 7d</Label>
-              {Number(metrics.percentChange24H) > 0 ? (
+              {Number(metrics.percentChange7D) > 0 ? (
                 <Color positive>{metrics.percentChange7D}%</Color>
               ) : (
                 <Color>{metrics.percentChange7D}%</Color>
@@ -122,7 +122,7 @@ class MetricsMenu extends React.Component {
             </Row>
             <Row>
               <Label>change 1h</Label>
-              {Number(metrics.percentChange24H) > 0 ? (
+              {Number(metrics.percentChange1H) > 0 ? (
                 <Color positive>{metrics.percentChange1H}%</Color>
               ) : (
                 <Color>{metrics.percentChange1H}%</Color>

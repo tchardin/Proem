@@ -13,25 +13,22 @@ const PContainer = styled.div`
   align-items: center;
 `
 
-class Portfolio extends React.Component {
-  render() {
-    const {
-      display,
-      allAssets,
-      pfAssets
-    } = this.props
-    return (
-      <PContainer>
-        {display ? (
-          <PForm
-            options={allAssets}/>
-        ) : (
-          <PDashboard
-            metrics={pfAssets}/>
-        )}
-      </PContainer>
-    )
-  }
+const Portfolio = ({
+  display,
+  allAssets,
+  pfAssets
+}) => {
+  return (
+    <PContainer>
+      {display ? (
+        <PForm
+          options={allAssets}/>
+      ) : (
+        <PDashboard
+          metrics={pfAssets}/>
+      )}
+    </PContainer>
+  )
 }
 
 const mapStateToProps = state => ({

@@ -1,9 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
 import {connect} from 'react-redux'
-import moment from 'moment'
+import isEqual from 'lodash/isEqual'
 import {VictoryPie} from 'victory'
 import {updateSelected} from '../store/ui'
+import Transactions from './Transactions'
 
 const Container = styled.div`
   display: flex;
@@ -19,69 +20,36 @@ const Message = styled.div`
   padding: 1em 0;
 `
 
-const Header = styled.div`
-  font-family: 'Gotham', sans-serif;
-`
-
 const Total = styled.h2`
+  font-family: 'Gotham', sans-serif;
   font-weight: bold;
   font-size: 1.5em;
 `
 
 const Change = styled.h3`
+  font-family: 'Gotham', sans-serif;
   font-size: 1em;
   color: ${props => props.positive ?
   '#0AFE00' : '#FF0000'};
-`
-
-const List = styled.div`
-  width: 100%;
-`
-
-const Row = styled.div`
-  font-family: 'Gotham', sans-serif;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  border-top: solid #e6e6e6 1px;
-  height: 52px;
-  & :last-child {
-    border-bottom: solid #e6e6e6 1px;
-  }
-`
-
-const Label = styled.p`
-  text-transform: uppercase;
-  font-size: 0.7em;
-  font-weight: 500;
-  line-height: 0;
-  color: #5A5A5A;
-`
-
-const Value = styled.p`
-  font-size: 1em;
-  color: black;
-`
-
-const Title = styled.h2`
-  font-family: 'Gotham', sans-serif;
-  font-size: 1em;
-  color: black;
-  padding: 0.5em 0;
+  margin: 0;
 `
 
 class PDashboard extends React.Component {
+  shouldComponentUpdate(nextProps) {
+    return (
+      !isEqual(this.props.metrics, nextProps.metrics) ||
+      this.props.selectedTxs !== nextProps.selectedTxs ||
+      this.props.displayEdit !== nextProps.displayEdit
+    )
+  }
   render() {
     const {
       allIds,
       assets,
       metrics,
-      selectedTxs,
-      updateSelected
+      updateSelected,
     } = this.props
-    if (!allIds.length) {
+    if (!allIds.length || !allIds.includes(metrics[0].symbol)) {
       return (
         <Container>
           <Message>
@@ -90,7 +58,12 @@ class PDashboard extends React.Component {
         </Container>
       )
     }
+    console.log('PDashboard renders')
     // Calculate totals for each asset
+    // let allBalances = allIds.map(id => {
+    //   let item = metrics.find(e => e.symbol === id)
+    //   return assets[id].balance * Number(item.price)
+    // })
     let allBalances = metrics.map(m =>
       assets[m.symbol].balance * m.price)
 
@@ -118,49 +91,8 @@ class PDashboard extends React.Component {
       totalPercentChange += allPercentShares[i]*metrics[i].percentChange24H
     }
 
-    let pie = <VictoryPie
-                data={sharesById}
-                padding={0}
-                colorScale={["#FFF500", "#FF00C4", "#FFA700", "#0089FF", "#B100FF"]}
-                innerRadius={100}
-                labelRadius={130}
-                style={{
-                  data: {cursor: 'pointer'},
-                  labels: { fill: "#00CEFF", fontSize: 30, fontWeight: "bold", fontFamily: 'Gotham', cursor: 'pointer'}}}
-                events={[
-                  {
-                    target: 'data',
-                    eventHandlers: {
-                      onClick: () => {
-                        return [{
-                          target: 'data',
-                          mutation: props => updateSelected('selectedTxs', props.datum.x)
-                        }]
-                      }
-                    }
-                  },{
-                    target: 'labels',
-                    eventHandlers: {
-                      onClick: () => {
-                        return [{
-                          target: 'labels',
-                          mutation: props => updateSelected('selectedTxs', props.datum.x)
-                        }]
-                      }
-                    }
-                  }
-                ]}/>
-
-    let txs = selectedTxs ? assets[selectedTxs].transactions.map((t, i) => (
-      <Row key={i}>
-        <Label>{moment(t.date).format("MMM Do, YYYY")}</Label>
-        <Value>{t.amount}</Value>
-      </Row>
-    )) : null
-
     return (
       <Container>
-        <Header>
           <Total>
             {new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(total)}
           </Total>
@@ -168,14 +100,41 @@ class PDashboard extends React.Component {
             positive={totalPercentChange > 0}>
               {Math.round(totalPercentChange*100)/100}%
           </Change>
-        </Header>
         <div>
-          {pie}
+          <VictoryPie
+                      data={sharesById}
+                      padding={0}
+                      colorScale={["#FFF500", "#FF00C4", "#FFA700", "#0089FF", "#B100FF"]}
+                      innerRadius={100}
+                      labelRadius={130}
+                      style={{
+                        data: {cursor: 'pointer'},
+                        labels: { fill: "#00CEFF", fontSize: 30, fontWeight: "bold", fontFamily: 'Gotham', cursor: 'pointer'}}}
+                      events={[
+                        {
+                          target: 'data',
+                          eventHandlers: {
+                            onClick: () => {
+                              return [{
+                                target: 'data',
+                                mutation: props => updateSelected('selectedTxs', props.datum.x)
+                              }]
+                            }
+                          }
+                        },{
+                          target: 'labels',
+                          eventHandlers: {
+                            onClick: () => {
+                              return [{
+                                target: 'labels',
+                                mutation: props => updateSelected('selectedTxs', props.datum.x)
+                              }]
+                            }
+                          }
+                        }
+                      ]}/>
         </div>
-        <Title>{selectedTxs || "Click on chart to see transaction details"}</Title>
-        <List>
-          {txs}
-        </List>
+        <Transactions />
       </Container>
     )
   }
@@ -185,7 +144,6 @@ const mapStateToProps = state => {
   return {
     allIds: state.portfolio.allIds,
     assets: state.portfolio.assets,
-    selectedTxs: state.ui.selectedTxs,
   }
 }
 

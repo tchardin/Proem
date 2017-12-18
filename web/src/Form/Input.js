@@ -71,7 +71,7 @@ const CoinSelect = styled.select`
     }
 `
 
-class InputField extends React.Component {
+class InputField extends React.PureComponent {
   handleChange = ({target}) => {
     const {value, name} = target
     this.props.onChange('portfolio', name, value)

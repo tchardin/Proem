@@ -60,12 +60,12 @@ class MenuList extends React.Component {
           {user.info ? (
             <Button
               caption="Sign Out"
-              type="primary"
+              type="secondary"
               onPress={() => signUserOut()}/>
           ) : (
             <Button
               caption="Sign in"
-              type="secondary"
+              type="primary"
               onPress={() => signUserIn()}/>
           )}
         </Option>

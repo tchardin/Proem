@@ -58,7 +58,7 @@ const RotateRight = styled.span`
   display: flex;
 `
 
-class Button extends React.Component {
+class Button extends React.PureComponent {
   props: {
     type: 'primary' | 'menu' | 'back',
     caption: string,

@@ -28,11 +28,6 @@ const Label = styled.p`
   color: #5A5A5A;
 `
 
-const Value = styled.p`
-  font-size: 5em;
-  color: black;
-`
-
 const Paragraph = styled.p`
   font-family: 'Gotham', sans-serif;
   font-size: 0.7em;

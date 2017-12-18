@@ -20,6 +20,7 @@ type State = {
 };
 
 const UPDATE_GROUP = 'UPDATE_GROUP'
+const DELETE_FROM_GROUP = 'DELETE_FROM_GROUP'
 // const UPDATE_SELECTED = 'UPDATE_SELECTED'
 const UPDATE_DATE = 'UPDATE_DATE'
 const SWITCH_ROUTE = 'SWITCH_ROUTE'
@@ -64,6 +65,14 @@ export default (state: State = initialState, action): State => {
               [...state.variables.group] : state.variables.group.concat(action.value)
           }
         }
+      case DELETE_FROM_GROUP:
+        return {
+          ...state,
+          variables: {
+            ...state.variables,
+            group: removeItem(state.variables.group, state.variables.group.indexOf(action.value))
+          }
+        }
       case UPDATE_DATE:
         return {
           ...state,
@@ -87,9 +96,20 @@ export default (state: State = initialState, action): State => {
 //   id, value
 // })
 
+const removeItem = (array, index) => {
+  let newArray = array.slice()
+  newArray.splice(index, 1)
+  return newArray
+}
+
 const switchRoute = (route, location, variables) => ({
   type: SWITCH_ROUTE,
   route, location, variables
+})
+
+export const deleteFromGroup = value => ({
+  type: DELETE_FROM_GROUP,
+  value
 })
 
 export const updateGroup = value => ({
@@ -109,9 +129,10 @@ const loadGroup = group => ({
 const earliestDate = assets => {
   let eD = moment()
   for (const prop in assets) {
-    assets[prop].transactions.forEach(t => {
-      eD = moment(t.date).isBefore(eD) ? moment(t.date) : eD
-    })
+    for (let i=0, n=assets[prop].transactions.length; i<n; i++) {
+      let tD = assets[prop].transactions[i].date
+      eD = moment(tD).isBefore(eD) ? moment(tD) : eD
+    }
   }
   return eD.format('YYYY-MM-DD')
 }
