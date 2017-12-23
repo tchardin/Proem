@@ -82,13 +82,8 @@ WSGI_APPLICATION = 'proemgsql.wsgi.application'
 
 DATABASES = {
     'default': {
-         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'proemdbdev',
-        'USER': 'proem_admin',
-        'PASSWORD': 'iloveproems',
-        # 'HOST': 'proemdb-dev.c6mmcimaihhy.us-west-2.rds.amazonaws.com',
-        'HOST': 'proemdbdev.czaefluoxrgv.us-east-1.rds.amazonaws.com',
-        'PORT': '',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'mydatabase',
     }
 }
 

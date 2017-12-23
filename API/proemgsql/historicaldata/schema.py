@@ -10,6 +10,9 @@ import re
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 from api_package.functions import *
+import quandl as q
+import pandas as pd
+q.ApiConfig.api_key = ""
 
 #list of supported currencies, fiats, and exchanges
 supported_currencies = ["BTC","ETH","LTC", "BCH", "ETC","ZEC","XMR","XRP","DASH"]
@@ -36,9 +39,15 @@ supported_currencies_exchange['KRAKEN'] = supported_currencies
 supported_currencies_exchange['BITSTAMP'] = supported_currencies[0:3] + ["XRP"]
 
 #Define API models or `endpoints`:
-class HistoryData(DjangoObjectType):
-    class Meta:
-        model = History
+class HistoryData(graphene.ObjectType):
+    date = graphene.String()
+    high = graphene.String()
+    low = graphene.String()
+    mid = graphene.String()
+    last = graphene.String()
+    bid = graphene.String()
+    ask = graphene.String()
+    volume = graphene.String()
 
 class TickerData(graphene.ObjectType):
     date = graphene.String()
@@ -64,6 +73,7 @@ class OrderData(graphene.ObjectType):
 
 class HistoryType(graphene.ObjectType):
     coin = graphene.String()
+    fiat = graphene.String()
     values = graphene.List(HistoryData)
 
 class CandlesType(graphene.ObjectType):
@@ -137,20 +147,35 @@ class Query(graphene.AbstractType):
         fiat = args.get('fiat') or "USD"
         coins = args.get('coins') or ["BTC"]
         dateFrom, dateTo = args.get('dateFrom'), args.get('dateTo')
+        if (fiat != 'USD'):
+            rates = json.loads(requests.get("http://api.fixer.io/latest?base=USD").content)
+        else:
+            rates = {'rates': {fiat: 1}}
         result = []
         for coin in coins:
-            filter = (
-                Q(coin__icontains=coin) &
-                Q(fiat__icontains=fiat)
-            )
-            if dateFrom and dateTo:
-                result.append(HistoryType(coin=coin,values=History.objects.filter(filter, date__range=(dateFrom,dateTo)).order_by('date')))
-            elif dateFrom:
-                result.append(HistoryType(coin=coin,values=History.objects.filter(filter, date__range=(dateFrom,'9999-01-01')).order_by('date')))
-            elif dateTo:
-                result.append(HistoryType(coin=coin,values=History.objects.filter(filter, date__range=('1999-01-01', dateTo)).order_by('date')))
-            else:
-                result.append(HistoryType(coin=coin,values=History.objects.filter(filter).order_by('date')))
+            if coin == "DASH": coin = "DSH"
+            df = q.get('BITFINEX/'+ coin + 'USD')
+            if(dateFrom and dateTo):
+                df = df[(df.index >= dateFrom) & (df.index <= dateTo)].copy()
+            elif(dateFrom):
+                df = df[(df.index >= dateFrom)].copy()
+            elif(dateTo):
+                df = df[(df.index <= dateTo)].copy()
+            values = []
+            df[['High','Low','Mid','Last','Bid','Ask']] = df[['High','Low','Mid','Last','Bid','Ask']].mul(rates['rates'][fiat])
+            df['Date'] = [str(datetime.strptime(str(d), '%Y-%m-%d %H:%M:%S').date()) for d in df.index]
+            #  [date.date() for date in df.index.values]
+            for index, row in df.iterrows():
+                values.append(HistoryData(date = row['Date'],
+                high = row['High'],
+                low = row['Low'],
+                mid = row['Mid'],
+                last = row['Last'],
+                bid = row['Bid'],
+                ask = row['Ask'],
+                volume = row['Volume']))
+            if coin == "DSH": coin = "DASH"
+            result.append(HistoryType(coin=coin, fiat= fiat, values=values))
         return result
 
     def resolve_ticker(self, args, context, info):
